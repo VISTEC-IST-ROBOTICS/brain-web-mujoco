@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MuJoCo Web Simulator</title>
+    <style>
+      html, body {
+        margin: 0;
+        height: 100%;
+        background: #111;
+        overflow: hidden;
+        font-family: system-ui, sans-serif;
+      }
+      #app {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+      canvas {
+        display: block;
+      }
+      #hud {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        color: #eee;
+        background: rgba(0, 0, 0, 0.45);
+        padding: 10px 14px;
+        border-radius: 8px;
+        font-size: 13px;
+        line-height: 1.5;
+        pointer-events: none;
+      }
+      #hud b {
+        color: #7fd0ff;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div id="hud">
+        <div><b>Drag</b> orbit &nbsp; <b>Scroll</b> zoom</div>
+        <div><b>&larr;/&rarr;</b> twist torso &nbsp; <b>&uarr;/&darr;</b> swing hips &nbsp; <b>Space</b> kick knees</div>
+        <div><b>R</b> reset</div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
