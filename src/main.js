@@ -76,6 +76,7 @@ function setupScene() {
   scene.background = new THREE.Color(0x1a1f26);
 
   const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.01, 100);
+  camera.up.set(0, 0, 1); // MuJoCo worlds are Z-up; three's default camera up is Y
   camera.position.set(2.2, -2.6, 1.8);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -103,7 +104,10 @@ function buildGeoms(model, scene) {
   for (let i = 0; i < model.ngeom; i++) {
     const type = model.geom_type[i];
     const size = [model.geom_size[3 * i], model.geom_size[3 * i + 1], model.geom_size[3 * i + 2]];
-    const rgba = [model.geom_rgba[4 * i], model.geom_rgba[4 * i + 1], model.geom_rgba[4 * i + 2], model.geom_rgba[4 * i + 3]];
+    const matid = model.geom_matid[i];
+    const rgba = matid >= 0
+      ? [model.mat_rgba[4 * matid], model.mat_rgba[4 * matid + 1], model.mat_rgba[4 * matid + 2], model.mat_rgba[4 * matid + 3]]
+      : [model.geom_rgba[4 * i], model.geom_rgba[4 * i + 1], model.geom_rgba[4 * i + 2], model.geom_rgba[4 * i + 3]];
 
     let geometry;
     switch (type) {

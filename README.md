@@ -46,6 +46,5 @@ mesh assets aren't supported yet — only primitive geoms are rendered.
 ## Known limitations
 
 - No mesh/heightfield geom rendering (primitives only)
-- Not yet verified in an actual browser in this environment — build and dev
-  server serve all assets (JS, WASM, model XML) with correct status codes and
-  MIME types, but the WebGL render/physics loop itself needs a manual check.
+- The stock model has no balance controller, so it topples over under gravity
+  within a few seconds — press and hold R to reset it to the standing pose.
