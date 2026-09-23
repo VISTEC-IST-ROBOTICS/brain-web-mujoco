@@ -1,0 +1,62 @@
+<mujoco model="Rover">
+  <option timestep="0.005"/>
+
+  <visual>
+    <rgba haze="0.15 0.25 0.35 1"/>
+    <global elevation="-20" azimuth="120"/>
+  </visual>
+
+  <statistic center="0 0 0.15"/>
+
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1=".3 .5 .7" rgb2="0 0 0" width="32" height="512"/>
+    <texture name="grid" type="2d" builtin="checker" width="512" height="512" rgb1=".1 .2 .3" rgb2=".2 .3 .4"/>
+    <material name="grid" texture="grid" texrepeat="1 1" texuniform="true" reflectance=".2"/>
+    <material name="chassis" rgba="0.85 0.35 0.15 1"/>
+    <material name="wheel" rgba="0.12 0.12 0.12 1"/>
+    <material name="sensor" rgba="0.2 0.8 0.9 1"/>
+  </asset>
+
+  <default>
+    <joint damping="0.2"/>
+    <default class="wheel">
+      <joint type="hinge" axis="0 1 0" damping="0.05"/>
+      <geom type="cylinder" size="0.06 0.025" quat="0.7071068 0.7071068 0 0" material="wheel" condim="4" friction="1.2 0.006 0.0001"/>
+    </default>
+  </default>
+
+  <worldbody>
+    <geom name="floor" size="0 0 .05" type="plane" material="grid" condim="3"/>
+    <light name="top" pos="0 0 2" mode="trackcom"/>
+
+    <body name="chassis" pos="0 0 0.06">
+      <freejoint name="root"/>
+      <geom name="chassis" type="box" size="0.15 0.07 0.03" material="chassis" mass="1.2"/>
+      <geom name="sensor" type="sphere" size="0.02" pos="0.15 0 0.03" material="sensor" mass="0.02"/>
+
+      <body name="wheel_fl" pos="0.12 0.09 0">
+        <joint name="wheel_fl" class="wheel"/>
+        <geom class="wheel" mass="0.15"/>
+      </body>
+      <body name="wheel_fr" pos="0.12 -0.09 0">
+        <joint name="wheel_fr" class="wheel"/>
+        <geom class="wheel" mass="0.15"/>
+      </body>
+      <body name="wheel_rl" pos="-0.12 0.09 0">
+        <joint name="wheel_rl" class="wheel"/>
+        <geom class="wheel" mass="0.15"/>
+      </body>
+      <body name="wheel_rr" pos="-0.12 -0.09 0">
+        <joint name="wheel_rr" class="wheel"/>
+        <geom class="wheel" mass="0.15"/>
+      </body>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <motor name="wheel_fl" joint="wheel_fl" gear="1" ctrlrange="-1 1"/>
+    <motor name="wheel_fr" joint="wheel_fr" gear="1" ctrlrange="-1 1"/>
+    <motor name="wheel_rl" joint="wheel_rl" gear="1" ctrlrange="-1 1"/>
+    <motor name="wheel_rr" joint="wheel_rr" gear="1" ctrlrange="-1 1"/>
+  </actuator>
+</mujoco>

@@ -2,17 +2,11 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import loadMujoco from '@mujoco/mujoco';
 
-const MODEL_URL = 'assets/humanoid.xml';
+const MODEL_URL = 'assets/rover.xml';
 
 // Actuator order matches the <actuator> block in the MJCF file (MuJoCo assigns
 // ids in declaration order).
-const ACTUATORS = [
-  'abdomen_z', 'abdomen_y', 'abdomen_x',
-  'hip_x_right', 'hip_z_right', 'hip_y_right', 'knee_right', 'ankle_y_right', 'ankle_x_right',
-  'hip_x_left', 'hip_z_left', 'hip_y_left', 'knee_left', 'ankle_y_left', 'ankle_x_left',
-  'shoulder1_right', 'shoulder2_right', 'elbow_right',
-  'shoulder1_left', 'shoulder2_left', 'elbow_left',
-];
+const ACTUATORS = ['wheel_fl', 'wheel_fr', 'wheel_rl', 'wheel_rr'];
 const ctrlIndex = (name) => ACTUATORS.indexOf(name);
 
 const mjGEOM = { PLANE: 0, SPHERE: 2, CAPSULE: 3, CYLINDER: 5, BOX: 6 };
@@ -77,7 +71,7 @@ function setupScene() {
 
   const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.01, 100);
   camera.up.set(0, 0, 1); // MuJoCo worlds are Z-up; three's default camera up is Y
-  camera.position.set(2.2, -2.6, 1.8);
+  camera.position.set(0.38, -0.45, 0.3);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -85,7 +79,7 @@ function setupScene() {
   document.getElementById('app').appendChild(renderer.domElement);
 
   const controls = new OrbitControls(camera, renderer.domElement);
-  controls.target.set(0, 0, 1);
+  controls.target.set(0, 0, 0.06);
   controls.enableDamping = true;
 
   scene.add(new THREE.HemisphereLight(0xbfd8ff, 0x333333, 1.2));
@@ -96,9 +90,9 @@ function setupScene() {
   return { scene, camera, renderer, controls };
 }
 
-// Builds one Three.js mesh per MuJoCo geom. Only the primitive shapes used by
-// the stock humanoid model are handled (plane, sphere, capsule); box/cylinder
-// are included for reuse with other MuJoCo Menagerie models.
+// Builds one Three.js mesh per MuJoCo geom, generically from geom type/size/
+// material, so any model using only these primitive shapes can be dropped in
+// via MODEL_URL. Meshes/heightfields are out of scope for this minimal viewer.
 function buildGeoms(model, scene) {
   const meshes = new Array(model.ngeom).fill(null);
   for (let i = 0; i < model.ngeom; i++) {
@@ -167,31 +161,25 @@ function syncGeoms(model, data, meshes) {
   }
 }
 
-const TORQUE = 0.7;
+const DRIVE = 0.8;
+const TURN = 0.5;
 
+// Tank/skid-steer control: throttle drives all wheels together, turn biases
+// the left and right pairs in opposite directions.
 function applyControls(data, keys) {
-  data.ctrl.fill(0);
-  const set = (name, value) => {
-    data.ctrl[ctrlIndex(name)] = value;
-  };
-  if (keys.has('ArrowUp') || keys.has('KeyW')) {
-    set('hip_y_right', TORQUE);
-    set('hip_y_left', TORQUE);
-  }
-  if (keys.has('ArrowDown') || keys.has('KeyS')) {
-    set('hip_y_right', -TORQUE);
-    set('hip_y_left', -TORQUE);
-  }
-  if (keys.has('ArrowLeft') || keys.has('KeyA')) {
-    set('abdomen_z', -TORQUE);
-  }
-  if (keys.has('ArrowRight') || keys.has('KeyD')) {
-    set('abdomen_z', TORQUE);
-  }
-  if (keys.has('Space')) {
-    set('knee_right', -TORQUE);
-    set('knee_left', -TORQUE);
-  }
+  let throttle = 0;
+  let turn = 0;
+  if (keys.has('ArrowUp') || keys.has('KeyW')) throttle += 1;
+  if (keys.has('ArrowDown') || keys.has('KeyS')) throttle -= 1;
+  if (keys.has('ArrowLeft') || keys.has('KeyA')) turn += 1;
+  if (keys.has('ArrowRight') || keys.has('KeyD')) turn -= 1;
+
+  const left = DRIVE * throttle + TURN * turn;
+  const right = DRIVE * throttle - TURN * turn;
+  data.ctrl[ctrlIndex('wheel_fl')] = left;
+  data.ctrl[ctrlIndex('wheel_rl')] = left;
+  data.ctrl[ctrlIndex('wheel_fr')] = right;
+  data.ctrl[ctrlIndex('wheel_rr')] = right;
 }
 
 main();

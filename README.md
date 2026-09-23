@@ -5,7 +5,11 @@ A minimal browser-based MuJoCo physics viewer, in the same spirit as
 MuJoCo compiled to WebAssembly runs the physics entirely client-side, rendered
 with Three.js — no backend.
 
-Currently loads the stock MuJoCo humanoid model ([public/assets/humanoid.xml](public/assets/humanoid.xml)).
+Currently loads a small 4-wheel skid-steer rover
+([public/assets/rover.xml](public/assets/rover.xml)) — a custom, self-contained
+MJCF (box chassis, cylinder wheels) chosen so it's inherently stable and needs
+no mesh assets. A capsule/sphere-only stock MuJoCo humanoid is also included
+at [public/assets/humanoid.xml](public/assets/humanoid.xml) for reference.
 
 ## Stack
 
@@ -25,8 +29,8 @@ Open the printed local URL in a browser.
 ## Controls
 
 - Drag: orbit camera · Scroll: zoom
-- Arrow keys / WASD: torque the hips and torso
-- Space: kick the knees
+- Up/Down or W/S: drive forward/backward
+- Left/Right or A/D: skid-steer turn
 - R (hold): reset the simulation
 
 ## How it works
@@ -46,5 +50,3 @@ mesh assets aren't supported yet — only primitive geoms are rendered.
 ## Known limitations
 
 - No mesh/heightfield geom rendering (primitives only)
-- The stock model has no balance controller, so it topples over under gravity
-  within a few seconds — press and hold R to reset it to the standing pose.
