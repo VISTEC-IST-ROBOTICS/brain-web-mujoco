@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>MuJoCo Web Simulator</title>
     <style>
       html, body {
@@ -35,15 +35,381 @@
       #hud b {
         color: #7fd0ff;
       }
+      /* Lab logo badge; on touch devices the joystick and buttons own the
+         bottom edge, so it sits under the Body button instead. */
+      #logo {
+        position: absolute;
+        right: 12px;
+        bottom: 12px;
+        height: 34px;
+        padding: 6px 10px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.92);
+        pointer-events: none;
+      }
+      .touch #logo {
+        bottom: auto;
+        top: 12px;
+        height: 26px;
+      }
+      .touch.has-paint #logo {
+        top: 58px;
+      }
+      #hud a.back {
+        display: inline-block;
+        margin-bottom: 6px;
+        padding: 3px 12px;
+        border-radius: 14px;
+        border: 1px solid rgba(127, 208, 255, 0.5);
+        background: rgba(127, 208, 255, 0.12);
+        color: #7fd0ff;
+        font-weight: 600;
+        text-decoration: none;
+        pointer-events: auto; /* the rest of the HUD lets clicks through */
+      }
+      #hud a.back:hover,
+      #hud a.back:focus-visible {
+        background: rgba(127, 208, 255, 0.28);
+        outline: none;
+      }
+      #hud .speed {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 4px;
+      }
+      #hud .speed input {
+        width: 140px;
+        accent-color: #7fd0ff;
+        pointer-events: auto; /* the rest of the HUD lets clicks through */
+      }
+      #hud .speed output {
+        min-width: 3.2em;
+        font-variant-numeric: tabular-nums;
+      }
+      /* Drive (user-controlled) vs Watch (runs on its own): HUD and menu cards */
+      .mode {
+        display: inline-block;
+        padding: 3px 9px;
+        border-radius: 10px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        line-height: 1.4;
+      }
+      .mode.drive {
+        background: #7fd0ff;
+        color: #0b2230;
+      }
+      .mode.watch {
+        background: rgba(20, 24, 30, 0.75);
+        color: #e6e6e6;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+      }
+      #hud .mode {
+        margin-left: 8px;
+        vertical-align: 1px;
+      }
+      /* Drive / Watch switch (robots with WATCH_INPUT): the chips as buttons,
+         the one not in use dimmed */
+      #hud .mode-switch {
+        display: inline-flex;
+        gap: 4px;
+        margin-left: 8px;
+        vertical-align: 1px;
+      }
+      #hud .mode-switch .mode {
+        margin: 0;
+        border: 0;
+        font-family: inherit;
+        cursor: pointer;
+        pointer-events: auto; /* the rest of the HUD lets clicks through */
+      }
+      #hud .mode-switch .mode.watch[aria-pressed='true'] {
+        background: #e6e6e6;
+        color: #14181e;
+        box-shadow: none;
+      }
+      #hud .mode-switch .mode[aria-pressed='false'] {
+        background: transparent;
+        color: #9aa4ad;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+      }
+      #hud .mode-switch .mode[aria-pressed='false']:hover,
+      #hud .mode-switch .mode:focus-visible {
+        color: #e6e6e6;
+        box-shadow: inset 0 0 0 1px rgba(127, 208, 255, 0.7);
+        outline: none;
+      }
+      .watching .drive-only,
+      #app:not(.watching) .watch-only,
+      .watching #touch .stick {
+        display: none;
+      }
+      #landing .thumb {
+        position: relative;
+      }
+      #landing .thumb .mode {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+      }
+      /* Robot menu (src/landing.js) */
+      #landing {
+        position: absolute;
+        inset: 0;
+        overflow-y: auto;
+        padding: 32px 16px 48px;
+        box-sizing: border-box;
+        background: radial-gradient(ellipse at top, #1d2a38, #111 70%);
+        color: #eee;
+      }
+      #landing header,
+      #landing .notice,
+      #landing .cards {
+        max-width: 1040px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      #landing .logo {
+        display: block;
+        height: 44px;
+        margin-bottom: 18px;
+        padding: 8px 12px;
+        border-radius: 8px;
+        background: #fff;
+      }
+      #landing h1 {
+        margin: 0 0 6px;
+        font-size: clamp(24px, 5vw, 34px);
+      }
+      #landing header p {
+        margin: 0 0 28px;
+        color: #aab4c0;
+      }
+      #landing .notice {
+        margin-bottom: 20px;
+        padding: 10px 14px;
+        border-radius: 8px;
+        background: rgba(255, 180, 80, 0.12);
+        color: #ffd29a;
+      }
+      #landing .cards {
+        list-style: none;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 18px;
+      }
+      #landing .card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #1b222b;
+        color: inherit;
+        text-decoration: none;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06);
+        transition: transform 0.15s, box-shadow 0.15s;
+      }
+      #landing .card:hover,
+      #landing .card:focus-visible {
+        transform: translateY(-3px);
+        box-shadow: 0 0 0 2px #7fd0ff, 0 10px 24px rgba(0, 0, 0, 0.4);
+        outline: none;
+      }
+      #landing .thumb {
+        aspect-ratio: 16 / 10;
+        background: #26303b;
+      }
+      #landing .thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      #landing .placeholder {
+        display: grid;
+        place-items: center;
+        width: 100%;
+        height: 100%;
+        font-size: 56px;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.85);
+        background: linear-gradient(135deg, hsl(var(--hue) 45% 32%), hsl(calc(var(--hue) + 40) 45% 18%));
+      }
+      #landing .info {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        flex: 1;
+        padding: 12px 14px 14px;
+      }
+      #landing h2 {
+        margin: 0;
+        font-size: 17px;
+      }
+      #landing .info p {
+        margin: 0;
+        font-size: 13px;
+        line-height: 1.45;
+        color: #aab4c0;
+      }
+      /* Load/controller errors, e.g. a Python traceback (src/robots/python.js) */
+      #error {
+        position: absolute;
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        max-height: 45%;
+        overflow: auto;
+        margin: 0;
+        padding: 10px 14px;
+        border-radius: 8px;
+        background: rgba(60, 0, 0, 0.85);
+        color: #ffd6d6;
+        font: 12px/1.4 ui-monospace, monospace;
+        white-space: pre-wrap;
+      }
+      /* Body colour picker (createPaintControl in src/main.js) */
+      #paint {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+        color: #eee;
+        font-size: 13px;
+      }
+      #paint .current {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px 6px 6px;
+        border: none;
+        border-radius: 18px;
+        background: rgba(0, 0, 0, 0.45);
+        color: #eee;
+        font: inherit;
+        cursor: pointer;
+      }
+      #paint .current i {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.35);
+      }
+      #paint .palette {
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        gap: 8px;
+        padding: 10px;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.55);
+      }
+      #paint .palette[hidden] {
+        display: none;
+      }
+      #paint .palette button {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.25);
+        cursor: pointer;
+      }
+      #paint .palette button.on {
+        border-color: #7fd0ff;
+        box-shadow: 0 0 0 2px #7fd0ff;
+      }
+      #paint input {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        border: none;
+        background: none;
+        cursor: pointer;
+      }
+      @media (max-width: 720px) {
+        /* below the HUD, which spans most of a phone's width (--hud-bottom is
+           kept up to date by src/main.js) */
+        #paint,
+        .touch #logo {
+          top: calc(var(--hud-bottom, 84px) + 12px);
+        }
+        .touch.has-paint #logo {
+          top: calc(var(--hud-bottom, 84px) + 58px);
+        }
+      }
+      /* Touch controls (src/touch.js), only created on touch devices */
+      #touch {
+        position: absolute;
+        inset: auto 0 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        padding: 0 20px calc(24px + env(safe-area-inset-bottom)) 20px;
+        pointer-events: none;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      #touch .stick {
+        position: relative;
+        width: 132px;
+        height: 132px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(255, 255, 255, 0.35);
+        touch-action: none;
+        pointer-events: auto;
+      }
+      #touch .stick.active {
+        background: rgba(127, 208, 255, 0.18);
+      }
+      #touch .knob {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 56px;
+        height: 56px;
+        margin: -28px 0 0 -28px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.75);
+        pointer-events: none;
+      }
+      #touch .buttons {
+        margin-left: auto; /* stay right when there's no joystick */
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        pointer-events: auto;
+      }
+      #touch button {
+        min-width: 96px;
+        min-height: 44px;
+        padding: 0 14px;
+        border-radius: 22px;
+        border: 2px solid rgba(255, 255, 255, 0.35);
+        background: rgba(0, 0, 0, 0.45);
+        color: #eee;
+        font: 600 14px system-ui, sans-serif;
+        touch-action: manipulation;
+      }
+      #touch button.on {
+        background: #7fd0ff;
+        border-color: #7fd0ff;
+        color: #111;
+      }
     </style>
   </head>
   <body>
     <div id="app">
-      <div id="hud">
-        <div><b>Drag</b> orbit &nbsp; <b>Scroll</b> zoom</div>
-        <div><b>&uarr;/&darr;/W/S</b> drive &nbsp; <b>&larr;/&rarr;/A/D</b> turn</div>
-        <div><b>R</b> reset</div>
-      </div>
+      <div id="hud">Loading&hellip;</div>
+      <img id="logo" src="assets/brain_logo_v2.webp" alt="BRAIN VISTEC">
     </div>
     <script type="module" src="/src/main.js"></script>
   </body>

@@ -1,0 +1,254 @@
+<mujoco model="body_carbon_rod">
+  <compiler angle="radian" meshdir="meshes/" />
+  <option integrator="implicitfast" />
+  <asset>
+    <mesh name="Red_mirror_model_walking_FL_link_1_vis_1" content_type="model/stl" file="Red_mirror_model_walking_FL_link_1_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_FL_link_2c1_vis_1" content_type="model/stl" file="Red_mirror_model_walking_FL_link_2c1_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_FL_link_2c2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_FL_link_2c2_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_FL_toe_vis_1" content_type="model/stl" file="Red_mirror_model_walking_FL_toe_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_FL_link_3c1_vis_1" content_type="model/stl" file="Red_mirror_model_walking_FL_link_3c1_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_ML_link_1_vis_1" content_type="model/stl" file="Red_mirror_model_walking_ML_link_1_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_ML_link_2c1_vis_1" content_type="model/stl" file="Red_mirror_model_walking_ML_link_2c1_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_ML_link_2c2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_ML_link_2c2_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_ML_link_3c1_vis_1" content_type="model/stl" file="Red_mirror_model_walking_ML_link_3c1_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_ML_toe_vis_1" content_type="model/stl" file="Red_mirror_model_walking_ML_toe_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_HL_link_1_vis_1" content_type="model/stl" file="Red_mirror_model_walking_HL_link_1_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_HL_link_2c1_vis_1" content_type="model/stl" file="Red_mirror_model_walking_HL_link_2c1_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_HL_link_2c2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_HL_link_2c2_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_HL_link_3c1_vis_1" content_type="model/stl" file="Red_mirror_model_walking_HL_link_3c1_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_HL_toe_vis_1" content_type="model/stl" file="Red_mirror_model_walking_HL_toe_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_FL_link_1_2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_FL_link_1_2_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_FL_link_2c1_2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_FL_link_2c1_2_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_FL_link_2c2_2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_FL_link_2c2_2_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_FR_link_3c1_vis_1" content_type="model/stl" file="Red_mirror_model_walking_FR_link_3c1_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_FR_toe_vis_1" content_type="model/stl" file="Red_mirror_model_walking_FR_toe_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_ML_link_1_2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_ML_link_1_2_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_ML_link_2c1_2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_ML_link_2c1_2_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_ML_link_2c2_2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_ML_link_2c2_2_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_MR_link_3c1_vis_1" content_type="model/stl" file="Red_mirror_model_walking_MR_link_3c1_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_MR_toe_vis_1" content_type="model/stl" file="Red_mirror_model_walking_MR_toe_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_HL_link_1_2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_HL_link_1_2_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_HL_link_2c1_2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_HL_link_2c1_2_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_HL_link_2c2_2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_HL_link_2c2_2_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_HL_link_3c1_2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_HL_link_3c1_2_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_HL_toe_2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_HL_toe_2_vis_1.stl" />
+    <texture name="grid" type="2d" builtin="checker" rgb1="0.35 0.4 0.45" rgb2="0.25 0.3 0.35" width="512" height="512" />
+    <material name="grid" texture="grid" texrepeat="8 8" reflectance="0.1" />
+  </asset>
+  <worldbody>
+    <light name="sun" pos="0 0 3" dir="0 0 -1" directional="true" />
+    <geom name="floor" type="plane" size="0 0 0.05" material="grid" />
+    <body name="robot_base" pos="1.50000 0.00047 -0.13000">
+      <freejoint />
+      <inertial pos="-1.5 0 0.75" quat="1 -3.82669e-06 -2.1734e-06 8.3169e-12" mass="0.2" diaginertia="0.0166733 0.0166733 0.011196" />
+      <geom name="body_carbon_rod" size="0.4 0.02 0.01" pos="-1.5 0 0.248" quat="-1 3.82674e-06 2.1733e-06 -2.48268e-05" type="box" />
+      <geom size="0.4 0.02 0.01" pos="-1.5 0 0.248" quat="-1 3.82674e-06 2.1733e-06 -2.48268e-05" type="box" contype="0" conaffinity="0" group="1" rgba="0.4 0.4 0.4 1" density="0" />
+      <body name="FL_motor_1" pos="-1.23 0.060014 0.247001" quat="-0.707107 0.707107 3.81838e-05 -3.2282e-05">
+        <inertial pos="0 0 1.4e-05" quat="1 -3.33665e-06 2.48268e-05 1.82688e-06" mass="0.165" diaginertia="7.36759e-05 6.24869e-05 4.20509e-05" />
+        <geom name="FL_motor_1" size="0.01675 0.02925 0.022" pos="0 0 1.4e-05" quat="0.707109 0.707104 1.8847e-05 -1.62634e-05" type="box" />
+        <geom size="0.01675 0.02925 0.022" pos="0 0 1.4e-05" quat="0.707109 0.707104 1.8847e-05 -1.62634e-05" type="box" contype="0" conaffinity="0" group="1" rgba="0.35 0.35 0.35 1" density="0" />
+        <body name="FL_motor_2" pos="1e-06 0 0.015414" quat="0.707109 0.707104 1.8847e-05 -1.62634e-05">
+          <inertial pos="0 -0.0054 -0.0493" quat="0.5 0.5 -0.5 0.5" mass="0.165" diaginertia="0.0007425 0.000627 0.0004125" />
+          <joint name="TL0" range="-1.5708 1.5708" actuatorfrcrange="-10 10" />
+          <geom name="FL_motor_2" size="0.01675 0.02925 0.022" pos="0 -0.0054 -0.0493" quat="0.707107 0 -0.707107 0" type="box" />
+          <geom size="0.01675 0.02925 0.022" pos="0 -0.0054 -0.0493" quat="0.707107 0 -0.707107 0" type="box" contype="0" conaffinity="0" group="1" rgba="0.35 0.35 0.35 1" density="0" />
+          <geom name="FL_link_1" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 0.2 0.2 1" density="0" mesh="Red_mirror_model_walking_FL_link_1_vis_1" />
+          <body name="FL_link_2c1" pos="0 0.01 -0.0493" quat="0.707107 0 -0.707107 0">
+            <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001" />
+            <joint name="CL0" />
+            <geom name="FL_link_2c1" quat="0 -1 -1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="Red_mirror_model_walking_FL_link_2c1_vis_1" />
+            <geom name="FL_link_2c2" pos="-0.0448 0.0476 0" quat="-0.707107 -0.707107 0 -2.44949e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 0.2 0.2 1" density="0" mesh="Red_mirror_model_walking_FL_link_2c2_vis_1" />
+            <geom name="FL_motor_3" size="0.01 0.01 0.06" pos="-0.0448 0.0476 0" quat="0.5 0.5 0.5 -0.5" type="box" contype="0" conaffinity="0" group="1" density="0" />
+            <geom size="0.01675 0.02925 0.022" pos="-0.045 0.1446 0" quat="-1 -1.73205e-07 1.73205e-07 1.73205e-07" type="box" contype="0" conaffinity="0" group="1" rgba="0.35 0.35 0.35 1" density="0" />
+            <body name="FL_link_3" pos="-0.045 0.16 0" quat="-1 -1.73205e-07 1.73205e-07 1.73205e-07">
+              <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001" />
+              <joint name="FL0" range="-3.14159 3.14159" actuatorfrcrange="-10 10" />
+              <geom name="FL_link_3" size="0.01 0.01 0.0825" pos="0.0432 0.0696 0" quat="0.5 0.5 0.5 -0.5" type="box" contype="0" conaffinity="0" group="1" density="0" />
+              <geom name="FL_toe" pos="0.0213 0.1846 0" quat="0.612372 0.353554 0.612372 -0.353553" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="Red_mirror_model_walking_FL_toe_vis_1" />
+              <geom name="FL_link_3c1" quat="0 1.73205e-07 -1.73205e-07 1" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="Red_mirror_model_walking_FL_link_3c1_vis_1" />
+              <body name="FOOT_L0" pos="0.0343 0.162083 0" quat="0.612372 0.353554 0.612372 -0.353553">
+                <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001" />
+                <geom name="FOOT_L0" size="0.01" pos="0 -0.0005 -0.025134" quat="1 1.73205e-07 -1.73205e-07 1.73205e-07" group="1" rgba="0.3 0.3 0.3 1" density="0" />
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="ML_motor_1" pos="-1.39 0.060006 0.247" quat="-0.707107 0.707107 3.81838e-05 -3.2282e-05">
+        <inertial pos="0.025 0 6e-06" quat="1 -3.33665e-06 2.48268e-05 1.82688e-06" mass="0.165" diaginertia="7.36759e-05 6.24869e-05 4.20509e-05" />
+        <geom name="ML_motor_1" size="0.01675 0.02925 0.022" pos="0.025 0 6e-06" quat="0.707109 0.707104 1.8847e-05 -1.62634e-05" type="box" />
+        <geom size="0.01675 0.02925 0.022" pos="0.025 0 6e-06" quat="0.707109 0.707104 1.8847e-05 -1.62634e-05" type="box" contype="0" conaffinity="0" group="1" rgba="0.35 0.35 0.35 1" density="0" />
+        <body name="ML_motor_2" pos="0.025001 0 0.015406" quat="0.707109 0.707104 1.8847e-05 -1.62634e-05">
+          <inertial pos="0 -0.0054 -0.0493" quat="0.5 0.5 -0.5 0.5" mass="0.165" diaginertia="0.0007425 0.000627 0.0004125" />
+          <joint name="TL1" range="-1.5708 1.5708" actuatorfrcrange="-10 10" />
+          <geom name="ML_motor_2" size="0.01675 0.02925 0.022" pos="0 -0.0054 -0.0493" quat="0.707107 0 -0.707107 0" type="box" />
+          <geom size="0.01675 0.02925 0.022" pos="0 -0.0054 -0.0493" quat="0.707107 0 -0.707107 0" type="box" contype="0" conaffinity="0" group="1" rgba="0.35 0.35 0.35 1" density="0" />
+          <geom name="ML_link_1" quat="1 1.73205e-07 -1.73205e-07 1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 0.2 0.2 1" density="0" mesh="Red_mirror_model_walking_ML_link_1_vis_1" />
+          <body name="ML_link_2c1" pos="0 0.01 -0.0493" quat="0.707107 0 -0.707107 0">
+            <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001" />
+            <joint name="CL1" />
+            <geom name="ML_link_2c1" quat="0 -1 -1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="Red_mirror_model_walking_ML_link_2c1_vis_1" />
+            <geom name="ML_link_2c2" pos="-0.0448 -0.0164 0" quat="-0.707107 -0.707107 0 -2.44949e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 0.2 0.2 1" density="0" mesh="Red_mirror_model_walking_ML_link_2c2_vis_1" />
+            <geom name="ML_motor_3" size="0.01 0.01 0.0275" pos="-0.0448 0.0146 0" quat="0.5 0.5 0.5 -0.5" type="box" contype="0" conaffinity="0" group="1" density="0" />
+            <geom size="0.01675 0.02925 0.022" pos="-0.045 0.0806 0" quat="-1 -1.73205e-07 1.73205e-07 1.73205e-07" type="box" contype="0" conaffinity="0" group="1" rgba="0.35 0.35 0.35 1" density="0" />
+            <body name="ML_link_3c1" pos="-0.045 0.096 0" quat="-1 -1.73205e-07 1.73205e-07 1.73205e-07">
+              <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001" />
+              <joint name="FL1" />
+              <geom name="ML_link_3c1" quat="0 1.73205e-07 -1.73205e-07 1" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="Red_mirror_model_walking_ML_link_3c1_vis_1" />
+              <geom name="ML_toe" pos="0.0213 0.1336 0" quat="0.612372 0.353554 0.612372 -0.353553" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="Red_mirror_model_walking_ML_toe_vis_1" />
+              <geom name="ML_link_3" size="0.01 0.01 0.0575" pos="0.0432 0.0446 0" quat="0.5 0.5 0.5 -0.5" type="box" contype="0" conaffinity="0" group="1" density="0" />
+              <body name="FOOT_L1" pos="0.0322 0.114961 0" quat="0.613354 0.351839 0.613357 -0.351851">
+                <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001" />
+                <geom name="FOOT_L1" size="0.01" pos="0 0 -0.019592" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" group="1" rgba="0.3 0.3 0.3 1" density="0" />
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="HL_motor_1" pos="-1.57 0.059997 0.246999" quat="-0.707107 0.707107 3.81838e-05 -3.2282e-05">
+        <inertial pos="0.025 0 0" quat="1 -3.33665e-06 2.48268e-05 1.82688e-06" mass="0.165" diaginertia="7.36759e-05 6.24869e-05 4.20509e-05" />
+        <geom name="HL_motor_1" size="0.01675 0.02925 0.022" pos="0.025 0 0" quat="0.707109 0.707104 1.8847e-05 -1.62634e-05" type="box" />
+        <geom size="0.01675 0.02925 0.022" pos="0.025 0 0" quat="0.707109 0.707104 1.8847e-05 -1.62634e-05" type="box" contype="0" conaffinity="0" group="1" rgba="0.35 0.35 0.35 1" density="0" />
+        <body name="HL_motor_2" pos="0.025001 0 0.0154" quat="0.707109 0.707104 1.8847e-05 -1.62634e-05">
+          <inertial pos="0 -0.0054 -0.0493" quat="0.5 0.5 -0.5 0.5" mass="0.165" diaginertia="0.0007425 0.000627 0.0004125" />
+          <joint name="TL2" range="-1.5708 1.5708" actuatorfrcrange="-10 10" />
+          <geom name="HL_motor_2" size="0.01675 0.02925 0.022" pos="0 -0.0054 -0.0493" quat="0.707107 0 -0.707107 0" type="box" />
+          <geom size="0.01675 0.02925 0.022" pos="0 -0.0054 -0.0493" quat="0.707107 0 -0.707107 0" type="box" contype="0" conaffinity="0" group="1" rgba="0.35 0.35 0.35 1" density="0" />
+          <geom name="HL_link_1" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 0.2 0.2 1" density="0" mesh="Red_mirror_model_walking_HL_link_1_vis_1" />
+          <body name="HL_link_2c1" pos="0 0.01 -0.0493" quat="0.707107 0 -0.707107 0">
+            <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001" />
+            <joint name="CL2" />
+            <geom name="HL_link_2c1" quat="0 -1 -1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="Red_mirror_model_walking_HL_link_2c1_vis_1" />
+            <geom name="HL_link_2c2" pos="-0.0448 0.0176 0" quat="-0.707107 -0.707107 0 -2.44949e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 0.2 0.2 1" density="0" mesh="Red_mirror_model_walking_HL_link_2c2_vis_1" />
+            <geom name="HL_motor_3" size="0.01 0.01 0.045" pos="-0.04493 0.033356 -0.000642" quat="0.5 0.5 0.5 -0.5" type="box" contype="0" conaffinity="0" group="1" density="0" />
+            <geom size="0.01675 0.02925 0.022" pos="-0.04513 0.115356 -0.000642" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="box" contype="0" conaffinity="0" group="1" rgba="0.35 0.35 0.35 1" density="0" />
+            <body name="HL_link_3c1" pos="-0.04513 0.130756 -0.000642" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07">
+              <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001" />
+              <joint name="FL2" />
+              <geom name="HL_link_3c1" quat="0 1.73205e-07 -1.73205e-07 1" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="Red_mirror_model_walking_HL_link_3c1_vis_1" />
+              <geom name="HL_toe" pos="0.0213 0.1856 0" quat="0.612372 0.353554 0.612372 -0.353553" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="Red_mirror_model_walking_HL_toe_vis_1" />
+              <geom name="HL_link_3" size="0.01 0.01 0.085" pos="0.0432 0.0716 0" quat="0.5 0.5 0.5 -0.5" type="box" contype="0" conaffinity="0" group="1" density="0" />
+              <body name="FOOT_L2" pos="0.0333 0.163815 0" quat="0.612372 0.353554 0.612372 -0.353553">
+                <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001" />
+                <geom name="FOOT_L2" size="0.01" pos="0 0 -0.024" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" group="1" rgba="0.3 0.3 0.3 1" density="0" />
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="FR_motor_1" pos="-1.23 -0.059986 0.247002" quat="-0.707107 0.707107 3.81838e-05 -3.2282e-05">
+        <inertial pos="0 0 1.4e-05" quat="1 -3.33665e-06 2.51732e-05 2.00008e-06" mass="0.165" diaginertia="7.36759e-05 6.24869e-05 4.20509e-05" />
+        <geom name="FR_motor_1" size="0.01675 0.02925 0.022" pos="0 0 1.4e-05" quat="-1.63859e-05 -1.92144e-05 0.707104 -0.707109" type="box" />
+        <geom size="0.01675 0.02925 0.022" pos="0 0 1.4e-05" quat="-1.63859e-05 -1.92144e-05 0.707104 -0.707109" type="box" contype="0" conaffinity="0" group="1" rgba="0.35 0.35 0.35 1" density="0" />
+        <body name="FR_motor_2" pos="-1e-06 0 -0.015386" quat="-1.63859e-05 -1.92144e-05 0.707104 -0.707109">
+          <inertial pos="0 -0.0054 -0.0493" quat="0.5 0.5 -0.5 0.5" mass="0.165" diaginertia="0.0007425 0.000627 0.0004125" />
+          <joint name="TR0" range="-1.5708 1.5708" actuatorfrcrange="-10 10" />
+          <geom name="FR_motor_2" size="0.01675 0.02925 0.022" pos="0 -0.0054 -0.0493" quat="0.707107 0 -0.707107 0" type="box" />
+          <geom size="0.01675 0.02925 0.022" pos="0 -0.0054 -0.0493" quat="0.707107 0 -0.707107 0" type="box" contype="0" conaffinity="0" group="1" rgba="0.35 0.35 0.35 1" density="0" />
+          <geom quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 0.2 0.2 1" density="0" mesh="Red_mirror_model_walking_FL_link_1_2_vis_1" />
+          <body name="FL_link_2c1_2" pos="0 0.01 -0.0493" quat="0.707107 0 -0.707107 0">
+            <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001" />
+            <joint name="CR0" />
+            <geom quat="0 -1 -1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="Red_mirror_model_walking_FL_link_2c1_2_vis_1" />
+            <geom pos="-0.0448 0.0476 0" quat="-0.707107 -0.707107 0 -2.44949e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 0.2 0.2 1" density="0" mesh="Red_mirror_model_walking_FL_link_2c2_2_vis_1" />
+            <geom name="FR_link_3" size="0.01 0.01 0.06" pos="-0.0448 0.0476 0" quat="0.5 0.5 0.5 -0.5" type="box" contype="0" conaffinity="0" group="1" density="0" />
+            <geom size="0.01675 0.02925 0.022" pos="-0.045 0.1446 0" quat="1 1.73205e-07 -1.73205e-07 1.73205e-07" type="box" contype="0" conaffinity="0" group="1" rgba="0.35 0.35 0.35 1" density="0" />
+            <body name="FR_link_3c1" pos="-0.045 0.16 0" quat="1 1.73205e-07 -1.73205e-07 1.73205e-07">
+              <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001" />
+              <joint name="FR0" />
+              <geom name="FR_link_3c1" quat="0 1.73205e-07 -1.73205e-07 1" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="Red_mirror_model_walking_FR_link_3c1_vis_1" />
+              <geom name="FR_toe" pos="0.0213 0.1856 0" quat="0.612372 0.353554 0.612372 -0.353553" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="Red_mirror_model_walking_FR_toe_vis_1" />
+              <geom size="0.01 0.01 0.0825" pos="0.0432 0.0706 0" quat="0.5 0.5 0.5 -0.5" type="box" contype="0" conaffinity="0" group="1" density="0" />
+              <body name="FOOT_R0" pos="0.0333 0.163815 0" quat="0.612372 0.353554 0.612372 -0.353553">
+                <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001" />
+                <geom name="FOOT_R0" size="0.01" pos="0 0 -0.024" quat="1 1.73205e-07 -1.73205e-07 1.73205e-07" group="1" rgba="0.3 0.3 0.3 1" density="0" />
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="MR_motor_1" pos="-1.39 -0.059994 0.247001" quat="-0.707107 0.707107 3.81838e-05 -3.2282e-05">
+        <inertial pos="0.025 0 6e-06" quat="1 -3.33665e-06 2.51732e-05 2.00008e-06" mass="0.165" diaginertia="7.36759e-05 6.24869e-05 4.20509e-05" />
+        <geom name="MR_motor_1" size="0.01675 0.02925 0.022" pos="0.025 0 6e-06" quat="-1.63859e-05 -1.92144e-05 0.707104 -0.707109" type="box" />
+        <geom size="0.01675 0.02925 0.022" pos="0.025 0 6e-06" quat="-1.63859e-05 -1.92144e-05 0.707104 -0.707109" type="box" contype="0" conaffinity="0" group="1" rgba="0.35 0.35 0.35 1" density="0" />
+        <body name="MR_motor_2" pos="0.024999 0 -0.015394" quat="-1.63859e-05 -1.92144e-05 0.707104 -0.707109">
+          <inertial pos="0 -0.0054 -0.0493" quat="0.5 0.5 -0.5 0.5" mass="0.165" diaginertia="0.0007425 0.000627 0.0004125" />
+          <joint name="TR1" range="-1.5708 1.5708" actuatorfrcrange="-10 10" />
+          <geom name="MR_motor_2" size="0.01675 0.02925 0.022" pos="0 -0.0054 -0.0493" quat="0.707107 0 -0.707107 0" type="box" />
+          <geom size="0.01675 0.02925 0.022" pos="0 -0.0054 -0.0493" quat="0.707107 0 -0.707107 0" type="box" contype="0" conaffinity="0" group="1" rgba="0.35 0.35 0.35 1" density="0" />
+          <geom quat="-1 -1.73205e-07 1.73205e-07 1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 0.2 0.2 1" density="0" mesh="Red_mirror_model_walking_ML_link_1_2_vis_1" />
+          <body name="ML_link_2c1_2" pos="0 0.01 -0.0493" quat="0.707107 0 -0.707107 0">
+            <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001" />
+            <joint name="CR1" />
+            <geom quat="0 1 -1.73205e-07 1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="Red_mirror_model_walking_ML_link_2c1_2_vis_1" />
+            <geom pos="-0.0448 -0.0164 0" quat="-0.707107 -0.707107 0 -2.44949e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 0.2 0.2 1" density="0" mesh="Red_mirror_model_walking_ML_link_2c2_2_vis_1" />
+            <geom size="0.01 0.01 0.0275" pos="-0.0448 0.0146 0" quat="0.5 0.5 0.5 -0.5" type="box" contype="0" conaffinity="0" group="1" density="0" />
+            <geom size="0.01675 0.02925 0.022" pos="-0.045 0.0806 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="box" contype="0" conaffinity="0" group="1" rgba="0.35 0.35 0.35 1" density="0" />
+            <body name="MR_link_3c1" pos="-0.045 0.096 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07">
+              <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001" />
+              <joint name="FR1" />
+              <geom name="MR_link_3c1" quat="0 1.73205e-07 -1.73205e-07 1" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="Red_mirror_model_walking_MR_link_3c1_vis_1" />
+              <geom name="MR_toe" pos="0.0213 0.1336 0" quat="0.612372 0.353554 0.612372 -0.353553" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="Red_mirror_model_walking_MR_toe_vis_1" />
+              <geom name="MR_link_3" size="0.01 0.01 0.0575" pos="0.0432 0.0446 0" quat="0.5 0.5 0.5 -0.5" type="box" contype="0" conaffinity="0" group="1" density="0" />
+              <body name="FOOT_R1" pos="0.0323 0.113547 0" quat="0.612372 0.353554 0.612372 -0.353553">
+                <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001" />
+                <geom name="FOOT_R1" size="0.01" pos="0 0 -0.022" quat="1 1.73205e-07 -1.73205e-07 1.73205e-07" group="1" rgba="0.3 0.3 0.3 1" density="0" />
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="HR_motor_1" pos="-1.57 -0.060003 0.247" quat="-0.707107 0.707107 3.81838e-05 -3.2282e-05">
+        <inertial pos="0.025 0 0" quat="1 -3.33665e-06 2.51732e-05 2.00008e-06" mass="0.165" diaginertia="7.36759e-05 6.24869e-05 4.20509e-05" />
+        <geom name="HR_motor_1" size="0.01675 0.02925 0.022" pos="0.025 0 0" quat="-1.63859e-05 -1.92144e-05 0.707104 -0.707109" type="box" />
+        <geom size="0.01675 0.02925 0.022" pos="0.025 0 0" quat="-1.63859e-05 -1.92144e-05 0.707104 -0.707109" type="box" contype="0" conaffinity="0" group="1" rgba="0.35 0.35 0.35 1" density="0" />
+        <body name="HR_motor_2" pos="0.024999 0 -0.0154" quat="-1.63859e-05 -1.92144e-05 0.707104 -0.707109">
+          <inertial pos="0 -0.0054 -0.0493" quat="0.5 0.5 -0.5 0.5" mass="0.165" diaginertia="0.0007425 0.000627 0.0004125" />
+          <joint name="TR2" range="-1.5708 1.5708" actuatorfrcrange="-10 10" />
+          <geom name="HR_motor_2" size="0.01675 0.02925 0.022" pos="0 -0.0054 -0.0493" quat="0.707107 0 -0.707107 0" type="box" />
+          <geom size="0.01675 0.02925 0.022" pos="0 -0.0054 -0.0493" quat="0.707107 0 -0.707107 0" type="box" contype="0" conaffinity="0" group="1" rgba="0.35 0.35 0.35 1" density="0" />
+          <geom quat="1 -1.73205e-07 -1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 0.2 0.2 1" density="0" mesh="Red_mirror_model_walking_HL_link_1_2_vis_1" />
+          <body name="HL_link_2c1_2" pos="0 0.01 -0.0493" quat="0.707107 0 -0.707107 0">
+            <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001" />
+            <joint name="CR2" />
+            <geom quat="0 -1 -1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="Red_mirror_model_walking_HL_link_2c1_2_vis_1" />
+            <geom pos="-0.0448 0.0176 0" quat="-0.707107 -0.707107 0 -2.44949e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 0.2 0.2 1" density="0" mesh="Red_mirror_model_walking_HL_link_2c2_2_vis_1" />
+            <geom size="0.01 0.01 0.045" pos="-0.0448 0.0326 0" quat="0.5 0.5 0.5 -0.5" type="box" contype="0" conaffinity="0" group="1" density="0" />
+            <geom size="0.01675 0.02925 0.022" pos="-0.045 0.1146 0" quat="-1 -1.73205e-07 1.73205e-07 1.73205e-07" type="box" contype="0" conaffinity="0" group="1" rgba="0.35 0.35 0.35 1" density="0" />
+            <body name="HL_link_3c1_2" pos="-0.045 0.13 0" quat="-1 -1.73205e-07 1.73205e-07 1.73205e-07">
+              <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001" />
+              <joint name="FR2" />
+              <geom quat="0 1.73205e-07 -1.73205e-07 1" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="Red_mirror_model_walking_HL_link_3c1_2_vis_1" />
+              <geom pos="0.0213 0.1886 0" quat="0.612372 0.353554 0.612372 -0.353553" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="Red_mirror_model_walking_HL_toe_2_vis_1" />
+              <geom name="HR_link_3" size="0.01 0.01 0.085" pos="0.0432 0.0716 0" quat="0.5 0.5 0.5 -0.5" type="box" contype="0" conaffinity="0" group="1" density="0" />
+              <body name="FOOT_R2" pos="0.0333 0.166815 0" quat="0.612372 0.353554 0.612372 -0.353553">
+                <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001" />
+                <geom name="FOOT_R2" size="0.01" pos="0 0 -0.024" quat="-1 -1.73205e-07 1.73205e-07 1.73205e-07" group="1" rgba="0.3 0.3 0.3 1" density="0" />
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+  <actuator>
+    <position name="TL0" joint="TL0" kp="10.0" kv="0.5" ctrlrange="-1.5708 1.5708" />
+    <position name="CL0" joint="CL0" kp="10.0" kv="0.5" />
+    <position name="FL0" joint="FL0" kp="10.0" kv="0.5" ctrlrange="-3.14159 3.14159" />
+    <position name="TL1" joint="TL1" kp="10.0" kv="0.5" ctrlrange="-1.5708 1.5708" />
+    <position name="CL1" joint="CL1" kp="10.0" kv="0.5" />
+    <position name="FL1" joint="FL1" kp="10.0" kv="0.5" />
+    <position name="TL2" joint="TL2" kp="10.0" kv="0.5" ctrlrange="-1.5708 1.5708" />
+    <position name="CL2" joint="CL2" kp="10.0" kv="0.5" />
+    <position name="FL2" joint="FL2" kp="10.0" kv="0.5" />
+    <position name="TR0" joint="TR0" kp="10.0" kv="0.5" ctrlrange="-1.5708 1.5708" />
+    <position name="CR0" joint="CR0" kp="10.0" kv="0.5" />
+    <position name="FR0" joint="FR0" kp="10.0" kv="0.5" />
+    <position name="TR1" joint="TR1" kp="10.0" kv="0.5" ctrlrange="-1.5708 1.5708" />
+    <position name="CR1" joint="CR1" kp="10.0" kv="0.5" />
+    <position name="FR1" joint="FR1" kp="10.0" kv="0.5" />
+    <position name="TR2" joint="TR2" kp="10.0" kv="0.5" ctrlrange="-1.5708 1.5708" />
+    <position name="CR2" joint="CR2" kp="10.0" kv="0.5" />
+    <position name="FR2" joint="FR2" kp="10.0" kv="0.5" />
+  </actuator>
+</mujoco>

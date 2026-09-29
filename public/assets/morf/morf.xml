@@ -1,0 +1,485 @@
+<mujoco model="morf">
+  <compiler angle="radian" meshdir="meshes/" />
+  <option integrator="implicitfast" />
+  <asset>
+    <mesh name="MORF_BasicLocomotionLearning_morf_frame_vis_1" content_type="model/stl" file="MORF_BasicLocomotionLearning_morf_frame_vis_1.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_morf_frame_vis_2" content_type="model/stl" file="MORF_BasicLocomotionLearning_morf_frame_vis_2.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_morf_frame_vis_3" content_type="model/stl" file="MORF_BasicLocomotionLearning_morf_frame_vis_3.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_morf_frame_vis_4" content_type="model/stl" file="MORF_BasicLocomotionLearning_morf_frame_vis_4.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_morf_frame_vis_5" content_type="model/stl" file="MORF_BasicLocomotionLearning_morf_frame_vis_5.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_morf_frame_vis_6" content_type="model/stl" file="MORF_BasicLocomotionLearning_morf_frame_vis_6.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_morf_frame_vis_7" content_type="model/stl" file="MORF_BasicLocomotionLearning_morf_frame_vis_7.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_morf_frame_vis_8" content_type="model/stl" file="MORF_BasicLocomotionLearning_morf_frame_vis_8.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_morf_frame_vis_9" content_type="model/stl" file="MORF_BasicLocomotionLearning_morf_frame_vis_9.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_morf_frame_vis_10" content_type="model/stl" file="MORF_BasicLocomotionLearning_morf_frame_vis_10.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_morf_frame_vis_11" content_type="model/stl" file="MORF_BasicLocomotionLearning_morf_frame_vis_11.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_morf_frame_vis_12" content_type="model/stl" file="MORF_BasicLocomotionLearning_morf_frame_vis_12.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_morf_frame_vis_13" content_type="model/stl" file="MORF_BasicLocomotionLearning_morf_frame_vis_13.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_morf_frame_vis_14" content_type="model/stl" file="MORF_BasicLocomotionLearning_morf_frame_vis_14.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_morf_frame_vis_15" content_type="model/stl" file="MORF_BasicLocomotionLearning_morf_frame_vis_15.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_coxa_vis0_vis_1" content_type="model/stl" file="MORF_BasicLocomotionLearning_coxa_vis0_vis_1.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_femur_vis0_vis_1" content_type="model/stl" file="MORF_BasicLocomotionLearning_femur_vis0_vis_1.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_femur_vis0_vis_2" content_type="model/stl" file="MORF_BasicLocomotionLearning_femur_vis0_vis_2.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis0_vis_1" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis0_vis_1.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis0_vis_2" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis0_vis_2.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis0_vis_3" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis0_vis_3.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis0_vis_4" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis0_vis_4.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_coxa_vis1_vis_1" content_type="model/stl" file="MORF_BasicLocomotionLearning_coxa_vis1_vis_1.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_femur_vis1_vis_1" content_type="model/stl" file="MORF_BasicLocomotionLearning_femur_vis1_vis_1.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_femur_vis1_vis_2" content_type="model/stl" file="MORF_BasicLocomotionLearning_femur_vis1_vis_2.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis1_vis_1" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis1_vis_1.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis1_vis_2" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis1_vis_2.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis1_vis_3" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis1_vis_3.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis1_vis_4" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis1_vis_4.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_coxa_vis2_vis_1" content_type="model/stl" file="MORF_BasicLocomotionLearning_coxa_vis2_vis_1.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_femur_vis2_vis_1" content_type="model/stl" file="MORF_BasicLocomotionLearning_femur_vis2_vis_1.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_femur_vis2_vis_2" content_type="model/stl" file="MORF_BasicLocomotionLearning_femur_vis2_vis_2.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis2_vis_1" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis2_vis_1.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis2_vis_2" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis2_vis_2.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis2_vis_3" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis2_vis_3.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis2_vis_4" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis2_vis_4.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_coxa_vis3_vis_1" content_type="model/stl" file="MORF_BasicLocomotionLearning_coxa_vis3_vis_1.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_femur_vis3_vis_1" content_type="model/stl" file="MORF_BasicLocomotionLearning_femur_vis3_vis_1.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_femur_vis3_vis_2" content_type="model/stl" file="MORF_BasicLocomotionLearning_femur_vis3_vis_2.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis3_vis_1" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis3_vis_1.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis3_vis_2" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis3_vis_2.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis3_vis_3" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis3_vis_3.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis3_vis_4" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis3_vis_4.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_coxa_vis4_vis_1" content_type="model/stl" file="MORF_BasicLocomotionLearning_coxa_vis4_vis_1.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_femur_vis4_vis_1" content_type="model/stl" file="MORF_BasicLocomotionLearning_femur_vis4_vis_1.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_femur_vis4_vis_2" content_type="model/stl" file="MORF_BasicLocomotionLearning_femur_vis4_vis_2.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis4_vis_1" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis4_vis_1.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis4_vis_2" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis4_vis_2.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis4_vis_3" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis4_vis_3.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis4_vis_4" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis4_vis_4.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_coxa_vis5_vis_1" content_type="model/stl" file="MORF_BasicLocomotionLearning_coxa_vis5_vis_1.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_femur_vis5_vis_1" content_type="model/stl" file="MORF_BasicLocomotionLearning_femur_vis5_vis_1.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_femur_vis5_vis_2" content_type="model/stl" file="MORF_BasicLocomotionLearning_femur_vis5_vis_2.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis5_vis_1" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis5_vis_1.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis5_vis_2" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis5_vis_2.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis5_vis_3" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis5_vis_3.stl" />
+    <mesh name="MORF_BasicLocomotionLearning_tibia_vis5_vis_4" content_type="model/stl" file="MORF_BasicLocomotionLearning_tibia_vis5_vis_4.stl" />
+  </asset>
+  <worldbody>
+    <geom name="floor" size="0 0 0.05" type="plane" condim="3" rgba="0.2 0.3 0.4 1"/>
+    <body name="robot_base">
+      <freejoint />
+      <inertial pos="0.002896 0 0.122273" quat="0.503026 0.496956 0.496956 0.503026" mass="1.965" diaginertia="0.0291941 0.0290425 0.00518744" />
+      <geom name="morf" size="0.0525215 0.0620015 0.0665415" pos="0.14786 0 0.125" quat="1 1.73262e-07 -0.000327173 1.73262e-07" type="box" />
+      <geom size="0.062771 0.062001 0.14924" pos="-0.051185 0 0.121256" quat="0.707107 0 -0.707107 0" type="box" />
+      <geom name="morf_frame" pos="-4e-05 0 0.126007" quat="0.707107 0 -0.707107 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.08 0.08 0.08 1" density="0" mesh="MORF_BasicLocomotionLearning_morf_frame_vis_1" />
+      <geom pos="-4e-05 0 0.126007" quat="0.707107 0 -0.707107 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.08 0.08 0.08 1" density="0" mesh="MORF_BasicLocomotionLearning_morf_frame_vis_2" />
+      <geom pos="-4e-05 0 0.126007" quat="0.707107 0 -0.707107 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.08 0.08 0.08 1" density="0" mesh="MORF_BasicLocomotionLearning_morf_frame_vis_3" />
+      <geom pos="-4e-05 0 0.126007" quat="0.707107 0 -0.707107 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.08 0.08 0.08 1" density="0" mesh="MORF_BasicLocomotionLearning_morf_frame_vis_4" />
+      <geom pos="-4e-05 0 0.126007" quat="0.707107 0 -0.707107 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.08 0.08 0.08 1" density="0" mesh="MORF_BasicLocomotionLearning_morf_frame_vis_5" />
+      <geom pos="-4e-05 0 0.126007" quat="0.707107 0 -0.707107 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.08 0.08 0.08 1" density="0" mesh="MORF_BasicLocomotionLearning_morf_frame_vis_6" />
+      <geom pos="-4e-05 0 0.126007" quat="0.707107 0 -0.707107 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.08 0.08 0.08 1" density="0" mesh="MORF_BasicLocomotionLearning_morf_frame_vis_7" />
+      <geom pos="-4e-05 0 0.126007" quat="0.707107 0 -0.707107 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.16 0.16 0.16 1" density="0" mesh="MORF_BasicLocomotionLearning_morf_frame_vis_8" />
+      <geom pos="-4e-05 0 0.126007" quat="0.707107 0 -0.707107 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.13 0.13 0.13 1" density="0" mesh="MORF_BasicLocomotionLearning_morf_frame_vis_9" />
+      <geom pos="-4e-05 0 0.126007" quat="0.707107 0 -0.707107 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.13 0.13 0.13 1" density="0" mesh="MORF_BasicLocomotionLearning_morf_frame_vis_10" />
+      <geom pos="-4e-05 0 0.126007" quat="0.707107 0 -0.707107 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.791244 0.918648 0.860337 1" density="0" mesh="MORF_BasicLocomotionLearning_morf_frame_vis_11" />
+      <geom pos="-4e-05 0 0.126007" quat="0.707107 0 -0.707107 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.08 0.08 0.08 1" density="0" mesh="MORF_BasicLocomotionLearning_morf_frame_vis_12" />
+      <geom pos="-4e-05 0 0.126007" quat="0.707107 0 -0.707107 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.791244 0.918648 0.860337 1" density="0" mesh="MORF_BasicLocomotionLearning_morf_frame_vis_13" />
+      <geom pos="-4e-05 0 0.126007" quat="0.707107 0 -0.707107 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.3 0.07 0.08 1" density="0" mesh="MORF_BasicLocomotionLearning_morf_frame_vis_14" />
+      <geom pos="-4e-05 0 0.126007" quat="0.707107 0 -0.707107 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.08 0.08 0.08 1" density="0" mesh="MORF_BasicLocomotionLearning_morf_frame_vis_15" />
+      <body name="bc_dyn0" pos="0.156771 0.062793 0.086513" quat="-8.60775e-06 9.31487e-06 0.707107 0.707107">
+        <inertial pos="-7.2e-05 2.2e-05 0.025529" quat="0.999995 -0.00309621 7.36592e-05 -0.000159623" mass="0.82" diaginertia="0.000224356 0.000188999 0.000131697" />
+        <geom name="bc_dyn0" size="0.0170005 0.01425 0.0232505" pos="-7.4e-05 -2.3e-05 0.023107" quat="-1.22473e-07 0.707116 0.707098 1.22476e-07" type="box" />
+        <geom size="0.00224059 0.00125018" pos="-6.1e-05 0.022127 0.035107" quat="0.499994 -0.500006 -0.499993 -0.500006" type="cylinder" />
+        <geom size="0.00974708 0.0190063" pos="-6.5e-05 -2.3e-05 0.035107" quat="0.00023994 0.000240185 0.707107 0.707107" type="cylinder" />
+        <geom size="0.0039899 0.000850186" pos="-7.3e-05 0.019827 0.03512" quat="9.06991e-06 9.31486e-06 0.707107 0.707107" type="cylinder" />
+        <geom name="bc_vis0" size="0.0170005 0.01425 0.0232505" pos="-7.4e-05 -2.3e-05 0.023107" quat="-1.22473e-07 0.707116 0.707098 1.22476e-07" type="box" contype="0" conaffinity="0" group="1" rgba="0.1 0.1 0.1 1" density="0" />
+        <geom size="0.00224059 0.00125018" pos="-6.1e-05 0.022127 0.035106" quat="0.499994 -0.500006 -0.499993 -0.500006" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+        <geom size="0.00974708 0.0190063" pos="-6.5e-05 -2.3e-05 0.035107" quat="0.00023994 0.000240185 0.707107 0.707107" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+        <geom size="0.0039899 0.000850186" pos="-7.3e-05 0.019827 0.03512" quat="9.06991e-06 9.31486e-06 0.707107 0.707107" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+        <body name="coxa_dyn0" pos="-4e-06 0.000969 0.035091" quat="-8.96131e-06 9.42347e-06 0.707107 -0.707107">
+          <inertial pos="0.000112 -0.0374 0.006753" quat="0.996353 0.0851619 0.00207945 0.0048746" mass="0.093" diaginertia="2.74013e-05 2.65594e-05 1.90867e-05" />
+          <joint name="TC0" />
+          <geom name="coxa_dyn0" size="0.0010005 0.0138225 0.0140035" pos="-1e-05 -0.009278 0.020992" quat="0.00213216 0.707104 0.00213215 -0.707103" type="box" />
+          <geom size="0.0015 0.014001 0.020974" pos="7e-05 -0.024017 0.000965" quat="-1.32039e-05 -0.707105 0.707109 2.92225e-05" type="box" />
+          <geom size="0.0010005 0.0135 0.014" pos="7e-05 -0.009016 -0.019008" quat="2.31079e-07 -0.707107 2.31079e-07 0.707107" type="box" />
+          <geom size="0.01425 0.0170015 0.023251" pos="7e-05 -0.039767 0.004991" quat="-1.21432e-05 -0.707104 0.707109 3.02832e-05" type="box" />
+          <geom size="0.0022406 0.00125013" pos="0.02222 -0.039768 0.017004" quat="0.480938 0.518365 0.480963 0.518335" type="cylinder" />
+          <geom size="0.00974561 0.019" pos="7e-05 -0.039767 0.016991" quat="5.84632e-07 -0.707107 5.84632e-07 0.707107" type="cylinder" />
+          <geom size="0.00399013 0.000951409" pos="0.020019 -0.039767 0.017005" quat="0.499836 -0.500163 0.500164 -0.499837" type="cylinder" />
+          <geom name="coxa_vis0" pos="7e-05 -0.010516 0.000992" quat="9.25705e-12 -1 3.26795e-07 2.83268e-05" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.3 0 0 1" density="0" mesh="MORF_BasicLocomotionLearning_coxa_vis0_vis_1" />
+          <geom name="coxa2_vis0" size="0.01425 0.0170015 0.023251" pos="7e-05 -0.039767 0.004991" quat="-1.21432e-05 -0.707104 0.707109 3.02832e-05" type="box" contype="0" conaffinity="0" group="1" rgba="0.1 0.1 0.1 1" density="0" />
+          <geom size="0.0022406 0.00125013" pos="0.02222 -0.039768 0.017004" quat="0.480938 0.518365 0.480963 0.518335" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+          <geom size="0.00974561 0.019" pos="7e-05 -0.039767 0.016991" quat="5.84632e-07 -0.707107 5.84632e-07 0.707107" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+          <geom size="0.00399013 0.000951409" pos="0.020019 -0.039767 0.017005" quat="0.499836 -0.500163 0.500164 -0.499837" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+          <body name="femur_dyn0" pos="-6.1e-05 -0.0398 0.017011" quat="0.378996 -0.596961 0.378979 -0.596971">
+            <inertial pos="-0.008679 0.034036 0.000129" quat="0.705315 0.705255 0.0507165 0.0507252" mass="0.018" diaginertia="1.91281e-05 1.28705e-05 8.15428e-06" />
+            <joint name="CF0" />
+            <geom name="femur_dyn0" size="0.001 0.0110825 0.0243845" pos="-0.005338 0.01217 -0.019869" quat="0.591516 0.387444 0.591501 -0.387457" type="box" />
+            <geom size="0.001 0.0110825 0.0243845" pos="-0.005338 0.012171 0.020131" quat="0.591516 0.387445 0.591501 -0.387457" type="box" />
+            <geom size="0.001 0.0110825 0.0256575" pos="-0.011855 0.054817 0.020129" quat="-0.46826 -0.529847 -0.468241 0.529854" type="box" />
+            <geom size="0.001 0.0110825 0.0256575" pos="-0.011855 0.054816 -0.01987" quat="-0.468259 -0.529848 -0.46824 0.529855" type="box" />
+            <geom name="femur_vis0" pos="-0.009358 0.034005 0.000129" quat="0.0525032 -0.0487571 0.705395 -0.705183" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.3 0 0 1" density="0" mesh="MORF_BasicLocomotionLearning_femur_vis0_vis_1" />
+            <geom pos="-0.009358 0.034005 0.000129" quat="0.0525032 -0.0487571 0.705395 -0.705183" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.3 0 0 1" density="0" mesh="MORF_BasicLocomotionLearning_femur_vis0_vis_2" />
+            <body name="tibia_dyn0" pos="-0.010078 0.069315 0.001992" quat="-1.4956e-07 0.504377 0.863484 8.73606e-08">
+              <inertial pos="-0.040173 0.011371 0.00184" quat="0.552421 0.551723 0.442756 0.440908" mass="0.134" diaginertia="0.000169168 0.000166296 2.09931e-05" />
+              <joint name="FT0" />
+              <geom name="tibia_dyn0" size="0.0174979 0.0257507" pos="-0.068067 0.017808 0.001861" quat="-0.460358 0.578443 0.406723 -0.536704" type="cylinder" />
+              <geom size="0.0015 0.0140015 0.019001" pos="-0.040943 0.015195 0.001862" quat="0.998846 -3.93426e-05 -9.79497e-06 -0.0480278" type="box" />
+              <geom size="0.001007 0.0092095 0.0144895" pos="-0.03112 0.014252 -0.016139" quat="0.459311 0.537934 0.459006 -0.537563" type="box" />
+              <geom size="0.0010065 0.0092095 0.01449" pos="-0.031121 0.014251 0.019861" quat="0.459311 0.537934 0.459006 -0.537563" type="box" />
+              <geom size="0.01425 0.0170045 0.023253" pos="-0.010869 0.005134 0.001862" quat="-0.598092 0.597982 0.377268 -0.377322" type="box" />
+              <geom size="0.00974391 0.0190006" pos="-4.1e-05 -3.3e-05 0.001867" quat="1 -0.000244327 -1.26718e-05 -5.82989e-06" type="cylinder" />
+              <geom size="0.00223847 0.00125007" pos="-5.3e-05 -3e-05 -0.020288" quat="3.72479e-06 -0.634071 0.773275 1.01669e-05" type="cylinder" />
+              <geom size="0.00398813 0.000950307" pos="-3.3e-05 -1.8e-05 -0.018088" quat="3.85875e-05 0.127974 0.991778 -4.41838e-07" type="cylinder" />
+              <geom size="0.00774071 0.0250042" pos="-0.085325 0.019486 0.001864" quat="0.499657 0.545718 0.449738 0.500271" type="cylinder" />
+              <geom name="tibia_vis0" pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.08 0.08 0.08 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis0_vis_1" />
+              <geom pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.08 0.08 0.08 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis0_vis_2" />
+              <geom pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.84 0.84 0.84 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis0_vis_3" />
+              <geom pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.24 0.24 0.24 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis0_vis_4" />
+              <geom name="tibia2_vis0" size="0.01425 0.0170045 0.023253" pos="-0.010868 0.005134 0.001862" quat="-0.598093 0.597981 0.377268 -0.377322" type="box" contype="0" conaffinity="0" group="1" rgba="0.1 0.1 0.1 1" density="0" />
+              <geom size="0.00974391 0.0190006" pos="-4e-05 -3.3e-05 0.001867" quat="1 -0.000244327 -1.26717e-05 -6.32989e-06" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+              <geom size="0.00223847 0.00125007" pos="-5.2e-05 -3e-05 -0.020288" quat="3.72479e-06 -0.634071 0.773275 1.01669e-05" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+              <geom size="0.00398813 0.000950307" pos="-3.3e-05 -1.7e-05 -0.018087" quat="3.86515e-05 0.127974 0.991778 5.40703e-08" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+              <body name="foot0" pos="-0.090383 0.019361 0.00184" quat="0.689732 -0.0889312 0.701488 -0.155807">
+                <inertial pos="-0.000222 0.00056 -0.02298" quat="0.504629 0.495088 0.495328 0.504865" mass="0.00169631" diaginertia="5.90203e-08 5.90203e-08 5.88317e-08" />
+                <geom name="foot0" size="0.00937155" pos="-0.000222 0.00056 -0.02298" quat="-0.700084 0.0185586 0.713579 -0.0185409" />
+                <geom size="0.00937155" pos="-0.000222 0.00056 -0.02298" quat="-0.700084 0.0185586 0.713579 -0.0185409" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 1 1" density="0" />
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="bc_dyn1" pos="0.012772 0.06278 0.086513" quat="-8.96131e-06 8.96131e-06 0.707107 0.707107">
+        <inertial pos="-7.2e-05 2.2e-05 0.025529" quat="0.999995 -0.00309621 7.36592e-05 -0.000159623" mass="0.082" diaginertia="2.24356e-05 1.88999e-05 1.31697e-05" />
+        <geom name="bc_dyn1" size="0.0170005 0.01425 0.0232505" pos="-7.4e-05 -2.3e-05 0.023107" quat="-1.22473e-07 0.707116 0.707098 1.22476e-07" type="box" />
+        <geom size="0.00224059 0.00125018" pos="-6.1e-05 0.022127 0.035107" quat="0.499994 -0.500006 -0.499993 -0.500006" type="cylinder" />
+        <geom size="0.00974708 0.0190063" pos="-6.5e-05 -2.3e-05 0.035107" quat="0.00023994 0.000240185 0.707107 0.707107" type="cylinder" />
+        <geom size="0.0039899 0.000850186" pos="-7.3e-05 0.019827 0.03512" quat="9.06991e-06 9.31486e-06 0.707107 0.707107" type="cylinder" />
+        <geom name="bc_vis1" size="0.0170005 0.01425 0.0232505" pos="-7.4e-05 -2.3e-05 0.023107" quat="-1.22473e-07 0.707116 0.707098 1.22476e-07" type="box" contype="0" conaffinity="0" group="1" rgba="0.1 0.1 0.1 1" density="0" />
+        <geom size="0.00224059 0.00125018" pos="-6.1e-05 0.022127 0.035107" quat="0.499994 -0.500006 -0.499993 -0.500006" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+        <geom size="0.00974708 0.0190063" pos="-6.5e-05 -2.3e-05 0.035107" quat="0.00023994 0.000240185 0.707107 0.707107" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+        <geom size="0.0039899 0.000850186" pos="-7.3e-05 0.019827 0.03512" quat="9.06991e-06 9.31486e-06 0.707107 0.707107" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+        <body name="coxa_dyn1" pos="-4e-06 0.000969 0.035091" quat="-8.96131e-06 9.42347e-06 0.707107 -0.707107">
+          <inertial pos="0.000111 -0.0374 0.006753" quat="0.996353 0.0851619 0.00207945 0.0048746" mass="0.093" diaginertia="2.74013e-05 2.65594e-05 1.90867e-05" />
+          <joint name="TC1" />
+          <geom name="coxa_dyn1" size="0.0010005 0.0138225 0.0140035" pos="-1.1e-05 -0.009278 0.020992" quat="0.00213216 0.707104 0.00213215 -0.707103" type="box" />
+          <geom size="0.0015 0.014001 0.020974" pos="6.9e-05 -0.024017 0.000964" quat="-1.32039e-05 -0.707105 0.707109 2.92225e-05" type="box" />
+          <geom size="0.0010005 0.0135 0.014" pos="7e-05 -0.009016 -0.019008" quat="2.31079e-07 -0.707107 2.31079e-07 0.707107" type="box" />
+          <geom size="0.01425 0.0170015 0.023251" pos="7e-05 -0.039767 0.004991" quat="-1.21432e-05 -0.707104 0.707109 3.02832e-05" type="box" />
+          <geom size="0.0022406 0.00125013" pos="0.02222 -0.039768 0.017004" quat="0.480938 0.518365 0.480963 0.518335" type="cylinder" />
+          <geom size="0.00974561 0.019" pos="7e-05 -0.039767 0.016991" quat="5.84632e-07 -0.707107 5.84632e-07 0.707107" type="cylinder" />
+          <geom size="0.00399013 0.000951409" pos="0.020019 -0.039767 0.017005" quat="0.499836 -0.500163 0.500164 -0.499837" type="cylinder" />
+          <geom name="coxa_vis1" pos="7e-05 -0.010516 0.000992" quat="9.25705e-12 -1 3.26795e-07 2.83268e-05" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.3 0 0 1" density="0" mesh="MORF_BasicLocomotionLearning_coxa_vis1_vis_1" />
+          <geom name="coxa2_vis1" size="0.01425 0.0170015 0.023251" pos="7e-05 -0.039767 0.004991" quat="-1.21432e-05 -0.707104 0.707109 3.02832e-05" type="box" contype="0" conaffinity="0" group="1" rgba="0.1 0.1 0.1 1" density="0" />
+          <geom size="0.0022406 0.00125013" pos="0.02222 -0.039768 0.017004" quat="0.480938 0.518365 0.480963 0.518335" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+          <geom size="0.00974561 0.019" pos="7e-05 -0.039767 0.016991" quat="5.84632e-07 -0.707107 5.84632e-07 0.707107" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+          <geom size="0.00399013 0.000951409" pos="0.020019 -0.039767 0.017005" quat="0.499836 -0.500163 0.500164 -0.499837" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+          <body name="femur_dyn1" pos="-6.2e-05 -0.0398 0.01701" quat="0.383154 -0.594301 0.383137 -0.594311">
+            <inertial pos="-0.008679 0.034036 0.000129" quat="0.705315 0.705255 0.0507172 0.0507252" mass="0.018" diaginertia="1.91281e-05 1.28705e-05 8.15428e-06" />
+            <joint name="CF1" />
+            <geom name="femur_dyn1" size="0.001 0.0110825 0.0243845" pos="-0.005338 0.012169 -0.019869" quat="0.591516 0.387444 0.591501 -0.387457" type="box" />
+            <geom size="0.001 0.0110825 0.0243845" pos="-0.005338 0.01217 0.020131" quat="0.591516 0.387445 0.5915 -0.387457" type="box" />
+            <geom size="0.001 0.0110825 0.0256575" pos="-0.011855 0.054817 0.020129" quat="-0.46826 -0.529847 -0.468241 0.529854" type="box" />
+            <geom size="0.001 0.0110825 0.0256575" pos="-0.011855 0.054816 -0.01987" quat="-0.468259 -0.529848 -0.46824 0.529855" type="box" />
+            <geom name="femur_vis1" pos="-0.009358 0.034005 0.000129" quat="0.0525032 -0.0487571 0.705395 -0.705183" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.3 0 0 1" density="0" mesh="MORF_BasicLocomotionLearning_femur_vis1_vis_1" />
+            <geom pos="-0.009358 0.034005 0.000129" quat="0.0525032 -0.0487571 0.705395 -0.705183" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.3 0 0 1" density="0" mesh="MORF_BasicLocomotionLearning_femur_vis1_vis_2" />
+            <body name="tibia_dyn1" pos="-0.010078 0.069315 0.001992" quat="2.76258e-07 0.534205 0.845355 -1.74575e-07">
+              <inertial pos="-0.040173 0.011371 0.00184" quat="0.552421 0.551723 0.442756 0.440908" mass="0.134" diaginertia="0.000169168 0.000166296 2.09931e-05" />
+              <joint name="FT1" />
+              <geom name="tibia_dyn1" size="0.0174979 0.0257507" pos="-0.068067 0.017808 0.001861" quat="-0.460358 0.578443 0.406723 -0.536704" type="cylinder" />
+              <geom size="0.0015 0.0140015 0.019001" pos="-0.040943 0.015195 0.001862" quat="0.998846 -3.93426e-05 -9.79497e-06 -0.0480278" type="box" />
+              <geom size="0.001007 0.0092095 0.0144895" pos="-0.03112 0.014252 -0.016139" quat="0.459311 0.537934 0.459006 -0.537563" type="box" />
+              <geom size="0.0010065 0.0092095 0.01449" pos="-0.031121 0.014251 0.019861" quat="0.459311 0.537934 0.459006 -0.537563" type="box" />
+              <geom size="0.01425 0.0170045 0.023253" pos="-0.010869 0.005134 0.001862" quat="-0.598092 0.597982 0.377268 -0.377322" type="box" />
+              <geom size="0.00974391 0.0190006" pos="-4.1e-05 -3.3e-05 0.001867" quat="1 -0.000244327 -1.26718e-05 -5.82989e-06" type="cylinder" />
+              <geom size="0.00223847 0.00125007" pos="-5.3e-05 -3e-05 -0.020288" quat="3.72479e-06 -0.634071 0.773275 1.01669e-05" type="cylinder" />
+              <geom size="0.00398813 0.000950307" pos="-3.3e-05 -1.8e-05 -0.018088" quat="3.85875e-05 0.127974 0.991778 -4.41838e-07" type="cylinder" />
+              <geom size="0.00774071 0.0250042" pos="-0.085325 0.019486 0.001864" quat="0.499657 0.545718 0.449738 0.500271" type="cylinder" />
+              <geom name="tibia_vis1" pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.08 0.08 0.08 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis1_vis_1" />
+              <geom pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.08 0.08 0.08 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis1_vis_2" />
+              <geom pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.84 0.84 0.84 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis1_vis_3" />
+              <geom pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.24 0.24 0.24 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis1_vis_4" />
+              <geom name="tibia2_vis1" size="0.01425 0.0170045 0.023253" pos="-0.010868 0.005134 0.001862" quat="-0.598093 0.597981 0.377268 -0.377322" type="box" contype="0" conaffinity="0" group="1" rgba="0.1 0.1 0.1 1" density="0" />
+              <geom size="0.00974391 0.0190006" pos="-4e-05 -3.3e-05 0.001867" quat="1 -0.000244327 -1.26717e-05 -6.32989e-06" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+              <geom size="0.00223847 0.00125007" pos="-5.2e-05 -3e-05 -0.020288" quat="3.72479e-06 -0.634071 0.773275 1.01669e-05" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+              <geom size="0.00398813 0.000950307" pos="-3.3e-05 -1.7e-05 -0.018087" quat="3.86515e-05 0.127974 0.991778 5.40703e-08" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+              <body name="foot1" pos="-0.090383 0.019361 0.00184" quat="0.689732 -0.0889312 0.701488 -0.155807">
+                <inertial pos="-0.000222 0.00056 -0.02298" quat="0.500013 0.5 0.499987 0.5" mass="0.00169631" diaginertia="5.90203e-08 5.90203e-08 5.88317e-08" />
+                <geom name="foot1" size="0.00937155" pos="-0.000222 0.00056 -0.02298" quat="-0.707098 8.1021e-07 0.707116 1.82817e-05" />
+                <geom size="0.00937155" pos="-0.000222 0.00056 -0.02298" quat="-0.707098 8.1021e-07 0.707116 1.82817e-05" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 1 1" density="0" />
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="bc_dyn2" pos="-0.131227 0.062775 0.086513" quat="-8.96131e-06 8.96131e-06 0.707107 0.707107">
+        <inertial pos="-7.2e-05 2.2e-05 0.025529" quat="0.999995 -0.00309621 7.36592e-05 -0.000159623" mass="0.082" diaginertia="2.24356e-05 1.88999e-05 1.31697e-05" />
+        <geom name="bc_dyn2" size="0.0170005 0.01425 0.0232505" pos="-7.4e-05 -2.3e-05 0.023107" quat="-1.22473e-07 0.707116 0.707098 1.22476e-07" type="box" />
+        <geom size="0.00224059 0.00125018" pos="-6.1e-05 0.022127 0.035107" quat="0.499994 -0.500006 -0.499993 -0.500006" type="cylinder" />
+        <geom size="0.00974708 0.0190063" pos="-6.5e-05 -2.3e-05 0.035107" quat="0.00023994 0.000240185 0.707107 0.707107" type="cylinder" />
+        <geom size="0.0039899 0.000850186" pos="-7.3e-05 0.019827 0.03512" quat="9.06991e-06 9.31486e-06 0.707107 0.707107" type="cylinder" />
+        <geom name="bc_vis2" size="0.0170005 0.01425 0.0232505" pos="-7.4e-05 -2.3e-05 0.023107" quat="-1.22473e-07 0.707116 0.707098 1.22476e-07" type="box" contype="0" conaffinity="0" group="1" rgba="0.1 0.1 0.1 1" density="0" />
+        <geom size="0.00224059 0.00125018" pos="-6.1e-05 0.022127 0.035107" quat="0.499994 -0.500006 -0.499993 -0.500006" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+        <geom size="0.00974708 0.0190063" pos="-6.5e-05 -2.3e-05 0.035107" quat="0.00023994 0.000240185 0.707107 0.707107" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+        <geom size="0.0039899 0.000850186" pos="-7.3e-05 0.019827 0.03512" quat="9.06991e-06 9.31486e-06 0.707107 0.707107" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+        <body name="coxa_dyn2" pos="-4e-06 0.000969 0.035091" quat="-8.96131e-06 9.42347e-06 0.707107 -0.707107">
+          <inertial pos="0.000111 -0.0374 0.006753" quat="0.996353 0.0851619 0.00207945 0.0048746" mass="0.093" diaginertia="2.74013e-05 2.65594e-05 1.90867e-05" />
+          <joint name="TC2" />
+          <geom name="coxa_dyn2" size="0.0010005 0.0138225 0.0140035" pos="-1.1e-05 -0.009278 0.020992" quat="0.00213216 0.707104 0.00213215 -0.707103" type="box" />
+          <geom size="0.0015 0.014001 0.020974" pos="6.9e-05 -0.024017 0.000965" quat="-1.32039e-05 -0.707105 0.707109 2.92225e-05" type="box" />
+          <geom size="0.0010005 0.0135 0.014" pos="7e-05 -0.009016 -0.019008" quat="2.31079e-07 -0.707107 2.31079e-07 0.707107" type="box" />
+          <geom size="0.01425 0.0170015 0.023251" pos="7e-05 -0.039767 0.004991" quat="-1.21432e-05 -0.707104 0.707109 3.02832e-05" type="box" />
+          <geom size="0.0022406 0.00125013" pos="0.02222 -0.039768 0.017004" quat="0.480938 0.518365 0.480963 0.518335" type="cylinder" />
+          <geom size="0.00974561 0.019" pos="7e-05 -0.039767 0.016991" quat="5.84632e-07 -0.707107 5.84632e-07 0.707107" type="cylinder" />
+          <geom size="0.00399013 0.000951409" pos="0.020018 -0.039767 0.017005" quat="0.499836 -0.500163 0.500164 -0.499837" type="cylinder" />
+          <geom name="coxa_vis2" pos="6.9e-05 -0.010516 0.000992" quat="9.25705e-12 -1 3.26795e-07 2.83268e-05" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.3 0 0 1" density="0" mesh="MORF_BasicLocomotionLearning_coxa_vis2_vis_1" />
+          <geom name="coxa2_vis2" size="0.01425 0.0170015 0.023251" pos="7e-05 -0.039767 0.004991" quat="-1.21432e-05 -0.707104 0.707109 3.02832e-05" type="box" contype="0" conaffinity="0" group="1" rgba="0.1 0.1 0.1 1" density="0" />
+          <geom size="0.0022406 0.00125013" pos="0.02222 -0.039768 0.017004" quat="0.480938 0.518365 0.480963 0.518335" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+          <geom size="0.00974561 0.019" pos="7e-05 -0.039767 0.016991" quat="5.84632e-07 -0.707107 5.84632e-07 0.707107" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+          <geom size="0.00399013 0.000951409" pos="0.020018 -0.039767 0.017005" quat="0.499836 -0.500163 0.500164 -0.499837" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+          <body name="femur_dyn2" pos="-6.2e-05 -0.0398 0.017011" quat="0.383154 -0.594301 0.383137 -0.594311">
+            <inertial pos="-0.008679 0.034036 0.000129" quat="0.705315 0.705255 0.0507169 0.0507255" mass="0.018" diaginertia="1.91281e-05 1.28705e-05 8.15428e-06" />
+            <joint name="CF2" />
+            <geom name="femur_dyn2" size="0.001 0.0110825 0.0243845" pos="-0.005337 0.012169 -0.019869" quat="0.591516 0.387445 0.591501 -0.387457" type="box" />
+            <geom size="0.001 0.0110825 0.0243845" pos="-0.005338 0.012171 0.020131" quat="0.591516 0.387445 0.591501 -0.387457" type="box" />
+            <geom size="0.001 0.0110825 0.0256575" pos="-0.011855 0.054817 0.02013" quat="-0.46826 -0.529847 -0.468241 0.529854" type="box" />
+            <geom size="0.001 0.0110825 0.0256575" pos="-0.011855 0.054816 -0.01987" quat="-0.468259 -0.529848 -0.46824 0.529855" type="box" />
+            <geom name="femur_vis2" pos="-0.009358 0.034005 0.00013" quat="0.0525032 -0.0487571 0.705395 -0.705183" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.3 0 0 1" density="0" mesh="MORF_BasicLocomotionLearning_femur_vis2_vis_1" />
+            <geom pos="-0.009358 0.034005 0.00013" quat="0.0525032 -0.0487571 0.705395 -0.705183" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.3 0 0 1" density="0" mesh="MORF_BasicLocomotionLearning_femur_vis2_vis_2" />
+            <body name="tibia_dyn2" pos="-0.010078 0.069315 0.001992" quat="2.76258e-07 0.534205 0.845355 -1.74575e-07">
+              <inertial pos="-0.040173 0.011371 0.00184" quat="0.552421 0.551723 0.442756 0.440908" mass="0.134" diaginertia="0.000169168 0.000166296 2.09931e-05" />
+              <joint name="FT2" />
+              <geom name="tibia_dyn2" size="0.0174979 0.0257507" pos="-0.068067 0.017808 0.001861" quat="-0.460358 0.578443 0.406723 -0.536704" type="cylinder" />
+              <geom size="0.0015 0.0140015 0.019001" pos="-0.040943 0.015195 0.001862" quat="0.998846 -3.93426e-05 -9.79497e-06 -0.0480278" type="box" />
+              <geom size="0.001007 0.0092095 0.0144895" pos="-0.03112 0.014252 -0.016139" quat="0.459311 0.537934 0.459006 -0.537563" type="box" />
+              <geom size="0.0010065 0.0092095 0.01449" pos="-0.031121 0.014251 0.019861" quat="0.459311 0.537934 0.459006 -0.537563" type="box" />
+              <geom size="0.01425 0.0170045 0.023253" pos="-0.010869 0.005134 0.001862" quat="-0.598092 0.597982 0.377268 -0.377322" type="box" />
+              <geom size="0.00974391 0.0190006" pos="-4.1e-05 -3.3e-05 0.001867" quat="1 -0.000244327 -1.26718e-05 -5.82989e-06" type="cylinder" />
+              <geom size="0.00223847 0.00125007" pos="-5.3e-05 -3e-05 -0.020288" quat="3.72479e-06 -0.634071 0.773275 1.01669e-05" type="cylinder" />
+              <geom size="0.00398813 0.000950307" pos="-3.3e-05 -1.8e-05 -0.018088" quat="3.85875e-05 0.127974 0.991778 -4.41838e-07" type="cylinder" />
+              <geom size="0.00774071 0.0250042" pos="-0.085325 0.019486 0.001864" quat="0.499657 0.545718 0.449738 0.500271" type="cylinder" />
+              <geom name="tibia_vis2" pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.08 0.08 0.08 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis2_vis_1" />
+              <geom pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.08 0.08 0.08 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis2_vis_2" />
+              <geom pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.84 0.84 0.84 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis2_vis_3" />
+              <geom pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.24 0.24 0.24 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis2_vis_4" />
+              <geom name="tibia2_vis2" size="0.01425 0.0170045 0.023253" pos="-0.010868 0.005134 0.001862" quat="-0.598093 0.597981 0.377268 -0.377322" type="box" contype="0" conaffinity="0" group="1" rgba="0.1 0.1 0.1 1" density="0" />
+              <geom size="0.00974391 0.0190006" pos="-4e-05 -3.3e-05 0.001867" quat="1 -0.000244327 -1.26717e-05 -6.32989e-06" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+              <geom size="0.00223847 0.00125007" pos="-5.2e-05 -3e-05 -0.020288" quat="3.72479e-06 -0.634071 0.773275 1.01669e-05" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+              <geom size="0.00398813 0.000950307" pos="-3.3e-05 -1.7e-05 -0.018087" quat="3.86515e-05 0.127974 0.991778 5.40703e-08" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+              <body name="foot2" pos="-0.090383 0.019361 0.00184" quat="0.689732 -0.0889312 0.701488 -0.155807">
+                <inertial pos="-0.000222 0.00056 -0.02298" quat="0.500013 0.5 0.499987 0.5" mass="0.00169631" diaginertia="5.90203e-08 5.90203e-08 5.88317e-08" />
+                <geom name="foot2" size="0.00937155" pos="-0.000222 0.00056 -0.02298" quat="-0.707098 8.1021e-07 0.707116 1.82817e-05" />
+                <geom size="0.00937155" pos="-0.000222 0.00056 -0.02298" quat="-0.707098 8.1021e-07 0.707116 1.82817e-05" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 1 1" density="0" />
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="bc_dyn3" pos="0.157148 -0.062778 0.086513" quat="-0.707107 -0.707107 9.54594e-06 -9.08379e-06">
+        <inertial pos="-7.2e-05 2.2e-05 0.025529" quat="0.999995 -0.00309621 7.36592e-05 -0.000159623" mass="0.82" diaginertia="0.000224356 0.000188999 0.000131697" />
+        <geom name="bc_dyn3" size="0.0170005 0.01425 0.0232505" pos="-7.4e-05 -2.3e-05 0.023107" quat="-1.22473e-07 0.707116 0.707098 1.22476e-07" type="box" />
+        <geom size="0.00224059 0.00125018" pos="-6.1e-05 0.022127 0.035107" quat="0.499994 -0.500006 -0.499993 -0.500006" type="cylinder" />
+        <geom size="0.00974708 0.0190063" pos="-6.5e-05 -2.3e-05 0.035107" quat="0.00023994 0.000240185 0.707107 0.707107" type="cylinder" />
+        <geom size="0.0039899 0.000850186" pos="-7.3e-05 0.019827 0.03512" quat="9.06991e-06 9.31486e-06 0.707107 0.707107" type="cylinder" />
+        <geom name="bc_vis3" size="0.0170005 0.01425 0.0232505" pos="-7.4e-05 -2.3e-05 0.023107" quat="-1.22473e-07 0.707116 0.707098 1.22476e-07" type="box" contype="0" conaffinity="0" group="1" rgba="0.1 0.1 0.1 1" density="0" />
+        <geom size="0.00224059 0.00125018" pos="-6.1e-05 0.022127 0.035107" quat="0.499994 -0.500006 -0.499993 -0.500006" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+        <geom size="0.00974708 0.0190063" pos="-6.5e-05 -2.3e-05 0.035107" quat="0.00023994 0.000240185 0.707107 0.707107" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+        <geom size="0.0039899 0.000850186" pos="-7.3e-05 0.019827 0.03512" quat="9.06991e-06 9.31486e-06 0.707107 0.707107" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+        <body name="coxa_dyn3" pos="-4e-06 0.000969 0.035091" quat="9.42347e-06 8.96131e-06 0.707107 0.707107">
+          <inertial pos="0.000111 0.0374 -0.006753" quat="0.996353 0.0851616 -0.0020793 -0.00487462" mass="0.093" diaginertia="2.74013e-05 2.65594e-05 1.90867e-05" />
+          <joint name="TC3" />
+          <geom name="coxa_dyn3" size="0.0010005 0.0138225 0.0140035" pos="-1.1e-05 0.009278 -0.020992" quat="0.707104 -0.00213228 -0.707103 -0.00213228" type="box" />
+          <geom size="0.0015 0.014001 0.020974" pos="6.9e-05 0.024017 -0.000965" quat="-0.707105 1.319e-05 2.89914e-05 -0.707109" type="box" />
+          <geom size="0.0010005 0.0135 0.014" pos="7e-05 0.009016 0.019008" quat="0.707107 3.53553e-07 -0.707107 3.53553e-07" type="box" />
+          <geom size="0.01425 0.0170015 0.023251" pos="7e-05 0.039767 -0.004991" quat="-0.707104 1.17758e-05 3.04056e-05 -0.707109" type="box" />
+          <geom size="0.0022406 0.00125013" pos="0.02222 0.039768 -0.017004" quat="0.518365 -0.480937 0.518335 -0.480963" type="cylinder" />
+          <geom size="0.00974561 0.019" pos="7e-05 0.039767 -0.016991" quat="0.707107 7.07107e-07 -0.707107 7.07107e-07" type="cylinder" />
+          <geom size="0.00399013 0.000951409" pos="0.020018 0.039767 -0.017005" quat="0.500163 0.499836 0.499837 0.500164" type="cylinder" />
+          <geom name="coxa_vis3" pos="6.9e-05 0.010516 -0.000992" quat="-1 -1.73214e-07 2.81732e-05 -3.268e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.3 0 0 1" density="0" mesh="MORF_BasicLocomotionLearning_coxa_vis3_vis_1" />
+          <geom name="coxa2_vis3" size="0.01425 0.0170015 0.023251" pos="7e-05 0.039767 -0.004991" quat="-0.707104 1.17758e-05 3.04056e-05 -0.707109" type="box" contype="0" conaffinity="0" group="1" rgba="0.1 0.1 0.1 1" density="0" />
+          <geom size="0.0022406 0.00125013" pos="0.02222 0.039768 -0.017004" quat="0.518365 -0.480937 0.518335 -0.480963" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+          <geom size="0.00974561 0.019" pos="7e-05 0.039767 -0.016991" quat="0.707107 3.53553e-07 -0.707107 3.53553e-07" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+          <geom size="0.00399013 0.000951409" pos="0.020018 0.039767 -0.017005" quat="0.500163 0.499836 0.499837 0.500164" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+          <body name="femur_dyn3" pos="-6.2e-05 0.0398 -0.01701" quat="0.594301 0.383154 0.594311 0.383138">
+            <inertial pos="-0.008679 0.034036 0.000129" quat="0.705315 0.705255 0.0507172 0.0507252" mass="0.018" diaginertia="1.91281e-05 1.28705e-05 8.15428e-06" />
+            <joint name="CF3" />
+            <geom name="femur_dyn3" size="0.001 0.0110825 0.0243845" pos="-0.005338 0.01217 -0.019869" quat="0.591516 0.387444 0.591501 -0.387457" type="box" />
+            <geom size="0.001 0.0110825 0.0243845" pos="-0.005338 0.012171 0.020131" quat="0.591516 0.387445 0.5915 -0.387457" type="box" />
+            <geom size="0.001 0.0110825 0.0256575" pos="-0.011855 0.054817 0.02013" quat="-0.46826 -0.529847 -0.468241 0.529854" type="box" />
+            <geom size="0.001 0.0110825 0.0256575" pos="-0.011855 0.054816 -0.01987" quat="-0.468259 -0.529848 -0.46824 0.529855" type="box" />
+            <geom name="femur_vis3" pos="-0.009358 0.034005 0.000129" quat="0.0525032 -0.0487571 0.705395 -0.705183" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.3 0 0 1" density="0" mesh="MORF_BasicLocomotionLearning_femur_vis3_vis_1" />
+            <geom pos="-0.009358 0.034005 0.000129" quat="0.0525032 -0.0487571 0.705395 -0.705183" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.3 0 0 1" density="0" mesh="MORF_BasicLocomotionLearning_femur_vis3_vis_2" />
+            <body name="tibia_dyn3" pos="-0.010078 0.069315 0.001992" quat="2.76258e-07 0.534205 0.845355 -1.74575e-07">
+              <inertial pos="-0.040173 0.011371 0.00184" quat="0.552421 0.551723 0.442756 0.440908" mass="0.134" diaginertia="0.000169168 0.000166296 2.09931e-05" />
+              <joint name="FT3" />
+              <geom name="tibia_dyn3" size="0.0174979 0.0257507" pos="-0.068067 0.017808 0.001861" quat="-0.460358 0.578443 0.406723 -0.536704" type="cylinder" />
+              <geom size="0.0015 0.0140015 0.019001" pos="-0.040943 0.015195 0.001862" quat="0.998846 -3.93426e-05 -9.79497e-06 -0.0480278" type="box" />
+              <geom size="0.001007 0.0092095 0.0144895" pos="-0.03112 0.014252 -0.016139" quat="0.459311 0.537934 0.459006 -0.537563" type="box" />
+              <geom size="0.0010065 0.0092095 0.01449" pos="-0.031121 0.014251 0.019861" quat="0.459311 0.537934 0.459006 -0.537563" type="box" />
+              <geom size="0.01425 0.0170045 0.023253" pos="-0.010869 0.005134 0.001862" quat="-0.598092 0.597982 0.377268 -0.377322" type="box" />
+              <geom size="0.00974391 0.0190006" pos="-4.1e-05 -3.3e-05 0.001867" quat="1 -0.000244327 -1.26718e-05 -5.82989e-06" type="cylinder" />
+              <geom size="0.00223847 0.00125007" pos="-5.3e-05 -3e-05 -0.020288" quat="3.72479e-06 -0.634071 0.773275 1.01669e-05" type="cylinder" />
+              <geom size="0.00398813 0.000950307" pos="-3.3e-05 -1.8e-05 -0.018088" quat="3.85875e-05 0.127974 0.991778 -4.41838e-07" type="cylinder" />
+              <geom size="0.00774071 0.0250042" pos="-0.085325 0.019486 0.001864" quat="0.499657 0.545718 0.449738 0.500271" type="cylinder" />
+              <geom name="tibia_vis3" pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.08 0.08 0.08 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis3_vis_1" />
+              <geom pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.08 0.08 0.08 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis3_vis_2" />
+              <geom pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.84 0.84 0.84 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis3_vis_3" />
+              <geom pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.24 0.24 0.24 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis3_vis_4" />
+              <geom name="tibia2_vis3" size="0.01425 0.0170045 0.023253" pos="-0.010868 0.005134 0.001862" quat="-0.598093 0.597981 0.377268 -0.377322" type="box" contype="0" conaffinity="0" group="1" rgba="0.1 0.1 0.1 1" density="0" />
+              <geom size="0.00974391 0.0190006" pos="-4e-05 -3.3e-05 0.001867" quat="1 -0.000244327 -1.26717e-05 -6.32989e-06" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+              <geom size="0.00223847 0.00125007" pos="-5.2e-05 -3e-05 -0.020288" quat="3.72479e-06 -0.634071 0.773275 1.01669e-05" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+              <geom size="0.00398813 0.000950307" pos="-3.3e-05 -1.7e-05 -0.018087" quat="3.86515e-05 0.127974 0.991778 5.40703e-08" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+              <body name="foot3" pos="-0.090383 0.019361 0.00184" quat="0.689732 -0.0889312 0.701488 -0.155807">
+                <inertial pos="-0.000222 0.00056 -0.02298" quat="0.500013 0.5 0.499987 0.5" mass="0.00169631" diaginertia="5.90203e-08 5.90203e-08 5.88317e-08" />
+                <geom name="foot3" size="0.00937155" pos="-0.000222 0.00056 -0.02298" quat="-0.707098 8.1021e-07 0.707116 1.82817e-05" />
+                <geom size="0.00937155" pos="-0.000222 0.00056 -0.02298" quat="-0.707098 8.1021e-07 0.707116 1.82817e-05" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 1 1" density="0" />
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="bc_dyn4" pos="0.012549 -0.062778 0.086513" quat="-0.707107 -0.707107 9.54594e-06 -9.08379e-06">
+        <inertial pos="-7.2e-05 2.2e-05 0.025529" quat="0.999995 -0.00309621 7.36592e-05 -0.000159623" mass="0.082" diaginertia="2.24356e-05 1.88999e-05 1.31697e-05" />
+        <geom name="bc_dyn4" size="0.0170005 0.01425 0.0232505" pos="-7.4e-05 -2.3e-05 0.023107" quat="-1.22473e-07 0.707116 0.707098 1.22476e-07" type="box" />
+        <geom size="0.00224059 0.00125018" pos="-6.1e-05 0.022127 0.035107" quat="0.499994 -0.500006 -0.499993 -0.500006" type="cylinder" />
+        <geom size="0.00974708 0.0190063" pos="-6.5e-05 -2.3e-05 0.035107" quat="0.00023994 0.000240185 0.707107 0.707107" type="cylinder" />
+        <geom size="0.0039899 0.000850186" pos="-7.3e-05 0.019827 0.03512" quat="9.06991e-06 9.31486e-06 0.707107 0.707107" type="cylinder" />
+        <geom name="bc_vis4" size="0.0170005 0.01425 0.0232505" pos="-7.4e-05 -2.3e-05 0.023107" quat="-1.22473e-07 0.707116 0.707098 1.22476e-07" type="box" contype="0" conaffinity="0" group="1" rgba="0.1 0.1 0.1 1" density="0" />
+        <geom size="0.00224059 0.00125018" pos="-6.1e-05 0.022127 0.035107" quat="0.499994 -0.500006 -0.499993 -0.500006" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+        <geom size="0.00974708 0.0190063" pos="-6.5e-05 -2.3e-05 0.035107" quat="0.00023994 0.000240185 0.707107 0.707107" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+        <geom size="0.0039899 0.000850186" pos="-7.3e-05 0.019827 0.03512" quat="9.06991e-06 9.31486e-06 0.707107 0.707107" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+        <body name="coxa_dyn4" pos="-4e-06 0.000969 0.035091" quat="9.42347e-06 8.96131e-06 0.707107 0.707107">
+          <inertial pos="0.000111 0.0374 -0.006753" quat="0.996353 0.0851616 -0.0020793 -0.00487462" mass="0.093" diaginertia="2.74013e-05 2.65594e-05 1.90867e-05" />
+          <joint name="TC4" />
+          <geom name="coxa_dyn4" size="0.0010005 0.0138225 0.0140035" pos="-1.1e-05 0.009278 -0.020992" quat="0.707104 -0.00213228 -0.707103 -0.00213228" type="box" />
+          <geom size="0.0015 0.014001 0.020974" pos="6.9e-05 0.024017 -0.000965" quat="-0.707105 1.319e-05 2.89914e-05 -0.707109" type="box" />
+          <geom size="0.0010005 0.0135 0.014" pos="7e-05 0.009016 0.019008" quat="0.707107 3.53553e-07 -0.707107 3.53553e-07" type="box" />
+          <geom size="0.01425 0.0170015 0.023251" pos="7e-05 0.039767 -0.004991" quat="-0.707104 1.17758e-05 3.04056e-05 -0.707109" type="box" />
+          <geom size="0.0022406 0.00125013" pos="0.02222 0.039768 -0.017004" quat="0.518365 -0.480937 0.518335 -0.480963" type="cylinder" />
+          <geom size="0.00974561 0.019" pos="7e-05 0.039767 -0.016991" quat="0.707107 7.07107e-07 -0.707107 7.07107e-07" type="cylinder" />
+          <geom size="0.00399013 0.000951409" pos="0.020018 0.039767 -0.017005" quat="0.500163 0.499836 0.499837 0.500164" type="cylinder" />
+          <geom name="coxa_vis4" pos="6.9e-05 0.010516 -0.000992" quat="-1 -1.73214e-07 2.81732e-05 -3.268e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.3 0 0 1" density="0" mesh="MORF_BasicLocomotionLearning_coxa_vis4_vis_1" />
+          <geom name="coxa2_vis4" size="0.01425 0.0170015 0.023251" pos="7e-05 0.039767 -0.004991" quat="-0.707104 1.17758e-05 3.04056e-05 -0.707109" type="box" contype="0" conaffinity="0" group="1" rgba="0.1 0.1 0.1 1" density="0" />
+          <geom size="0.0022406 0.00125013" pos="0.02222 0.039768 -0.017004" quat="0.518365 -0.480937 0.518335 -0.480963" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+          <geom size="0.00974561 0.019" pos="7e-05 0.039767 -0.016991" quat="0.707107 3.53553e-07 -0.707107 3.53553e-07" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+          <geom size="0.00399013 0.000951409" pos="0.020018 0.039767 -0.017005" quat="0.500163 0.499836 0.499837 0.500164" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+          <body name="femur_dyn4" pos="-6.2e-05 0.0398 -0.01701" quat="0.594301 0.383154 0.594311 0.383138">
+            <inertial pos="-0.008679 0.034036 0.000129" quat="0.705315 0.705255 0.0507172 0.0507252" mass="0.018" diaginertia="1.91281e-05 1.28705e-05 8.15428e-06" />
+            <joint name="CF4" />
+            <geom name="femur_dyn4" size="0.001 0.0110825 0.0243845" pos="-0.005338 0.01217 -0.019869" quat="0.591516 0.387444 0.591501 -0.387457" type="box" />
+            <geom size="0.001 0.0110825 0.0243845" pos="-0.005338 0.012171 0.020131" quat="0.591516 0.387445 0.5915 -0.387457" type="box" />
+            <geom size="0.001 0.0110825 0.0256575" pos="-0.011855 0.054817 0.020129" quat="-0.46826 -0.529847 -0.468241 0.529854" type="box" />
+            <geom size="0.001 0.0110825 0.0256575" pos="-0.011855 0.054816 -0.01987" quat="-0.468259 -0.529848 -0.46824 0.529855" type="box" />
+            <geom name="femur_vis4" pos="-0.009358 0.034005 0.000129" quat="0.0525032 -0.0487571 0.705395 -0.705183" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.3 0 0 1" density="0" mesh="MORF_BasicLocomotionLearning_femur_vis4_vis_1" />
+            <geom pos="-0.009358 0.034005 0.000129" quat="0.0525032 -0.0487571 0.705395 -0.705183" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.3 0 0 1" density="0" mesh="MORF_BasicLocomotionLearning_femur_vis4_vis_2" />
+            <body name="tibia_dyn4" pos="-0.010078 0.069315 0.001992" quat="2.76258e-07 0.534205 0.845355 -1.74575e-07">
+              <inertial pos="-0.040173 0.011371 0.00184" quat="0.552421 0.551723 0.442756 0.440908" mass="0.134" diaginertia="0.000169168 0.000166296 2.09931e-05" />
+              <joint name="FT4" />
+              <geom name="tibia_dyn4" size="0.0174979 0.0257507" pos="-0.068067 0.017808 0.001861" quat="-0.460358 0.578443 0.406723 -0.536704" type="cylinder" />
+              <geom size="0.0015 0.0140015 0.019001" pos="-0.040943 0.015195 0.001862" quat="0.998846 -3.93426e-05 -9.79497e-06 -0.0480278" type="box" />
+              <geom size="0.001007 0.0092095 0.0144895" pos="-0.03112 0.014252 -0.016139" quat="0.459311 0.537934 0.459006 -0.537563" type="box" />
+              <geom size="0.0010065 0.0092095 0.01449" pos="-0.031121 0.014251 0.019861" quat="0.459311 0.537934 0.459006 -0.537563" type="box" />
+              <geom size="0.01425 0.0170045 0.023253" pos="-0.010869 0.005134 0.001862" quat="-0.598092 0.597982 0.377268 -0.377322" type="box" />
+              <geom size="0.00974391 0.0190006" pos="-4.1e-05 -3.3e-05 0.001867" quat="1 -0.000244327 -1.26718e-05 -5.82989e-06" type="cylinder" />
+              <geom size="0.00223847 0.00125007" pos="-5.3e-05 -3e-05 -0.020288" quat="3.72479e-06 -0.634071 0.773275 1.01669e-05" type="cylinder" />
+              <geom size="0.00398813 0.000950307" pos="-3.3e-05 -1.8e-05 -0.018088" quat="3.85875e-05 0.127974 0.991778 -4.41838e-07" type="cylinder" />
+              <geom size="0.00774071 0.0250042" pos="-0.085325 0.019486 0.001864" quat="0.499657 0.545718 0.449738 0.500271" type="cylinder" />
+              <geom name="tibia_vis4" pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.08 0.08 0.08 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis4_vis_1" />
+              <geom pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.08 0.08 0.08 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis4_vis_2" />
+              <geom pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.84 0.84 0.84 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis4_vis_3" />
+              <geom pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.24 0.24 0.24 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis4_vis_4" />
+              <geom name="tibia2_vis4" size="0.01425 0.0170045 0.023253" pos="-0.010868 0.005134 0.001862" quat="-0.598093 0.597981 0.377268 -0.377322" type="box" contype="0" conaffinity="0" group="1" rgba="0.1 0.1 0.1 1" density="0" />
+              <geom size="0.00974391 0.0190006" pos="-4e-05 -3.3e-05 0.001867" quat="1 -0.000244327 -1.26717e-05 -6.32989e-06" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+              <geom size="0.00223847 0.00125007" pos="-5.2e-05 -3e-05 -0.020288" quat="3.72479e-06 -0.634071 0.773275 1.01669e-05" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+              <geom size="0.00398813 0.000950307" pos="-3.3e-05 -1.7e-05 -0.018087" quat="3.86515e-05 0.127974 0.991778 5.40703e-08" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+              <body name="foot4" pos="-0.090383 0.019361 0.00184" quat="0.689732 -0.0889312 0.701488 -0.155807">
+                <inertial pos="-0.000222 0.00056 -0.02298" quat="0.500013 0.5 0.499987 0.5" mass="0.00169631" diaginertia="5.90203e-08 5.90203e-08 5.88317e-08" />
+                <geom name="foot4" size="0.00937155" pos="-0.000222 0.00056 -0.02298" quat="-0.707098 8.1021e-07 0.707116 1.82817e-05" />
+                <geom size="0.00937155" pos="-0.000222 0.00056 -0.02298" quat="-0.707098 8.1021e-07 0.707116 1.82817e-05" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 1 1" density="0" />
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="bc_dyn5" pos="-0.131451 -0.062778 0.086512" quat="-0.707107 -0.707107 9.54594e-06 -9.08379e-06">
+        <inertial pos="-7.2e-05 2.2e-05 0.025529" quat="0.999995 -0.00309621 7.36592e-05 -0.000159623" mass="0.082" diaginertia="2.24356e-05 1.88999e-05 1.31697e-05" />
+        <geom name="bc_dyn5" size="0.0170005 0.01425 0.0232505" pos="-7.4e-05 -2.3e-05 0.023107" quat="-1.22473e-07 0.707116 0.707098 1.22476e-07" type="box" />
+        <geom size="0.00224059 0.00125018" pos="-6.1e-05 0.022127 0.035107" quat="0.499994 -0.500006 -0.499993 -0.500006" type="cylinder" />
+        <geom size="0.00974708 0.0190063" pos="-6.5e-05 -2.3e-05 0.035107" quat="0.00023994 0.000240185 0.707107 0.707107" type="cylinder" />
+        <geom size="0.0039899 0.000850186" pos="-7.3e-05 0.019827 0.03512" quat="9.06991e-06 9.31486e-06 0.707107 0.707107" type="cylinder" />
+        <geom name="bc_vis5" size="0.0170005 0.01425 0.0232505" pos="-7.4e-05 -2.3e-05 0.023107" quat="-1.22473e-07 0.707116 0.707098 1.22476e-07" type="box" contype="0" conaffinity="0" group="1" rgba="0.1 0.1 0.1 1" density="0" />
+        <geom size="0.00224059 0.00125018" pos="-6.1e-05 0.022127 0.035107" quat="0.499994 -0.500006 -0.499993 -0.500006" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+        <geom size="0.00974708 0.0190063" pos="-6.5e-05 -2.3e-05 0.035107" quat="0.00023994 0.000240185 0.707107 0.707107" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+        <geom size="0.0039899 0.000850186" pos="-7.3e-05 0.019827 0.03512" quat="9.06991e-06 9.31486e-06 0.707107 0.707107" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+        <body name="coxa_dyn5" pos="-4e-06 0.000969 0.035091" quat="9.42347e-06 8.96131e-06 0.707107 0.707107">
+          <inertial pos="0.000111 0.0374 -0.006753" quat="0.996353 0.0851616 -0.0020793 -0.00487462" mass="0.093" diaginertia="2.74013e-05 2.65594e-05 1.90867e-05" />
+          <joint name="TC5" />
+          <geom name="coxa_dyn5" size="0.0010005 0.0138225 0.0140035" pos="-1.1e-05 0.009278 -0.020992" quat="0.707104 -0.00213228 -0.707103 -0.00213228" type="box" />
+          <geom size="0.0015 0.014001 0.020974" pos="6.9e-05 0.024017 -0.000965" quat="-0.707105 1.319e-05 2.89914e-05 -0.707109" type="box" />
+          <geom size="0.0010005 0.0135 0.014" pos="7e-05 0.009016 0.019008" quat="0.707107 3.53553e-07 -0.707107 3.53553e-07" type="box" />
+          <geom size="0.01425 0.0170015 0.023251" pos="7e-05 0.039767 -0.004991" quat="-0.707104 1.17758e-05 3.04056e-05 -0.707109" type="box" />
+          <geom size="0.0022406 0.00125013" pos="0.02222 0.039768 -0.017004" quat="0.518365 -0.480937 0.518335 -0.480963" type="cylinder" />
+          <geom size="0.00974561 0.019" pos="7e-05 0.039767 -0.016991" quat="0.707107 7.07107e-07 -0.707107 7.07107e-07" type="cylinder" />
+          <geom size="0.00399013 0.000951409" pos="0.020018 0.039767 -0.017005" quat="0.500163 0.499836 0.499837 0.500164" type="cylinder" />
+          <geom name="coxa_vis5" pos="6.9e-05 0.010516 -0.000992" quat="-1 -1.73214e-07 2.81732e-05 -3.268e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.3 0 0 1" density="0" mesh="MORF_BasicLocomotionLearning_coxa_vis5_vis_1" />
+          <geom name="coxa2_vis5" size="0.01425 0.0170015 0.023251" pos="7e-05 0.039767 -0.004991" quat="-0.707104 1.17758e-05 3.04056e-05 -0.707109" type="box" contype="0" conaffinity="0" group="1" rgba="0.1 0.1 0.1 1" density="0" />
+          <geom size="0.0022406 0.00125013" pos="0.02222 0.039768 -0.017004" quat="0.518365 -0.480937 0.518335 -0.480963" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+          <geom size="0.00974561 0.019" pos="7e-05 0.039767 -0.016991" quat="0.707107 3.53553e-07 -0.707107 3.53553e-07" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+          <geom size="0.00399013 0.000951409" pos="0.020018 0.039767 -0.017005" quat="0.500163 0.499836 0.499837 0.500164" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+          <body name="femur_dyn5" pos="-6.2e-05 0.0398 -0.01701" quat="0.594301 0.383154 0.594311 0.383138">
+            <inertial pos="-0.008679 0.034036 0.000129" quat="0.705315 0.705255 0.0507172 0.0507252" mass="0.018" diaginertia="1.91281e-05 1.28705e-05 8.15428e-06" />
+            <joint name="CF5" />
+            <geom name="femur_dyn5" size="0.001 0.0110825 0.0243845" pos="-0.005338 0.01217 -0.019869" quat="0.591516 0.387444 0.591501 -0.387457" type="box" />
+            <geom size="0.001 0.0110825 0.0243845" pos="-0.005338 0.012171 0.020131" quat="0.591516 0.387445 0.5915 -0.387457" type="box" />
+            <geom size="0.001 0.0110825 0.0256575" pos="-0.011855 0.054817 0.02013" quat="-0.46826 -0.529847 -0.468241 0.529854" type="box" />
+            <geom size="0.001 0.0110825 0.0256575" pos="-0.011855 0.054816 -0.01987" quat="-0.468259 -0.529848 -0.46824 0.529855" type="box" />
+            <geom name="femur_vis5" pos="-0.009358 0.034005 0.00013" quat="0.0525032 -0.0487571 0.705395 -0.705183" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.3 0 0 1" density="0" mesh="MORF_BasicLocomotionLearning_femur_vis5_vis_1" />
+            <geom pos="-0.009358 0.034005 0.00013" quat="0.0525032 -0.0487571 0.705395 -0.705183" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.3 0 0 1" density="0" mesh="MORF_BasicLocomotionLearning_femur_vis5_vis_2" />
+            <body name="tibia_dyn5" pos="-0.010078 0.069315 0.001992" quat="2.76258e-07 0.534205 0.845355 -1.74575e-07">
+              <inertial pos="-0.040173 0.011371 0.00184" quat="0.552421 0.551723 0.442756 0.440908" mass="0.134" diaginertia="0.000169168 0.000166296 2.09931e-05" />
+              <joint name="FT5" />
+              <geom name="tibia_dyn5" size="0.0174979 0.0257507" pos="-0.068067 0.017808 0.001861" quat="-0.460358 0.578443 0.406723 -0.536704" type="cylinder" />
+              <geom size="0.0015 0.0140015 0.019001" pos="-0.040943 0.015195 0.001862" quat="0.998846 -3.93426e-05 -9.79497e-06 -0.0480278" type="box" />
+              <geom size="0.001007 0.0092095 0.0144895" pos="-0.03112 0.014252 -0.016139" quat="0.459311 0.537934 0.459006 -0.537563" type="box" />
+              <geom size="0.0010065 0.0092095 0.01449" pos="-0.031121 0.014251 0.019861" quat="0.459311 0.537934 0.459006 -0.537563" type="box" />
+              <geom size="0.01425 0.0170045 0.023253" pos="-0.010869 0.005134 0.001862" quat="-0.598092 0.597982 0.377268 -0.377322" type="box" />
+              <geom size="0.00974391 0.0190006" pos="-4.1e-05 -3.3e-05 0.001867" quat="1 -0.000244327 -1.26718e-05 -5.82989e-06" type="cylinder" />
+              <geom size="0.00223847 0.00125007" pos="-5.3e-05 -3e-05 -0.020288" quat="3.72479e-06 -0.634071 0.773275 1.01669e-05" type="cylinder" />
+              <geom size="0.00398813 0.000950307" pos="-3.3e-05 -1.8e-05 -0.018088" quat="3.85875e-05 0.127974 0.991778 -4.41838e-07" type="cylinder" />
+              <geom size="0.00774071 0.0250042" pos="-0.085325 0.019486 0.001864" quat="0.499657 0.545718 0.449738 0.500271" type="cylinder" />
+              <geom name="tibia_vis5" pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.08 0.08 0.08 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis5_vis_1" />
+              <geom pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.08 0.08 0.08 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis5_vis_2" />
+              <geom pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.84 0.84 0.84 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis5_vis_3" />
+              <geom pos="-0.070175 0.018012 0.001861" quat="-0.523429 0.523433 0.475426 -0.475406" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.24 0.24 0.24 1" density="0" mesh="MORF_BasicLocomotionLearning_tibia_vis5_vis_4" />
+              <geom name="tibia2_vis5" size="0.01425 0.0170045 0.023253" pos="-0.010868 0.005134 0.001862" quat="-0.598093 0.597981 0.377268 -0.377322" type="box" contype="0" conaffinity="0" group="1" rgba="0.1 0.1 0.1 1" density="0" />
+              <geom size="0.00974391 0.0190006" pos="-4e-05 -3.3e-05 0.001867" quat="1 -0.000244327 -1.26717e-05 -6.32989e-06" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+              <geom size="0.00223847 0.00125007" pos="-5.2e-05 -3e-05 -0.020288" quat="3.72479e-06 -0.634071 0.773275 1.01669e-05" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+              <geom size="0.00398813 0.000950307" pos="-3.3e-05 -1.7e-05 -0.018087" quat="3.86515e-05 0.127974 0.991778 5.40703e-08" type="cylinder" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 0.85 1" density="0" />
+              <body name="foot5" pos="-0.090383 0.019361 0.00184" quat="0.689732 -0.0889312 0.701488 -0.155807">
+                <inertial pos="-0.000222 0.00056 -0.02298" quat="0.500013 0.5 0.499987 0.5" mass="0.00169631" diaginertia="5.90203e-08 5.90203e-08 5.88317e-08" />
+                <geom name="foot5" size="0.00937155" pos="-0.000222 0.00056 -0.02298" quat="-0.707098 8.1021e-07 0.707116 1.82817e-05" />
+                <geom size="0.00937155" pos="-0.000222 0.00056 -0.02298" quat="-0.707098 8.1021e-07 0.707116 1.82817e-05" contype="0" conaffinity="0" group="1" rgba="0.85 0.85 1 1" density="0" />
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+  <actuator>
+    <position name="TC0" joint="TC0" kp="10.0" kv="0.5" />
+    <position name="CF0" joint="CF0" kp="10.0" kv="0.5" />
+    <position name="FT0" joint="FT0" kp="10.0" kv="0.5" />
+    <position name="TC1" joint="TC1" kp="10.0" kv="0.5" />
+    <position name="CF1" joint="CF1" kp="10.0" kv="0.5" />
+    <position name="FT1" joint="FT1" kp="10.0" kv="0.5" />
+    <position name="TC2" joint="TC2" kp="10.0" kv="0.5" />
+    <position name="CF2" joint="CF2" kp="10.0" kv="0.5" />
+    <position name="FT2" joint="FT2" kp="10.0" kv="0.5" />
+    <position name="TC3" joint="TC3" kp="10.0" kv="0.5" />
+    <position name="CF3" joint="CF3" kp="10.0" kv="0.5" />
+    <position name="FT3" joint="FT3" kp="10.0" kv="0.5" />
+    <position name="TC4" joint="TC4" kp="10.0" kv="0.5" />
+    <position name="CF4" joint="CF4" kp="10.0" kv="0.5" />
+    <position name="FT4" joint="FT4" kp="10.0" kv="0.5" />
+    <position name="TC5" joint="TC5" kp="10.0" kv="0.5" />
+    <position name="CF5" joint="CF5" kp="10.0" kv="0.5" />
+    <position name="FT5" joint="FT5" kp="10.0" kv="0.5" />
+  </actuator>
+</mujoco>
