@@ -4,9 +4,10 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import loadMujoco from '@mujoco/mujoco';
-import { availableRobotCards, loadPythonRobot, pythonRobotNames, showError } from './robots/python.js';
+import { availableRobotCards, loadPythonRobot, pythonRobotCards, pythonRobotNames, showError } from './robots/python.js';
 import { showLanding } from './landing.js';
 import { createTouchControls, isTouchDevice } from './touch.js';
+import { createLoadingScreen, onDownload } from './loading.js';
 
 // ?robot=<name> opens a Python robot (python/robots/<name>.py); without it
 // (or with an unknown name) the page shows the robot menu.
@@ -17,22 +18,54 @@ const LOGO_URL = 'assets/brain_logo_v2.webp';
 
 const mjGEOM = { PLANE: 0, SPHERE: 2, CAPSULE: 3, CYLINDER: 5, BOX: 6, MESH: 7 };
 const mjOBJ_BODY = 1;
-// MuJoCo convention: geom group 3 = collision-only shapes, hidden by default
-// (toggle with C) when a robot supplies separate visual meshes.
+// MuJoCo convention: geom group 3 = collision-only shapes, hidden when a
+// robot supplies separate visual meshes.
 const COLLISION_GROUP = 3;
 
-async function main() {
-  const robotDef = await loadPythonRobot(robotName);
-  const mujoco = await loadMujoco();
-  const [model, visuals] = await Promise.all([
-    loadModel(mujoco, robotDef.modelUrl),
-    robotDef.visualsUrl ? loadVisuals(robotDef.visualsUrl) : null,
+async function main(card, loading) {
+  // Start every download that doesn't need Python while Pyodide loads: the
+  // MuJoCo engine, and the model and visuals files the robot's .py names
+  // (read from its text, as the menu does).
+  const hud = document.getElementById('hud');
+  hud.style.visibility = 'hidden'; // until the scene is ready
+  // MuJoCo's engine (.wasm, ~10 MB): progress when its size is known.
+  const stopWatching = onDownload((url) => /mujoco[^/]*\.wasm/.test(url),
+    (url, bytes, total) => total && loading.progress('mujoco', 0.9 * bytes / total));
+  const mujocoReady = loading.track('mujoco', loadMujoco());
+  mujocoReady.then(stopWatching, stopWatching);
+  const modelProgress = (f) => loading.progress('model', f);
+  const visualsProgress = (f) => loading.progress('visuals', f);
+  const early = {
+    model: card?.model && fetchModelFiles(card.model, modelProgress),
+    visuals: card?.visuals && loadVisuals(card.visuals, visualsProgress),
+  };
+  Object.values(early).forEach((p) => p?.catch(() => {})); // reported where they're awaited
+  const robotDef = await loading.track('python', loadPythonRobot(robotName, (f) => loading.progress('python', f)));
+  const mujoco = await mujocoReady;
+  // Normally the early downloads; fetched again only if the .py computes
+  // its paths in a way the text scan couldn't see.
+  const [files, visuals] = await Promise.all([
+    loading.track('model', robotDef.modelUrl === card?.model ? early.model : fetchModelFiles(robotDef.modelUrl, modelProgress)),
+    !robotDef.visualsUrl ? null : loading.track('visuals',
+      robotDef.visualsUrl === card?.visuals ? early.visuals : loadVisuals(robotDef.visualsUrl, visualsProgress)),
   ]);
+  loading.progress('scene');
+  await new Promise((resolve) => setTimeout(resolve)); // let the checklist repaint before the busy part
+  const model = compileModel(mujoco, files);
   const data = new mujoco.MjData(model);
   const robot = robotDef.create(mujoco, model);
+  // Start from the model's first keyframe when it has one (e.g. B1's
+  // standing pose), else from its default pose.
+  const resetState = () => (model.nkey > 0 ? mujoco.mj_resetDataKeyframe(model, data, 0) : mujoco.mj_resetData(model, data));
+  resetState();
   robot.reset(data);
   mujoco.mj_forward(model, data);
 
+  // Separate looks from the collision shapes: a VISUALS file, or visual-only
+  // geoms in the MJCF (contype = conaffinity = 0, as in MORF's CAD meshes).
+  // Then the collision shapes (group 3) aren't drawn.
+  const hasVisuals = !!visuals || Array.from({ length: model.ngeom }, (_, i) => i)
+    .some((i) => !model.geom_contype[i] && !model.geom_conaffinity[i] && model.geom_group[i] !== COLLISION_GROUP);
   const touch = isTouchDevice();
   document.getElementById('app').classList.toggle('touch', touch); // moves the logo badge clear of the touch controls
   const drive = !!robotDef.controllable; // user drives it, or it only runs on its own (watch mode)
@@ -46,7 +79,7 @@ async function main() {
       : drive ? '<span class="mode drive">Drive mode</span>' : '<span class="mode watch">Watch mode</span>') + (touch
     ? (drive ? '<div><span class="drive-only"><b>Joystick</b> walk &amp; steer &nbsp; </span>' : '<div>') + '<b>Drag</b> orbit &nbsp; <b>Pinch</b> zoom</div>'
     : `<div><b>Drag</b> orbit &nbsp; <b>Scroll</b> zoom</div>${robotDef.hud}` +
-      `<div><b>R</b> reset${switchable ? ' &nbsp; <b>M</b> drive/watch' : ''}${visuals ? ' &nbsp; <b>C</b> collision shapes' : ''}</div>`);
+      `<div><b>R</b> reset${switchable ? ' &nbsp; <b>M</b> drive/watch' : ''}</div>`);
   const mode = createModeSwitch(drive, switchable);
   const speed = createSpeedControl(robotDef.speedRange);
   // Narrow screens stack the Body button and logo badge under the HUD
@@ -62,22 +95,14 @@ async function main() {
   if (visuals) createPaintControl(visuals, robotDef); // before attachVisuals moves the nodes
   document.getElementById('app').classList.toggle('has-paint', !!document.getElementById('paint'));
   const bodyVisuals = visuals ? attachVisuals(mujoco, model, visuals, scene) : [];
-  const collisionGeoms = geomMeshes.filter((m, i) => m && model.geom_group[i] === COLLISION_GROUP);
-  const showCollision = (on) => collisionGeoms.forEach((m) => (m.visible = on || !visuals));
-  if (visuals) {
-    // When toggled on, overlay the hulls translucently on the visual meshes.
-    collisionGeoms.forEach((m) => {
-      Object.assign(m.material, { transparent: true, opacity: 0.45, depthWrite: false });
-      m.castShadow = false;
-    });
+  if (hasVisuals) {
+    geomMeshes.forEach((m, i) => m && model.geom_group[i] === COLLISION_GROUP && (m.visible = false));
   }
-  showCollision(false);
 
-  const toggleCodes = ['KeyC', ...(robotDef.touchButtons ?? []).filter((b) => b.toggle).map((b) => b.code)];
+  const toggleCodes = (robotDef.touchButtons ?? []).filter((b) => b.toggle).map((b) => b.code);
   const input = createInput(toggleCodes, drive, touch && [
     { label: 'Reset', code: 'KeyR' },
     ...(robotDef.touchButtons ?? []),
-    ...(visuals ? [{ label: 'Hulls', code: 'KeyC', toggle: true }] : []),
   ]);
   window.addEventListener('keydown', (e) => {
     if (e.code === 'Escape') location.href = './';
@@ -103,11 +128,12 @@ async function main() {
     lastTime = now;
 
     const joy = input.read();
-    joy.speed = speed.value;
+    // The speed slider is for Watch mode; driving runs at the robot's DRIVE_SPEED.
+    joy.speed = mode.watching ? speed.value : robotDef.driveSpeed;
     joy.watch = mode.watching;
     const resetHeld = input.keys.has('KeyR');
     if (resetHeld && !lastReset) {
-      mujoco.mj_resetData(model, data);
+      resetState();
       robot.reset(data);
       mujoco.mj_forward(model, data);
       followed.forEach((v, i) => v.copy(initialView[i])); // back to the starting view
@@ -124,7 +150,6 @@ async function main() {
       }
     }
 
-    showCollision(joy.showCollision);
     syncGeoms(model, data, geomMeshes);
     syncBodies(data, bodyVisuals);
     follow.update();
@@ -132,12 +157,31 @@ async function main() {
     renderer.render(scene, camera);
     requestAnimationFrame(frame);
   }
-  requestAnimationFrame(frame);
+  requestAnimationFrame(() => {
+    frame();
+    hud.style.visibility = '';
+    loading.finish();
+  });
 }
 
 // Fetches an MJCF file plus any mesh files it references into a MuJoCo
-// virtual filesystem, so models with STL/OBJ assets load in the browser.
-async function loadModel(mujoco, url) {
+// virtual filesystem, so models with mesh assets load in the browser. Split
+// in two so the downloads can start before MuJoCo and Python are ready.
+// onProgress(fraction): mesh files finished plus the bytes of those under
+// way, over all of them (known once the small XML has arrived).
+async function fetchModelFiles(url, onProgress = () => {}) {
+  let fileCount = 1;
+  let finished = 0;
+  const partial = new Map();
+  const report = () => onProgress((finished + [...partial.values()].reduce((a, b) => a + b, 0)) / fileCount);
+  const read = async (key, res) => {
+    const bytes = await readBody(res, (f) => { partial.set(key, f); report(); });
+    partial.delete(key);
+    finished++;
+    report();
+    return bytes;
+  };
+
   const res = await fetch(url);
   // Dev servers and some hosts answer a missing file with the index page.
   if (!res.ok || (res.headers.get('content-type') ?? '').includes('text/html')) {
@@ -147,23 +191,55 @@ async function loadModel(mujoco, url) {
   const doc = new DOMParser().parseFromString(xml, 'application/xml');
   const meshdir = doc.querySelector('compiler')?.getAttribute('meshdir') ?? '';
   const base = new URL(url, location.href);
-  const vfs = new mujoco.MjVFS();
   const files = [...doc.querySelectorAll('mesh[file]')].map((m) => m.getAttribute('file'));
-  await Promise.all(files.map(async (file) => {
+  fileCount = files.length || 1;
+  const meshes = await Promise.all(files.map(async (file) => {
     const path = meshdir ? `${meshdir}/${file}` : file;
     const res = await fetch(new URL(path, base));
     if (!res.ok) throw new Error(`failed to fetch mesh ${path}: ${res.status}`);
-    vfs.addBuffer(file, new Uint8Array(await res.arrayBuffer()));
+    return [file, await read(path, res)];
   }));
+  onProgress(1);
+  return { xml, meshes };
+}
+
+// A response body as bytes, reporting onFraction(0..1) as it streams in
+// (when the size is known; a compressed response can over-count, hence min).
+async function readBody(res, onFraction) {
+  // Compressed responses: the size header counts compressed bytes, so skip it.
+  const size = res.headers.has('content-encoding') ? 0 : Number(res.headers.get('content-length'));
+  if (!res.body || !size) return new Uint8Array(await res.arrayBuffer());
+  const reader = res.body.getReader();
+  const chunks = [];
+  let received = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    chunks.push(value);
+    received += value.length;
+    onFraction(Math.min(1, received / size));
+  }
+  const bytes = new Uint8Array(received);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.length;
+  }
+  return bytes;
+}
+
+function compileModel(mujoco, { xml, meshes }) {
+  const vfs = new mujoco.MjVFS();
+  for (const [file, bytes] of meshes) vfs.addBuffer(file, bytes);
   return mujoco.MjModel.from_xml_string(xml, vfs);
 }
 
 // Visual-only meshes (GLB, meshopt-compressed) with one node per MuJoCo body,
 // named after it and authored in that body's frame. Physics never sees these.
-async function loadVisuals(url) {
+async function loadVisuals(url, onProgress = () => {}) {
   const loader = new GLTFLoader();
   loader.setMeshoptDecoder(MeshoptDecoder);
-  return (await loader.loadAsync(url)).scene;
+  return (await loader.loadAsync(url, (e) => e.total && onProgress(e.loaded / e.total))).scene;
 }
 
 function attachVisuals(mujoco, model, gltfScene, scene) {
@@ -305,7 +381,10 @@ function setupScene(view) {
 function createFollow(data, points) {
   const ROOT = 1; // body 0 is the world
   const last = new THREE.Vector2();
-  const read = () => last.set(data.xpos[3 * ROOT], data.xpos[3 * ROOT + 1]);
+  // Follow the robot's centre of mass, not the root body's origin: a model's
+  // origin can sit far from the robot (Red Mirror's is 1.4 m off, from its
+  // CAD export), and would then swing round in a wide circle as it turns.
+  const read = () => last.set(data.subtree_com[3 * ROOT], data.subtree_com[3 * ROOT + 1]);
   read();
   const delta = new THREE.Vector3();
   return {
@@ -352,14 +431,15 @@ function createModeSwitch(drive, switchable) {
 }
 
 // Speed slider in the HUD for robots that declare SPEED_RANGE = (low, high):
-// a multiplier starting at 1, passed to the controller as obs.speed.
+// a multiplier starting at 1, passed to the controller as obs.speed. Shown
+// in Watch mode only (.watch-only); when driving, DRIVE_SPEED applies.
 function createSpeedControl(range) {
   const state = { value: 1 };
   if (!range) return state;
   const [lo, hi] = range;
   state.value = Math.min(Math.max(1, lo), hi);
   const row = document.createElement('div');
-  row.className = 'speed';
+  row.className = 'speed watch-only';
   row.innerHTML = `<b>Speed</b>
     <input type="range" min="${lo}" max="${hi}" step="0.05" value="${state.value}" aria-label="Robot speed">
     <output>${state.value.toFixed(2)}&times;</output>`;
@@ -417,7 +497,6 @@ function createInput(toggleCodes, drive, touchButtons) {
         rightX,
         rightY,
         fixedSpine: toggles.has('KeyF'),
-        showCollision: toggles.has('KeyC'),
         stepUp: keys.has('BracketRight'),
         stepDown: keys.has('BracketLeft'),
         keys,
@@ -599,7 +678,19 @@ function syncGeoms(model, data, meshes) {
 }
 
 if (pythonRobotNames.includes(robotName)) {
-  main().catch(showError);
+  const card = pythonRobotCards.find((c) => c.name === robotName);
+  // Weights: roughly each step's share of a typical load.
+  const loading = createLoadingScreen(card?.title ?? robotName, [
+    { id: 'python', label: 'Python runtime', weight: 50 },
+    { id: 'mujoco', label: 'Physics engine', weight: 10 },
+    { id: 'model', label: 'Robot model', weight: 20 },
+    ...(card?.visuals ? [{ id: 'visuals', label: '3D visuals', weight: 10 }] : []),
+    { id: 'scene', label: 'Building the scene', weight: 10 },
+  ]);
+  main(card, loading).catch((err) => {
+    loading.fail();
+    showError(err);
+  });
 } else {
   availableRobotCards().then((cards) => showLanding(cards, robotName));
 }

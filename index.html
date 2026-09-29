@@ -258,6 +258,132 @@
         color: #aab4c0;
       }
       /* Load/controller errors, e.g. a Python traceback (src/robots/python.js) */
+      /* Loading screen (src/loading.js) */
+      #loading {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        padding: 16px;
+        background: radial-gradient(ellipse at top, #1d2a38, #111 70%);
+        color: #e6e6e6;
+        font: 14px/1.5 system-ui, sans-serif;
+        transition: opacity 0.35s;
+        z-index: 5; /* over the scene's controls, which are created while it loads */
+      }
+      #loading.finished {
+        opacity: 0;
+        pointer-events: none;
+      }
+      #loading .card {
+        width: min(360px, 100%);
+        padding: 22px 24px 18px;
+        border-radius: 14px;
+        background: rgba(0, 0, 0, 0.4);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+      }
+      #loading h1 {
+        margin: 0 0 14px;
+        font-size: 18px;
+        font-weight: 650;
+      }
+      #loading .bar {
+        height: 8px;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        overflow: hidden;
+      }
+      #loading .fill {
+        width: 0;
+        height: 100%;
+        border-radius: 4px;
+        background: #7fd0ff;
+      }
+      #loading.failed .fill {
+        background: #ff8a8a;
+      }
+      #loading .percent {
+        margin: 6px 0 12px;
+        color: #9aa4ad;
+        font-size: 12px;
+        font-variant-numeric: tabular-nums;
+        text-align: right;
+      }
+      #loading ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      #loading li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 3px 0;
+        color: #9aa4ad;
+      }
+      #loading li[data-state='active'],
+      #loading li[data-state='done'] {
+        color: #e6e6e6;
+      }
+      #loading li[data-state='failed'] {
+        color: #ffb3b3;
+      }
+      #loading .icon {
+        flex: none;
+        width: 14px;
+        height: 14px;
+        box-sizing: border-box;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.25);
+      }
+      #loading li[data-state='active'] .icon {
+        border-color: #7fd0ff;
+        border-right-color: transparent;
+        animation: loading-spin 0.8s linear infinite;
+      }
+      #loading li[data-state='done'] .icon {
+        border: 0;
+        background: #7fd0ff;
+        position: relative;
+      }
+      #loading li[data-state='done'] .icon::after {
+        content: '';
+        position: absolute;
+        left: 4.5px;
+        top: 2px;
+        width: 3px;
+        height: 7px;
+        border: solid #0b2230;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+      #loading li[data-state='failed'] .icon {
+        border-color: #ff8a8a;
+      }
+      #loading .back {
+        display: inline-block;
+        margin-top: 14px;
+        color: #7fd0ff;
+        font-size: 13px;
+        text-decoration: none;
+      }
+      #loading .back:hover,
+      #loading .back:focus-visible {
+        text-decoration: underline;
+      }
+      @keyframes loading-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #loading li[data-state='active'] .icon {
+          animation: none;
+        }
+        #loading {
+          transition: none;
+        }
+      }
       #error {
         position: absolute;
         left: 12px;
@@ -272,6 +398,7 @@
         color: #ffd6d6;
         font: 12px/1.4 ui-monospace, monospace;
         white-space: pre-wrap;
+        z-index: 6; /* over the loading screen too */
       }
       /* Body colour picker (createPaintControl in src/main.js) */
       #paint {

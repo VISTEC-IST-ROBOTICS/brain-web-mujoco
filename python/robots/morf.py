@@ -18,8 +18,9 @@ WATCH_INPUT = {"left_y": 1.0}  # Watch mode: walks straight ahead on its own
 # Speed slider: scales the gait rate, as for the gecko.
 SPEED_RANGE = (0.25, 2.0)
 DESCRIPTION = "Six-legged robot walking a tripod gait with the gecko's CPG."
-THUMBNAIL = "assets/thumbs/morf_py.jpg"
+THUMBNAIL = "assets/thumbs/morf.jpg"
 MODEL = "assets/morf/morf.xml"  # relative to public/
+CAMERA = {"position": [0.5, -0.62, 0.38], "target": [0.04, 0, 0.08]}
 HELP = "[ / ]: step height · Gamepad: left stick walk, right stick steer/pitch"
 
 # Tripods: front and hind legs of one side with the middle leg of the other

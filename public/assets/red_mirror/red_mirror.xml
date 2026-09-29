@@ -2,36 +2,36 @@
   <compiler angle="radian" meshdir="meshes/" />
   <option integrator="implicitfast" />
   <asset>
-    <mesh name="Red_mirror_model_walking_FL_link_1_vis_1" content_type="model/stl" file="Red_mirror_model_walking_FL_link_1_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_FL_link_2c1_vis_1" content_type="model/stl" file="Red_mirror_model_walking_FL_link_2c1_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_FL_link_2c2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_FL_link_2c2_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_FL_toe_vis_1" content_type="model/stl" file="Red_mirror_model_walking_FL_toe_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_FL_link_3c1_vis_1" content_type="model/stl" file="Red_mirror_model_walking_FL_link_3c1_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_ML_link_1_vis_1" content_type="model/stl" file="Red_mirror_model_walking_ML_link_1_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_ML_link_2c1_vis_1" content_type="model/stl" file="Red_mirror_model_walking_ML_link_2c1_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_ML_link_2c2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_ML_link_2c2_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_ML_link_3c1_vis_1" content_type="model/stl" file="Red_mirror_model_walking_ML_link_3c1_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_ML_toe_vis_1" content_type="model/stl" file="Red_mirror_model_walking_ML_toe_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_HL_link_1_vis_1" content_type="model/stl" file="Red_mirror_model_walking_HL_link_1_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_HL_link_2c1_vis_1" content_type="model/stl" file="Red_mirror_model_walking_HL_link_2c1_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_HL_link_2c2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_HL_link_2c2_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_HL_link_3c1_vis_1" content_type="model/stl" file="Red_mirror_model_walking_HL_link_3c1_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_HL_toe_vis_1" content_type="model/stl" file="Red_mirror_model_walking_HL_toe_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_FL_link_1_2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_FL_link_1_2_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_FL_link_2c1_2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_FL_link_2c1_2_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_FL_link_2c2_2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_FL_link_2c2_2_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_FR_link_3c1_vis_1" content_type="model/stl" file="Red_mirror_model_walking_FR_link_3c1_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_FR_toe_vis_1" content_type="model/stl" file="Red_mirror_model_walking_FR_toe_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_ML_link_1_2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_ML_link_1_2_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_ML_link_2c1_2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_ML_link_2c1_2_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_ML_link_2c2_2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_ML_link_2c2_2_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_MR_link_3c1_vis_1" content_type="model/stl" file="Red_mirror_model_walking_MR_link_3c1_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_MR_toe_vis_1" content_type="model/stl" file="Red_mirror_model_walking_MR_toe_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_HL_link_1_2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_HL_link_1_2_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_HL_link_2c1_2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_HL_link_2c1_2_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_HL_link_2c2_2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_HL_link_2c2_2_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_HL_link_3c1_2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_HL_link_3c1_2_vis_1.stl" />
-    <mesh name="Red_mirror_model_walking_HL_toe_2_vis_1" content_type="model/stl" file="Red_mirror_model_walking_HL_toe_2_vis_1.stl" />
+    <mesh name="Red_mirror_model_walking_FL_link_1_vis_1" file="Red_mirror_model_walking_FL_link_1_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_FL_link_2c1_vis_1" file="Red_mirror_model_walking_FL_link_2c1_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_FL_link_2c2_vis_1" file="Red_mirror_model_walking_FL_link_2c2_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_FL_toe_vis_1" file="Red_mirror_model_walking_FL_toe_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_FL_link_3c1_vis_1" file="Red_mirror_model_walking_FL_link_3c1_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_ML_link_1_vis_1" file="Red_mirror_model_walking_ML_link_1_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_ML_link_2c1_vis_1" file="Red_mirror_model_walking_ML_link_2c1_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_ML_link_2c2_vis_1" file="Red_mirror_model_walking_ML_link_2c2_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_ML_link_3c1_vis_1" file="Red_mirror_model_walking_ML_link_3c1_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_ML_toe_vis_1" file="Red_mirror_model_walking_ML_toe_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_HL_link_1_vis_1" file="Red_mirror_model_walking_HL_link_1_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_HL_link_2c1_vis_1" file="Red_mirror_model_walking_HL_link_2c1_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_HL_link_2c2_vis_1" file="Red_mirror_model_walking_HL_link_2c2_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_HL_link_3c1_vis_1" file="Red_mirror_model_walking_HL_link_3c1_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_HL_toe_vis_1" file="Red_mirror_model_walking_HL_toe_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_FL_link_1_2_vis_1" file="Red_mirror_model_walking_FL_link_1_2_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_FL_link_2c1_2_vis_1" file="Red_mirror_model_walking_FL_link_2c1_2_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_FL_link_2c2_2_vis_1" file="Red_mirror_model_walking_FL_link_2c2_2_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_FR_link_3c1_vis_1" file="Red_mirror_model_walking_FR_link_3c1_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_FR_toe_vis_1" file="Red_mirror_model_walking_FR_toe_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_ML_link_1_2_vis_1" file="Red_mirror_model_walking_ML_link_1_2_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_ML_link_2c1_2_vis_1" file="Red_mirror_model_walking_ML_link_2c1_2_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_ML_link_2c2_2_vis_1" file="Red_mirror_model_walking_ML_link_2c2_2_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_MR_link_3c1_vis_1" file="Red_mirror_model_walking_MR_link_3c1_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_MR_toe_vis_1" file="Red_mirror_model_walking_MR_toe_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_HL_link_1_2_vis_1" file="Red_mirror_model_walking_HL_link_1_2_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_HL_link_2c1_2_vis_1" file="Red_mirror_model_walking_HL_link_2c1_2_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_HL_link_2c2_2_vis_1" file="Red_mirror_model_walking_HL_link_2c2_2_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_HL_link_3c1_2_vis_1" file="Red_mirror_model_walking_HL_link_3c1_2_vis_1.msh" />
+    <mesh name="Red_mirror_model_walking_HL_toe_2_vis_1" file="Red_mirror_model_walking_HL_toe_2_vis_1.msh" />
     <texture name="grid" type="2d" builtin="checker" rgb1="0.35 0.4 0.45" rgb2="0.25 0.3 0.35" width="512" height="512" />
     <material name="grid" texture="grid" texrepeat="8 8" reflectance="0.1" />
   </asset>

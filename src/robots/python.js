@@ -3,6 +3,7 @@
 // one of these robots is selected. See python/simbot.py for the robot file
 // format; the same files run natively with python/run_local.py.
 import simbotSource from '../../python/simbot.py?raw';
+import { onDownload } from '../loading.js';
 
 const PYODIDE_URL = 'https://cdn.jsdelivr.net/pyodide/v314.0.7/full/';
 
@@ -33,8 +34,10 @@ export const pythonRobotCards = pythonRobotNames.map((name) => {
     description: constant('DESCRIPTION') ?? doc,
     thumbnail: constant('THUMBNAIL'),
     model: constant('MODEL'),
+    visuals: constant('VISUALS'),
     controllable: flag('USER_CONTROL'),
     watchable: flag('USER_CONTROL') && defined('WATCH_INPUT'),
+    hidden: flag('HIDDEN'), // work in progress: left out of the menu, ?robot=<name> still opens it
   };
 });
 
@@ -43,7 +46,8 @@ export const pythonRobotCards = pythonRobotNames.map((name) => {
 // Some static hosts answer a missing file with the index page (200,
 // text/html), so an HTML answer counts as missing too.
 export async function availableRobotCards() {
-  const found = await Promise.all(pythonRobotCards.map(async ({ name, model }) => {
+  const cards = pythonRobotCards.filter((c) => !c.hidden);
+  const found = await Promise.all(cards.map(async ({ name, model }) => {
     try {
       const res = model && await fetch(model, { method: 'HEAD' });
       if (res?.ok && !(res.headers.get('content-type') ?? '').includes('text/html')) return true;
@@ -54,13 +58,29 @@ export async function availableRobotCards() {
       + 'but that file is not in public/.');
     return false;
   }));
-  return pythonRobotCards.filter((_, i) => found[i]);
+  return cards.filter((_, i) => found[i]);
 }
 
-export async function loadPythonRobot(name) {
-  document.getElementById('hud').textContent = 'Loading Python…';
+// Uncompressed sizes of the files Pyodide fetches at start-up (for the
+// loading bar: the CDN compresses them, so its size headers don't match the
+// bytes that arrive). Update them with PYODIDE_URL.
+const PYODIDE_FILE_SIZES = { 'pyodide.asm.wasm': 9598218, 'python_stdlib.zip': 2545637, 'pyodide-lock.json': 119077 };
+
+// onProgress(fraction): Pyodide's downloads, byte by byte (up to 70%), then
+// its start-up (85%) and the robot's packages (95%).
+export async function loadPythonRobot(name, onProgress = () => {}) {
+  const received = {};
+  const expected = Object.values(PYODIDE_FILE_SIZES).reduce((a, b) => a + b, 0);
+  const stopWatching = onDownload((url) => url.startsWith(PYODIDE_URL), (url, bytes) => {
+    const file = url.slice(PYODIDE_URL.length);
+    if (!(file in PYODIDE_FILE_SIZES)) return;
+    received[file] = Math.min(bytes, PYODIDE_FILE_SIZES[file]);
+    onProgress(0.7 * Object.values(received).reduce((a, b) => a + b, 0) / expected);
+  });
   const { loadPyodide } = await import(/* @vite-ignore */ `${PYODIDE_URL}pyodide.mjs`);
   const py = await loadPyodide({ indexURL: PYODIDE_URL });
+  stopWatching();
+  onProgress(0.85);
 
   py.FS.mkdirTree('/robot/robots');
   py.FS.writeFile('/robot/simbot.py', simbotSource);
@@ -68,6 +88,7 @@ export async function loadPythonRobot(name) {
   // Fetch packages (numpy etc.) the robot and its helpers import.
   const imported = [name, ...Object.keys(sources).filter((n) => n.startsWith('_'))];
   await py.loadPackagesFromImports(imported.map((n) => sources[n]).join('\n'));
+  onProgress(0.95);
 
   const meta = JSON.parse(py.runPython(`
 import importlib, json, sys
@@ -83,6 +104,7 @@ json.dumps({
     "controllable": bool(getattr(robot_module, "USER_CONTROL", False)),
     "watchable": bool(getattr(robot_module, "USER_CONTROL", False) and getattr(robot_module, "WATCH_INPUT", None)),
     "speed_range": list(robot_module.SPEED_RANGE) if hasattr(robot_module, "SPEED_RANGE") else None,
+    "drive_speed": float(getattr(robot_module, "DRIVE_SPEED", 1.0)),
 })
 `));
   const module = py.globals.get('robot_module');
@@ -97,7 +119,8 @@ json.dumps({
     controllable: meta.controllable,
     // Also has a Watch mode (WATCH_INPUT), switchable on the page.
     watchable: meta.watchable,
-    speedRange: meta.speed_range,
+    speedRange: meta.speed_range, // Watch mode's slider
+    driveSpeed: meta.drive_speed, // obs.speed while driving
     // Driving keys only while the user drives (main.js shows .drive-only
     // or .watch-only lines by mode).
     hud: (meta.controllable
@@ -129,7 +152,7 @@ json.dumps({
       return {
         reset(data) {
           nextTick = 0;
-          call(data, () => runner.reset());
+          call(data, () => runner.reset_js(data.ctrl)); // from the start keyframe's controls, if any
         },
         // Called every physics step; ticks the controller at its own rate in
         // simulated time and holds its outputs in between.

@@ -30,7 +30,8 @@ and optionally
         # obs.joy.toggled (on the keyboard too), others show up in obs.joy.keys
     VISUALS = "assets/my_robot_visual.glb"  # browser-only visual meshes, one node per body
     BODY_COLOR = "#2b2b2b"                   # default colour of the GLB's 'printed' material
-    SPEED_RANGE = (0.25, 2.0)  # adds a speed slider (multiplier, starts at 1) -> obs.speed
+    SPEED_RANGE = (0.25, 2.0)  # adds a speed slider to Watch mode (multiplier, starts at 1) -> obs.speed
+    DRIVE_SPEED = 4.0          # obs.speed while the user drives (default 1)
 
 The same file runs in the browser (Pyodide, via src/robots/python.js) and on
 the desktop (python/run_local.py). Both go through Runner below, so a
@@ -74,7 +75,7 @@ class Observation:
     base_pos: tuple = None  # free-joint root body position (x, y, z), if the robot has one
     base_quat: tuple = None  # its orientation quaternion (w, x, y, z)
     base_vel: tuple = field(default=None)  # its (vx, vy, vz, wx, wy, wz), world linear / body angular
-    speed: float = 1.0  # the page's speed slider (robots with SPEED_RANGE); 1 = normal
+    speed: float = 1.0  # Watch mode: the speed slider (SPEED_RANGE); driving: DRIVE_SPEED. 1 = normal
     watching: bool = False  # Watch mode: joy's sticks are WATCH_INPUT, not the user's
 
 
@@ -105,12 +106,17 @@ class Runner:
         self.rate = getattr(self.controller, "rate", DEFAULT_RATE)
         self.ctrl = [0.0] * len(self.actuators)
 
-    def reset(self):
-        """Returns the control vector to start from (all zeros)."""
-        self.ctrl = [0.0] * len(self.actuators)
+    def reset(self, ctrl=None):
+        """Returns the control vector to start from: `ctrl` (the model's start
+        keyframe's, if it has one) or all zeros."""
+        self.ctrl = [float(c) for c in ctrl] if ctrl is not None else [0.0] * len(self.actuators)
         if hasattr(self.controller, "reset"):
             self.controller.reset()
         return self.ctrl
+
+    def reset_js(self, ctrl):
+        """Browser entry point for reset(): ctrl arrives as a JS typed array."""
+        return self.reset(list(ctrl.to_py()))
 
     def step(self, time, joy, qpos, qvel, sensordata, speed=1.0, watch=False):
         """One control tick. Returns the full control vector; actuators the

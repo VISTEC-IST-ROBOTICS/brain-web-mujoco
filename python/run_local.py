@@ -40,18 +40,24 @@ class Sim:
     """Model + data + controller, stepping the controller at its own rate in
     simulated time and holding its outputs in between (as the browser does)."""
 
-    def __init__(self, name, speed=1.0, watch=False):
-        self.speed = speed  # as the browser's speed slider (robots with SPEED_RANGE)
+    def __init__(self, name, speed=None, watch=False):
         self.watch = watch  # as the browser's Watch mode (robots with WATCH_INPUT)
         module = importlib.import_module(f"robots.{name}")
+        # As the browser: the speed slider's value in Watch mode (starts at
+        # 1), the robot's DRIVE_SPEED when driving.
+        self.speed = speed if speed is not None else 1.0 if watch else getattr(module, "DRIVE_SPEED", 1.0)
         self.model = mujoco.MjModel.from_xml_path(str(PUBLIC / module.MODEL))
         self.data = mujoco.MjData(self.model)
         self.runner = Runner(module, native_layout(self.model))
         self.reset()
 
     def reset(self):
-        mujoco.mj_resetData(self.model, self.data)
-        self.data.ctrl[:] = self.runner.reset()
+        # The model's first keyframe (a start pose) if it has one, as the web page does.
+        if self.model.nkey:
+            mujoco.mj_resetDataKeyframe(self.model, self.data, 0)
+        else:
+            mujoco.mj_resetData(self.model, self.data)
+        self.data.ctrl[:] = self.runner.reset(self.data.ctrl.copy())
         mujoco.mj_forward(self.model, self.data)
         self.next_tick = 0.0
 
@@ -110,9 +116,14 @@ def run_viewer(sim, joy):
         print(f"left_y={joy.left_y:+.1f} right_x={joy.right_x:+.1f}")
 
     with mujoco.viewer.launch_passive(sim.model, sim.data, key_callback=on_key) as viewer:
-        # Show collision geoms (group 3): in the browser a robot's looks can
-        # come from a VISUALS mesh file, which MuJoCo doesn't read.
-        viewer.opt.geomgroup[3] = 1
+        # Show collision geoms (group 3) when the model has nothing else to
+        # show: in the browser a robot's looks can come from a VISUALS mesh
+        # file, which MuJoCo doesn't read. Models with visual-only geoms (e.g.
+        # MORF's CAD meshes) keep them hidden, as the web page does.
+        m = sim.model
+        has_visual_geoms = any(
+            not m.geom_contype[i] and not m.geom_conaffinity[i] and m.geom_group[i] != 3 for i in range(m.ngeom))
+        viewer.opt.geomgroup[3] = 0 if has_visual_geoms else 1
         wall_start, sim_start = time.perf_counter(), sim.data.time
         while viewer.is_running():
             with viewer.lock():
@@ -134,7 +145,7 @@ def main():
     parser.add_argument("--headless", action="store_true", help="no window; simulate --seconds and print where the robot ended up")
     parser.add_argument("--seconds", type=float, default=5.0)
     parser.add_argument("--joy", nargs="*", default=[], metavar="FIELD=VALUE", help="constant input, e.g. left_y=1 right_x=-0.5 toggled=KeyF")
-    parser.add_argument("--speed", type=float, default=1.0, help="speed multiplier, as the web page's speed slider (obs.speed)")
+    parser.add_argument("--speed", type=float, help="speed multiplier (obs.speed); default: DRIVE_SPEED, or 1 with --watch")
     parser.add_argument("--watch", action="store_true", help="Watch mode, as the web page's Drive / Watch switch (WATCH_INPUT)")
     args = parser.parse_args()
 

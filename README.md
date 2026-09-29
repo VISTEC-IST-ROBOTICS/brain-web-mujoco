@@ -57,7 +57,7 @@ port of the gecko gait that behaves the same as the JS version).
 - Gamepad (standard mapping): left stick walk, right stick steer (X) / pitch (Y)
 - R (hold): reset the simulation and the camera view
 - Touch devices (phones/tablets) get an on-screen joystick (up/down walk or
-  drive, left/right steer) plus Reset / Lock spine / Hulls buttons; drag the
+  drive, left/right steer) plus Reset / Lock spine buttons; drag the
   scene to orbit, pinch to zoom. Add `?touch` to the URL to force it on desktop.
   Pitch and step height are keyboard/gamepad only.
 
@@ -72,7 +72,7 @@ Visuals and physics use separate meshes:
 
 - **Physics** (`meshes/*.stl`, geom group 3): a ≤400-triangle convex hull per
   link, which is what the USD colliders (`convexHull`) and MuJoCo's convex
-  collision use anyway. Press **C** in the viewer to see them.
+  collision use anyway. `python/run_local.py`'s viewer shows them.
 - **Visuals** (`gecko_visual.glb`): the full 374k-triangle CAD, welded, with
   35° crease-angle normals (the USD only has flat per-face normals), and
   meshopt-compressed by `gltfpack` (14 MB → 1.7 MB). The viewer places each
@@ -91,6 +91,20 @@ Re-run the converter after changing the USD (`npm install` first, for
 ```sh
 pip install usd-core numpy scipy trimesh fast_simplification
 python tools/usd_to_mjcf.py my_robot/gecko-aug-2026.usd public/assets/gecko
+```
+
+## Smaller mesh files
+
+Large STL meshes slow the page down: STL repeats every shared vertex, about
+50 bytes per triangle. [tools/stl_to_msh.py](tools/stl_to_msh.py) converts a
+model's STLs to MuJoCo's binary `.msh` (each vertex stored once), about a
+third of the size with exactly the same geometry, and points the XML at them.
+Red Mirror's meshes went from 11.9 MB to 4.3 MB this way; the original STLs
+and XML are kept in `assets_src/red_mirror/` to convert from again.
+
+```sh
+pip install trimesh
+python tools/stl_to_msh.py public/assets/red_mirror/red_mirror.xml assets_src/red_mirror/meshes
 ```
 
 [src/robots/gecko.js](src/robots/gecko.js) runs the gait at 50 Hz simulated

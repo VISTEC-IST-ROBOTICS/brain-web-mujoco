@@ -35,7 +35,8 @@ THUMBNAIL = "assets/thumbs/red_mirror.jpg"
 MODEL = "assets/red_mirror/red_mirror.xml"  # relative to public/
 CAMERA = {"position": [1.0, -1.35, 0.8], "target": [0, 0, 0.08]}  # wider view: the robot is ~0.8 m long
 HELP = "Gamepad: left stick walk, right stick steer"
-SPEED_RANGE = (0.25, 4.0)  # speed slider: scales how fast the CPG phase advances
+SPEED_RANGE = (0.25, 4.0)  # Watch mode's speed slider: scales how fast the CPG phase advances
+DRIVE_SPEED = 4.0  # speed when driving: the script's own pace (1x) is only ~4 cm/s
 
 # CoppeliaSim calls sysCall_actuation once per simulation step and the script
 # advances the phase by 0.05 each call, so the gait speed depends on the step
