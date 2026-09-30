@@ -45,7 +45,7 @@ CAMERA = {"position": [0.6, -0.8, 0.5], "target": [0, 0, 0.1]}  # starting web c
 HELP = "Up/Down: shoulder, Left/Right: elbow"                     # extra line in the web page's help box
 BUTTONS = [{"label": "Grip", "key": "KeyG", "toggle": True}]       # on-screen buttons on phones/tablets
 VISUALS = "assets/arm_visual.glb"   # web-only nicer meshes, one node per body name (see tools/usd_to_mjcf.py)
-BODY_COLOR = "#2b2b2b"              # default colour for the GLB's 'printed' material
+BODY_COLOR = "#2b2b2b"              # default for the page's Body colour picker, which recolours the material named 'printed' (MJCF or VISUALS)
 
 
 class Controller:

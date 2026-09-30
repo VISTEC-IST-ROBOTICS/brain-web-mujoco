@@ -121,7 +121,7 @@ json.dumps({
     watchable: meta.watchable,
     speedRange: meta.speed_range, // Watch mode's slider
     driveSpeed: meta.drive_speed, // obs.speed while driving
-    // Driving keys only while the user drives (main.js shows .drive-only
+    // Driving keys only while the user drives (hud.js shows .drive-only
     // or .watch-only lines by mode).
     hud: (meta.controllable
       ? '<div class="drive-only"><b>&uarr;/&darr;/W/S</b> forward/back &nbsp; <b>&larr;/&rarr;/A/D</b> turn &nbsp; <b>Q/E</b> up/down</div>'

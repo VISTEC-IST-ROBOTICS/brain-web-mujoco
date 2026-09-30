@@ -13,7 +13,7 @@ connected.
 | | MuJoCo | Python controller |
 | --- | --- | --- |
 | What runs | MuJoCo's C library compiled to WASM (`@mujoco/mujoco`, npm) | CPython compiled to WASM (Pyodide, from a CDN) |
-| Called from | JavaScript: [src/main.js](../src/main.js) | JavaScript: [src/robots/python.js](../src/robots/python.js) |
+| Called from | JavaScript: [src/simulation.js](../src/simulation.js) | JavaScript: [src/robots/python.js](../src/robots/python.js) |
 | Owns | `MjModel`, `MjData`, `mj_step`, the simulation loop | `simbot.Runner` and your `Controller` |
 | Knows about the other? | No | No: the `mujoco` Python package is not loaded in the browser |
 
@@ -23,7 +23,7 @@ The two runtimes have separate memory. JavaScript sits between them, and
 arrays, hands them to Python, and writes Python's answer back into MuJoCo.
 
 ```
- JavaScript (src/main.js)                     Python in Pyodide (simbot.py + robots/<name>.py)
+ JavaScript (src/simulation.js)               Python in Pyodide (simbot.py + robots/<name>.py)
  ────────────────────────                     ─────────────────────────────────────────────────
  mujoco = await loadMujoco()       (WASM)
  model  = MjModel.from_xml_string(xml, vfs)
@@ -46,7 +46,8 @@ arrays, hands them to Python, and writes Python's answer back into MuJoCo.
 
 ### 1. Loading the robot
 
-When a robot is opened ([src/main.js](../src/main.js) and
+When a robot is opened ([src/main.js](../src/main.js),
+[src/simulation.js](../src/simulation.js) and
 `loadPythonRobot` in [src/robots/python.js](../src/robots/python.js)):
 
 1. **MuJoCo**: JS loads the WASM module (`loadMujoco()`), fetches the MJCF
@@ -83,7 +84,8 @@ builds a `RobotInfo` (the lists of names) and constructs your
 
 ### 3. Each control tick
 
-The loop in [src/main.js](../src/main.js) steps physics at the model's
+The frame loop in [src/main.js](../src/main.js) has
+[src/simulation.js](../src/simulation.js) step physics at the model's
 fixed timestep to keep up with real time, and calls `robot.control(data, joy)`
 before every `mj_step`. That function only calls Python when the next
 control tick is due in **simulated** time (every `1 / rate` seconds,
@@ -163,7 +165,8 @@ objects, so it can't come to depend on one environment.
 
 | File | What it does |
 | --- | --- |
-| [src/main.js](../src/main.js) | Loads MuJoCo WASM and the model, runs the physics/render loop, calls `robot.control` / `robot.reset` |
+| [src/main.js](../src/main.js) | Page start-up (downloads, loading screen) and the frame loop |
+| [src/simulation.js](../src/simulation.js) | Fetches and compiles the model, steps physics, calls `robot.control` / `robot.reset` |
 | [src/robots/python.js](../src/robots/python.js) | Loads Pyodide and the Python files, `modelLayout()`, the `control`/`reset` bridge, error display |
 | [python/simbot.py](../python/simbot.py) | `Runner` (layout → `Observation` → controller → ctrl list), `Joy`, `Observation`, `native_layout()` |
 | [python/run_local.py](../python/run_local.py) | The desktop runner using native MuJoCo |

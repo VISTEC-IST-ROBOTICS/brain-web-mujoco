@@ -21,7 +21,7 @@ at the USD's 4.1 Nm max force. Visuals and physics use separate meshes:
   35° crease-angle normals, meshopt-compressed by `gltfpack` (14 MB → 1.7 MB).
   The page places each node at its MuJoCo body's pose; physics never sees it.
 - **Colours**: the converter splits each link into its CAD parts and
-  classifies them by size (servo cases, horns, fasteners, rubber feet,
+  classifies them by size (servo cases, horns, fasteners, white silicone feet,
   printed parts; see `PART_MATERIALS`). The page's **Body** button recolours
   the printed parts live and remembers the choice per browser.
 

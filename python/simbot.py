@@ -29,7 +29,7 @@ and optionally
         # keys for the browser's on-screen touch buttons; toggle keys flip
         # obs.joy.toggled (on the keyboard too), others show up in obs.joy.keys
     VISUALS = "assets/my_robot_visual.glb"  # browser-only visual meshes, one node per body
-    BODY_COLOR = "#2b2b2b"                   # default colour of the GLB's 'printed' material
+    BODY_COLOR = "#2b2b2b"                   # default Body colour: recolours the 'printed' material
     SPEED_RANGE = (0.25, 2.0)  # adds a speed slider to Watch mode (multiplier, starts at 1) -> obs.speed
     DRIVE_SPEED = 4.0          # obs.speed while the user drives (default 1)
 

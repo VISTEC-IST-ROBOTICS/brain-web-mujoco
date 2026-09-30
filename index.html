@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>MuJoCo Web Simulator</title>
+    <title>BRAIN-VISTEC Robots</title>
+    <!-- Tab / home-screen icon: the network emblem from assets/brain_logo_v2.webp -->
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <style>
       html, body {
         margin: 0;
@@ -400,7 +403,7 @@
         white-space: pre-wrap;
         z-index: 6; /* over the loading screen too */
       }
-      /* Body colour picker (createPaintControl in src/main.js) */
+      /* Body colour picker (src/paint.js) */
       #paint {
         position: absolute;
         top: 12px;
@@ -449,6 +452,25 @@
         border: 2px solid rgba(255, 255, 255, 0.25);
         cursor: pointer;
       }
+      /* Original: the robot's own colour, a full-width row above the swatches */
+      #paint .palette button.original {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: auto;
+        padding: 0 10px 0 3px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #eee;
+        font: inherit;
+      }
+      #paint .palette button.original i {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+      }
       #paint .palette button.on {
         border-color: #7fd0ff;
         box-shadow: 0 0 0 2px #7fd0ff;
@@ -463,7 +485,7 @@
       }
       @media (max-width: 720px) {
         /* below the HUD, which spans most of a phone's width (--hud-bottom is
-           kept up to date by src/main.js) */
+           kept up to date by src/hud.js) */
         #paint,
         .touch #logo {
           top: calc(var(--hud-bottom, 84px) + 12px);

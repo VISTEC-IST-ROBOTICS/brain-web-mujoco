@@ -20,6 +20,7 @@
     <texture name="grid" type="2d" builtin="checker" width="512" height="512" rgb1=".1 .2 .3" rgb2=".2 .3 .4"/>
     <material name="grid" texture="grid" texrepeat="1 1" texuniform="true" reflectance=".2"/>
     <material name="hull" rgba="0.55 0.75 0.45 1"/>
+    <material name="silicone" rgba="0.933 0.933 0.918 1"/>
     <mesh name="base_link" file="base_link.stl"/>
     <mesh name="body1" file="body1.stl"/>
     <mesh name="body2" file="body2.stl"/>
@@ -83,7 +84,7 @@
                     <geom name="link4_lh" mesh="link4_lh" material="hull" group="3"/>
                     <body name="foot_lh" pos="0.049824 -0.033964 -0.0205" quat="0.00731456 0.707074 -0.00682476 -0.707069">
                       <inertial pos="0 0 0" mass="0.01" diaginertia="1e-6 1e-6 1e-6"/>
-                      <geom name="foot_lh" mesh="foot_lh" material="hull" group="3"/>
+                      <geom name="foot_lh" mesh="foot_lh" material="silicone" group="3"/>
                     </body>
                   </body>
                 </body>
@@ -107,7 +108,7 @@
                     <geom name="link4_rh" mesh="link4_rh" material="hull" group="3"/>
                     <body name="foot_rh" pos="0.049804 0.033994 -0.0205" quat="-0.00703174 -0.707071 0.00710762 0.707072">
                       <inertial pos="0 0 0" mass="0.01" diaginertia="1e-6 1e-6 1e-6"/>
-                      <geom name="foot_rh" mesh="foot_rh" material="hull" group="3"/>
+                      <geom name="foot_rh" mesh="foot_rh" material="silicone" group="3"/>
                     </body>
                   </body>
                 </body>
@@ -134,7 +135,7 @@
               <geom name="link4_lf" mesh="link4_lf" material="hull" group="3"/>
               <body name="foot_lf" pos="0.049824 0.033964 -0.0205" quat="0.00731456 0.707074 -0.00682476 -0.707069">
                 <inertial pos="0 0 0" mass="0.01" diaginertia="1e-6 1e-6 1e-6"/>
-                <geom name="foot_lf" mesh="foot_lf" material="hull" group="3"/>
+                <geom name="foot_lf" mesh="foot_lf" material="silicone" group="3"/>
               </body>
             </body>
           </body>
@@ -158,7 +159,7 @@
               <geom name="link4_rf" mesh="link4_rf" material="hull" group="3"/>
               <body name="foot_rf" pos="0.049804 -0.033994 -0.0205" quat="-0.00703174 -0.707071 0.00710762 0.707072">
                 <inertial pos="0 0 0" mass="0.01" diaginertia="1e-6 1e-6 1e-6"/>
-                <geom name="foot_rf" mesh="foot_rf" material="hull" group="3"/>
+                <geom name="foot_rf" mesh="foot_rf" material="silicone" group="3"/>
               </body>
             </body>
           </body>

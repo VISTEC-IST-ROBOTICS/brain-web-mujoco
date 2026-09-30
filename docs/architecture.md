@@ -4,7 +4,12 @@
 
 ```
 index.html, src/          the web page
-  main.js                 loads MuJoCo WASM + the model, steps physics, renders with Three.js
+  main.js                 page start-up: loads everything, then runs the frame loop
+  simulation.js           fetches and compiles the MJCF model, steps MuJoCo + the controller
+  render/                 Three.js drawing: view.js (scene, camera follow), geoms.js
+                          (MuJoCo geoms -> meshes), visuals.js (VISUALS glTF), logo.js
+  hud.js, input.js        help box, Drive/Watch switch, speed slider; keyboard/gamepad/touch
+  paint.js                body colour picker
   robots/python.js        finds python/robots/*.py, runs the chosen one in Pyodide
   landing.js              the robot menu
   loading.js, touch.js    loading screen, on-screen joystick
@@ -54,7 +59,7 @@ docs/                     these documents
    `obs` (joystick, joint positions and velocities, sensors, base pose) and
    returns `{actuator name: target}`.
 4. Each geom's world transform (`geom_xpos` / `geom_xmat`) is copied onto a
-   matching Three.js mesh. Geoms in **group 3** are collision-only and hidden
+   matching Three.js mesh ([src/render/](../src/render/)). Geoms in **group 3** are collision-only and hidden
    when the model has separate visual geoms. A robot can also supply a
    `VISUALS` glTF file (one node per body) for nicer looks than the physics
    meshes, as the gecko does.

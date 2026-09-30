@@ -196,6 +196,12 @@ the MORF or Red Mirror models needed.
   cylinders and spheres). The page hides group 3 when a model has visual
   geoms, so you see the meshes and not the boxes. MuJoCo's desktop viewer
   still shows group 3 (toggle it with the `3` key), which helps debugging.
+- [ ] **Body colour (optional).** To get the page's **Body** colour picker,
+  give the shell parts one shared material named `printed`, in place of
+  their `rgba`. Add `<material name="printed" rgba="0.3 0 0 1"/>` to
+  `<asset>`, and use `material="printed"` on those geoms. MORF's leg
+  shells and Red Mirror's red links are done this way. The material's
+  colour is the default; `BODY_COLOR` in the `.py` overrides it.
 - [ ] **Floor.** The converter's floor is fine; a simple coloured one also
   works: `<geom name="floor" type="plane" size="0 0 0.05" condim="3" rgba="0.2 0.3 0.4 1"/>`.
 - [ ] **Actuator strength.** The default `kp=10` suits robots of about 1 kg
