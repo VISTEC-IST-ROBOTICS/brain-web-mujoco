@@ -17,10 +17,15 @@ The same controller file runs in two places:
   MuJoCo's viewer, `print()`, a debugger, matplotlib and so on.
 
 Start from [robots/_template.py](robots/_template.py), the minimal file that
-works (it loads the model and sends no commands). Two complete examples:
-- [robots/rover_py.py](robots/rover_py.py): wheels plus feedback (heading hold);
-- [robots/gecko_py.py](robots/gecko_py.py): a quadruped walking gait (CPG), with
-  a visual mesh file, a toggle key and a touch button.
+works (it loads the model and sends no commands). Complete examples:
+- [robots/gecko.py](robots/gecko.py): a quadruped walking gait (CPG), with
+  a visual mesh file, a toggle key and a touch button;
+- [robots/red_mirror.py](robots/red_mirror.py): a hexapod gait ported from
+  the robot's CoppeliaSim script;
+- [robots/morf.py](robots/morf.py): a hexapod tripod gait.
+
+For the whole process, from a CAD or CoppeliaSim model to a robot in the
+menu, see the tutorial [docs/adding-a-robot.md](../docs/adding-a-robot.md).
 
 ## Controller file
 
@@ -95,7 +100,8 @@ needs no extra code; held and toggled keys still come through, and
 
 The controller only works with names and numbers. It never touches MuJoCo
 directly, which is why the same file runs in both places. The details are in
-[simbot.py](simbot.py).
+[simbot.py](simbot.py), and how it's connected to the browser's JavaScript
+MuJoCo is explained in [docs/python-js-bridge.md](../docs/python-js-bridge.md).
 
 **Limits in the browser:** use the standard library, plus packages Pyodide
 ships (numpy and scipy work; they're downloaded the first time a robot

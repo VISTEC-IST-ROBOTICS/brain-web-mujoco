@@ -1,0 +1,4 @@
+mujoco==3.14.0
+trimesh==5.1.0
+pycollada==0.9.3
+numpy==2.5.3

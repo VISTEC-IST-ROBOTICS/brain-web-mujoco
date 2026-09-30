@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>URDF Viewer</title>
+<style>
+  html, body { margin: 0; height: 100%; font: 13px sans-serif; background: #1e1e1e; color: #ddd; }
+  #panel { position: absolute; top: 0; left: 0; bottom: 0; width: 260px; overflow-y: auto; padding: 10px; box-sizing: border-box; background: #2a2a2a; }
+  #view { position: absolute; top: 0; left: 260px; right: 0; bottom: 0; }
+  select, button { width: 100%; margin-bottom: 8px; }
+  .joint { margin: 6px 0; }
+  .joint label { display: flex; justify-content: space-between; }
+  .joint input { width: 100%; }
+  #status { color: #999; margin-bottom: 8px; }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
+  "urdf-loader": "https://cdn.jsdelivr.net/npm/urdf-loader@0.12.2/src/URDFLoader.js"
+} }
+</script>
+</head>
+<body>
+<div id="panel">
+  <select id="model"></select>
+  <button id="reset">Reset joints</button>
+  <div id="status"></div>
+  <div id="joints"></div>
+</div>
+<div id="view"></div>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { ColladaLoader } from 'three/addons/loaders/ColladaLoader.js';
+import URDFLoader from 'urdf-loader';
+
+const view = document.getElementById('view');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x1e1e1e);
+const camera = new THREE.PerspectiveCamera(50, 1, 0.01, 100);
+camera.up.set(0, 0, 1);            // URDF is Z-up
+camera.position.set(1, 1, 0.7);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+view.appendChild(renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 1.5));
+const sun = new THREE.DirectionalLight(0xffffff, 2);
+sun.position.set(2, 1, 4);
+scene.add(sun);
+const grid = new THREE.GridHelper(4, 40, 0x666666, 0x333333);
+grid.rotation.x = Math.PI / 2;
+scene.add(grid);
+
+function resize() {
+  renderer.setSize(view.clientWidth, view.clientHeight);
+  camera.aspect = view.clientWidth / view.clientHeight;
+  camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize);
+resize();
+renderer.setAnimationLoop(() => { controls.update(); renderer.render(scene, camera); });
+
+const select = document.getElementById('model');
+const jointsDiv = document.getElementById('joints');
+const status = document.getElementById('status');
+let robot = null;
+
+async function load(urdfPath) {
+  if (robot) { scene.remove(robot); robot = null; }
+  jointsDiv.innerHTML = '';
+  status.textContent = 'Loading...';
+  const dir = urdfPath.slice(0, urdfPath.lastIndexOf('/') + 1);
+  const manager = new THREE.LoadingManager();
+  const loader = new URDFLoader(manager);
+  // exported meshes are absolute file:// paths; resolve them next to the URDF instead
+  loader.loadMeshCb = (path, mgr, done) => {
+    const url = dir + path.split('/').pop();
+    new ColladaLoader(mgr).load(url, (dae) => done(dae.scene), undefined, (e) => done(null, e));
+  };
+  loader.load(urdfPath, (r) => {
+    robot = r;
+    scene.add(robot);
+  });
+  manager.onLoad = () => {
+    if (!robot) return;
+    const box = new THREE.Box3().setFromObject(robot);
+    const size = box.getSize(new THREE.Vector3()).length() || 1;
+    const c = box.getCenter(new THREE.Vector3());
+    controls.target.copy(c);
+    camera.position.copy(c).add(new THREE.Vector3(1, 1, 0.7).multiplyScalar(size * 0.8));
+    // put the model on the grid
+    robot.position.z -= box.min.z;
+    controls.target.z -= box.min.z;
+    camera.position.z -= box.min.z;
+    buildSliders();
+    status.textContent = `${Object.keys(robot.links).length} links, ${Object.values(robot.joints).filter(j => j.jointType !== 'fixed').length} movable joints`;
+  };
+}
+
+function buildSliders() {
+  for (const [name, joint] of Object.entries(robot.joints)) {
+    if (joint.jointType === 'fixed') continue;
+    const continuous = joint.jointType === 'continuous' || (joint.limit.lower === 0 && joint.limit.upper === 0);
+    const prismatic = joint.jointType === 'prismatic';
+    const lo = continuous ? -Math.PI : joint.limit.lower;
+    const hi = continuous ? Math.PI : joint.limit.upper;
+    const row = document.createElement('div');
+    row.className = 'joint';
+    row.innerHTML = `<label><span>${name}</span><span class="v">0.00</span></label>
+      <input type="range" min="${lo}" max="${hi}" step="0.01" value="${Math.min(Math.max(0, lo), hi)}">`;
+    const input = row.querySelector('input');
+    const v = row.querySelector('.v');
+    input.oninput = () => { joint.setJointValue(parseFloat(input.value)); v.textContent = (+input.value).toFixed(2); };
+    input.oninput();
+    row.dataset.joint = name;
+    jointsDiv.appendChild(row);
+  }
+}
+
+document.getElementById('reset').onclick = () => {
+  jointsDiv.querySelectorAll('.joint').forEach((row) => {
+    const input = row.querySelector('input');
+    input.value = Math.min(Math.max(0, +input.min), +input.max);
+    input.oninput();
+  });
+};
+
+const models = await (await fetch('/api/models')).json();
+if (!models.length) status.textContent = 'No URDF files found';
+for (const m of models) select.add(new Option(m.split('/')[0], '/' + m));
+select.onchange = () => load(select.value);
+if (models.length) load(select.value);
+</script>
+</body>
+</html>
