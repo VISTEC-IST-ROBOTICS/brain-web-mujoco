@@ -253,4 +253,10 @@
     <position name="CR2" joint="CR2" kp="10.0" kv="0.5" />
     <position name="FR2" joint="FR2" kp="10.0" kv="0.5" />
   </actuator>
+  <!-- Start pose: standing on all six feet with the joints at the controller's
+       rest targets (gait_targets(0, 0) in python/robots/red_mirror.py), settled
+       in the simulator. Joint zero has the legs sticking straight out. -->
+  <keyframe>
+    <key name="stand" qpos="1.5 0.00047 -0.12741 0.99991 -0.00136 0.01301 -0.00014 -0.7978 -0.62685 1.64411 0.00159 -0.55802 1.6732 0.80256 -0.62334 1.6387 0.79732 -0.62485 1.64471 -0.00154 -0.55639 1.67394 -0.80212 -0.62753 1.63557" ctrl="-0.8 -0.5 1.7 0 -0.5 1.7 0.8 -0.5 1.7 0.8 -0.5 1.7 0 -0.5 1.7 -0.8 -0.5 1.7"/>
+  </keyframe>
 </mujoco>

@@ -13,6 +13,9 @@ index.html, src/          the web page
   robots/python.js        finds python/robots/*.py, runs the chosen one in Pyodide
   landing.js              the robot menu
   loading.js, touch.js    loading screen, on-screen joystick
+summon.html, src/summon/  the robot summon (gacha) page: variants.js (colour variants,
+                          rarity, collection), stage.js (robot on a turntable, no physics);
+                          see summon.md
   robots/gecko.js         original JS gecko gait (not loaded; reference for tools/test_gecko.mjs)
 python/
   robots/<name>.py        one controller per robot; files starting with _ are helpers

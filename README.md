@@ -87,6 +87,18 @@ The full walkthrough, with the clean-up checklist, how to port a CoppeliaSim
 script and a troubleshooting table, is in
 **[docs/adding-a-robot.md](docs/adding-a-robot.md)**.
 
+## Future features
+
+- [ ] **Closed-loop controllers with sensory feedback.** The gaits are
+  currently open-loop, and those read the exact base pose from the simulator. None of the models have
+  sensors yet. Add `<sensor>` blocks to the MJCF (IMU: `gyro`,
+  `accelerometer`, `framequat`; foot contact: `touch`) so controllers can
+  react to the readings in `obs.sensors`.
+- [ ] **RL policy controllers using ONNX.** Run a trained policy exported to
+  ONNX as a robot's controller, in the browser and on the desktop. Its inputs
+  come from `obs` (joint state, sensors, joystick) and its outputs are the
+  actuator targets.
+
 ## Documentation
 
 | Document | Contents |
@@ -98,3 +110,4 @@ script and a troubleshooting table, is in
 | [docs/architecture.md](docs/architecture.md) | Repository layout, stack and how the page works |
 | [docs/python-js-bridge.md](docs/python-js-bridge.md) | How Python controllers drive the JavaScript/WASM MuJoCo |
 | [docs/gecko.md](docs/gecko.md) | The Gecko model's conversion and gait |
+| [docs/summon.md](docs/summon.md) | The Robot Summon page: odds, Robodex, variant links, how it works |

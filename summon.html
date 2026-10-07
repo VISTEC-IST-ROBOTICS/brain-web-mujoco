@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Robot Summon</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <style>
+      html, body {
+        margin: 0;
+        height: 100%;
+        background: #111;
+        color: #eee;
+        overflow: hidden;
+        font-family: system-ui, sans-serif;
+      }
+      body {
+        background: radial-gradient(ellipse at 50% 35%, #1d2a38, #111 70%);
+      }
+      #app {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        z-index: 1;
+      }
+      header h1 {
+        flex: 1;
+        min-width: 0;
+        margin: 0;
+        font-size: clamp(16px, 4vw, 24px);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 14px;
+        border-radius: 16px;
+        border: 1px solid rgba(127, 208, 255, 0.5);
+        background: rgba(127, 208, 255, 0.12);
+        color: #7fd0ff;
+        font: 600 14px system-ui, sans-serif;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .pill:hover,
+      .pill:focus-visible {
+        background: rgba(127, 208, 255, 0.28);
+        outline: none;
+      }
+      .pill output {
+        font-variant-numeric: tabular-nums;
+        color: #eee;
+      }
+      #stage {
+        position: relative;
+        flex: 1;
+        min-height: 0;
+      }
+      #stage canvas {
+        display: block;
+        position: absolute;
+        inset: 0;
+      }
+      #notice {
+        margin: 0 16px;
+        padding: 10px 14px;
+        border-radius: 8px;
+        background: rgba(255, 120, 120, 0.14);
+        color: #ffc2c2;
+      }
+      footer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        padding: 0 16px calc(20px + env(safe-area-inset-bottom));
+        z-index: 1;
+      }
+
+      /* Result card */
+      #result {
+        --tier: #aab4c0;
+        width: min(420px, 100%);
+        box-sizing: border-box;
+        padding: 14px 18px 16px;
+        border-radius: 14px;
+        background: rgba(20, 26, 34, 0.82);
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tier) 55%, transparent),
+          0 0 32px color-mix(in srgb, var(--tier) 25%, transparent);
+        text-align: center;
+        animation: card-in 0.45s ease-out;
+      }
+      #result[hidden] {
+        display: none;
+      }
+      #result .stars {
+        color: var(--tier);
+        font-size: 20px;
+        letter-spacing: 3px;
+      }
+      #result .stars span {
+        color: rgba(255, 255, 255, 0.15);
+      }
+      #result .tier {
+        color: var(--tier);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      #result .tier b {
+        margin-left: 6px;
+        padding: 1px 8px;
+        border-radius: 8px;
+        background: var(--tier);
+        color: #111;
+      }
+      #result h2 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin: 6px 0 4px;
+        font-size: 22px;
+      }
+      #result p {
+        margin: 0 0 10px;
+        color: #aab4c0;
+        font-size: 13px;
+        line-height: 1.45;
+      }
+      #result .walk {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        min-height: 40px;
+        padding: 0 20px;
+        border-radius: 20px;
+        border: 1.5px solid #7fd0ff;
+        background: rgba(127, 208, 255, 0.14);
+        color: #7fd0ff;
+        font-weight: 700;
+        font-size: 15px;
+        text-decoration: none;
+        transition: background 0.12s, color 0.12s;
+      }
+      #result .walk:hover,
+      #result .walk:focus-visible {
+        background: #7fd0ff;
+        color: #0b2230;
+        outline: none;
+      }
+      #result .actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+      }
+      #result .shot {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        min-height: 40px;
+        padding: 0 18px;
+        border-radius: 20px;
+        border: 1.5px solid rgba(255, 255, 255, 0.35);
+        background: rgba(255, 255, 255, 0.06);
+        color: #e6e6e6;
+        font: 700 15px system-ui, sans-serif;
+        cursor: pointer;
+        transition: background 0.12s, border-color 0.12s;
+      }
+      #result .shot:hover:not(:disabled),
+      #result .shot:focus-visible {
+        background: rgba(255, 255, 255, 0.16);
+        border-color: rgba(255, 255, 255, 0.6);
+        outline: none;
+      }
+      #result .shot:disabled {
+        opacity: 0.55;
+        cursor: progress;
+      }
+      #result .shot svg {
+        width: 18px;
+        height: 18px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linejoin: round;
+      }
+      /* Lab logo badge, as on the robot page: bottom right, or under the
+         header on narrow screens where the footer takes the bottom edge */
+      #logo {
+        position: absolute;
+        right: 16px;
+        bottom: 16px;
+        height: 34px;
+        padding: 6px 10px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.92);
+        pointer-events: none;
+      }
+      @media (max-width: 720px) {
+        #logo {
+          top: 64px;
+          bottom: auto;
+          height: 24px;
+        }
+      }
+      .dot {
+        display: inline-block;
+        flex: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.3);
+      }
+      .dot.prism {
+        background: conic-gradient(#ff4fd8, #ffcc33, #5ee6b0, #4fc3ff, #a98bf0, #ff4fd8) !important;
+      }
+      @keyframes card-in {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+      }
+
+      /* Summon button */
+      #summon {
+        min-width: 220px;
+        min-height: 52px;
+        padding: 0 28px;
+        border: 0;
+        border-radius: 26px;
+        background: linear-gradient(180deg, #9fdcff, #4fb4f0);
+        color: #0b2230;
+        font: 800 18px system-ui, sans-serif;
+        letter-spacing: 0.04em;
+        cursor: pointer;
+        box-shadow: 0 6px 22px rgba(79, 180, 240, 0.35);
+        transition: transform 0.12s, box-shadow 0.12s;
+      }
+      #summon:hover:not(:disabled),
+      #summon:focus-visible {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 28px rgba(79, 180, 240, 0.5);
+        outline: none;
+      }
+      #summon:disabled {
+        opacity: 0.55;
+        cursor: default;
+      }
+      #pity {
+        margin: -4px 0 0;
+        color: #9aa4ad;
+        font-size: 12px;
+      }
+
+      /* Summon animation: a box that drops, shakes and opens */
+      #overlay {
+        --flash: #fff;
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: rgba(8, 10, 14, 0.82);
+        z-index: 5;
+        cursor: pointer;
+      }
+      #overlay[hidden] {
+        display: none;
+      }
+      #overlay::after {
+        content: 'Tap to skip';
+        position: absolute;
+        bottom: calc(24px + env(safe-area-inset-bottom));
+        color: #6c7680;
+        font-size: 12px;
+      }
+      #overlay::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle, var(--flash), transparent 70%);
+        opacity: 0;
+        pointer-events: none;
+      }
+      #overlay.burst::before {
+        animation: flash 0.45s ease-out forwards;
+      }
+      /* The box: a lid and a crate with the lab logo on the front. Light
+         in the summoned tier's colour leaks from under the lid. */
+      .box {
+        --glow: #aab4c0;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        filter: drop-shadow(0 0 28px color-mix(in srgb, var(--glow) 65%, transparent));
+        transform: translateY(-60vh);
+        transition: filter 0.35s;
+      }
+      .dropped .box {
+        transform: none;
+        transition: transform 0.5s cubic-bezier(0.3, 1.4, 0.6, 1), filter 0.35s;
+      }
+      .box .lid {
+        position: relative;
+        z-index: 1;
+        width: 196px;
+        height: 36px;
+        border-radius: 7px;
+        background: linear-gradient(180deg, #56677a, #2a3440);
+        box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.18);
+      }
+      /* the light leak along the seam */
+      .box .lid::after {
+        content: '';
+        position: absolute;
+        left: 6px;
+        right: 6px;
+        bottom: -5px;
+        height: 5px;
+        border-radius: 3px;
+        background: var(--glow);
+        box-shadow: 0 0 14px 4px var(--glow);
+        transition: background 0.35s, box-shadow 0.35s;
+      }
+      .box .crate {
+        display: grid;
+        place-items: center;
+        width: 176px;
+        height: 136px;
+        border-radius: 0 0 10px 10px;
+        background: linear-gradient(180deg, #3a4757, #1b222b);
+        box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.06);
+      }
+      .box .crate img {
+        width: 128px;
+        padding: 8px 10px;
+        border-radius: 7px;
+        background: #fff;
+      }
+      .box.shake {
+        animation: shake 0.55s ease-in-out;
+      }
+      .burst .box {
+        animation: fade 0.45s ease-in forwards;
+      }
+      .burst .lid {
+        animation: lid-off 0.45s ease-out forwards;
+      }
+      @keyframes shake {
+        20% { transform: rotate(-16deg); }
+        45% { transform: rotate(13deg); }
+        70% { transform: rotate(-6deg); }
+        100% { transform: rotate(0); }
+      }
+      @keyframes lid-off {
+        to {
+          transform: translate(40px, -140px) rotate(28deg);
+        }
+      }
+      @keyframes fade {
+        60% { opacity: 1; }
+        100% { opacity: 0; }
+      }
+      @keyframes flash {
+        30% { opacity: 1; }
+        100% { opacity: 0; }
+      }
+
+      /* Robodex */
+      #dex {
+        width: min(560px, calc(100% - 32px));
+        max-height: calc(100% - 64px);
+        box-sizing: border-box;
+        padding: 18px 20px 20px;
+        border: 0;
+        border-radius: 14px;
+        background: #1b222b;
+        color: #eee;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 20px 50px rgba(0, 0, 0, 0.5);
+      }
+      #dex::backdrop {
+        background: rgba(0, 0, 0, 0.6);
+      }
+      #dex .head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 4px;
+      }
+      #dex h2 {
+        margin: 0;
+        font-size: 20px;
+      }
+      #dex .close {
+        width: 32px;
+        height: 32px;
+        border: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
+        color: #eee;
+        font-size: 18px;
+        cursor: pointer;
+      }
+      #dex .hint {
+        margin: 0 0 12px;
+        color: #9aa4ad;
+        font-size: 13px;
+      }
+      #dex h3 {
+        margin: 14px 0 8px;
+        font-size: 15px;
+      }
+      #dex h3 span {
+        color: #9aa4ad;
+        font-weight: 400;
+        font-variant-numeric: tabular-nums;
+      }
+      #dex ul {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 8px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      #dex li > * {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 100%;
+        aspect-ratio: 1;
+        box-sizing: border-box;
+        border-radius: 10px;
+        border: 2px solid color-mix(in srgb, var(--tier) 60%, transparent);
+      }
+      #dex button {
+        padding: 0;
+        background: #26303b;
+        cursor: pointer;
+      }
+      #dex button:hover,
+      #dex button:focus-visible {
+        border-color: var(--tier);
+        outline: none;
+        background: #303b48;
+      }
+      #dex button .dot {
+        width: 60%;
+        height: 60%;
+      }
+      #dex button b {
+        position: absolute;
+        right: 2px;
+        bottom: 1px;
+        font-size: 10px;
+        color: #cfd6dd;
+      }
+      #dex .unknown {
+        border-style: dashed;
+        border-color: color-mix(in srgb, var(--tier) 30%, transparent);
+        color: rgba(255, 255, 255, 0.25);
+        font-weight: 700;
+      }
+      @media (max-width: 480px) {
+        header .wide {
+          display: none;
+        }
+        #dex ul {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #result,
+        .box.shake {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <a class="pill" href="./">&larr; Robots</a>
+        <h1><span class="wide">Robot </span>Summon</h1>
+        <button class="pill" id="dex-open" type="button">Robodex <output>0/0</output></button>
+      </header>
+      <p id="notice" hidden></p>
+      <div id="stage"></div>
+      <footer>
+        <div id="result" aria-live="polite" hidden></div>
+        <button id="summon" type="button" disabled>Warming up&hellip;</button>
+        <p id="pity"></p>
+      </footer>
+      <img id="logo" src="assets/brain_logo_v2.webp" alt="BRAIN VISTEC">
+    </div>
+    <div id="overlay" hidden>
+      <div class="box"><div class="lid"></div><div class="crate"><img src="assets/brain_logo_v2.webp" alt="BRAIN VISTEC"></div></div>
+    </div>
+    <dialog id="dex">
+      <div class="head">
+        <h2>Robodex</h2>
+        <button class="close" type="button" aria-label="Close">&times;</button>
+      </div>
+      <p class="hint">Every robot comes in 16 colours: Common, Rare, Epic and Legendary. Pick one you've caught to put it on the pedestal.</p>
+      <div class="list"></div>
+    </dialog>
+    <script type="module" src="/src/summon/main.js"></script>
+  </body>
+</html>

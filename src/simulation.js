@@ -38,7 +38,7 @@ export async function fetchModelFiles(url, onProgress = () => {}) {
     return [file, await read(path, res)];
   }));
   onProgress(1);
-  return { xml, meshes };
+  return { xml, meshdir, meshes };
 }
 
 // A response body as bytes, reporting onFraction(0..1) as it streams in
@@ -66,10 +66,26 @@ async function readBody(res, onFraction) {
   return bytes;
 }
 
-function compileModel(mujoco, { xml, meshes }) {
-  const vfs = new mujoco.MjVFS();
-  for (const [file, bytes] of meshes) vfs.addBuffer(file, bytes);
-  return mujoco.MjModel.from_xml_string(xml, vfs);
+// Compiles a model from fetchModelFiles' files. They go into Emscripten's
+// in-memory file system, laid out as on the server, and MuJoCo reads them
+// from there: FS.writeFile copies a file in one go, while MjVFS.addBuffer
+// converts it byte by byte through embind (seconds for MORF's or Red
+// Mirror's few MB of meshes, with the page frozen). The files are deleted
+// again once compiled; the model keeps its own copy.
+let compiled = 0;
+export function compileModel(mujoco, { xml, meshdir, meshes }) {
+  const { FS } = mujoco;
+  const dir = `/models/${compiled++}`;
+  const meshPath = meshdir ? `${dir}/${meshdir.replace(/\/+$/, '')}` : dir;
+  FS.mkdirTree(meshPath);
+  const paths = [`${dir}/model.xml`, ...meshes.map(([file]) => `${meshPath}/${file}`)];
+  FS.writeFile(paths[0], xml);
+  meshes.forEach(([, bytes], i) => FS.writeFile(paths[i + 1], bytes));
+  try {
+    return mujoco.MjModel.from_xml_path(paths[0]);
+  } finally {
+    paths.forEach((p) => FS.unlink(p));
+  }
 }
 
 // Compiles the model (files from fetchModelFiles) and pairs it with the

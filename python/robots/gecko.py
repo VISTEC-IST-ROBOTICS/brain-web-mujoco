@@ -11,7 +11,7 @@ from robots._heading import HeadingHold
 
 TITLE = "Gecko"
 USER_CONTROL = True  # driven with the keyboard / gamepad / touch joystick
-WATCH_INPUT = {"left_y": 1.0}  # Watch mode: walks straight ahead on its own
+WATCH_INPUT = {"left_y": 0.5}  # Watch mode: walks straight ahead on its own
 # Speed slider: scales the gait rate (and so the top speed). Faster than
 # about 1.5x the feet slip and the gecko gets slower again.
 SPEED_RANGE = (0.25, 1.5)

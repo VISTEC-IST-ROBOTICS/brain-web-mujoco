@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { animateFinish, applyFinish, VARIANTS } from './summon/variants.js';
 
 // Body-colour picker: recolours the materials named 'printed', the robot's
 // shell parts: a VISUALS file's (see tools/usd_to_mjcf.py) or an MJCF
@@ -7,6 +8,11 @@ import * as THREE from 'three';
 // opens the palette, whose first entry, Original, is the robot's own colour
 // (robotDef.bodyColor, else the model's). Another choice is kept per robot
 // in localStorage; Original clears it.
+//
+// ?variant=<id> (the summon page's "Take it for a walk" link) opens the robot
+// in that summoned variant, finish and all (metal, glow, Prism's cycling
+// hue). Its colour is remembered as above; the finish lasts until another
+// colour is picked.
 const SWATCHES = ['#2b2b2b', '#4c9a2a', '#e8731a', '#1f6fd1', '#c8262e', '#f2c318', '#7a3fc4', '#e9e9e9'];
 
 // Tolerant compare: Three.js stores colours linear, so round-tripping to
@@ -36,6 +42,11 @@ export function createPaintControl(root, robotDef) {
     </div>`;
   app.appendChild(el);
   app.classList.add('has-paint');
+  // The materials' own finish, put back when a summoned one gives way.
+  const plain = [...materials].map((m) => ({
+    m, roughness: m.roughness, metalness: m.metalness, emissive: m.emissive.clone(), emissiveIntensity: m.emissiveIntensity,
+  }));
+  let finish = null; // the summoned variant being shown, if any
   const toggle = el.querySelector('.current');
   const palette = el.querySelector('.palette');
   const custom = el.querySelector('input');
@@ -46,6 +57,13 @@ export function createPaintControl(root, robotDef) {
   toggle.addEventListener('click', () => setOpen(palette.hidden));
 
   const apply = (hex, remember = true) => {
+    if (finish) {
+      finish = null;
+      plain.forEach(({ m, ...props }) => Object.assign(m, props));
+      const url = new URL(location.href);
+      url.searchParams.delete('variant'); // a reload keeps the colour picked now
+      history.replaceState(null, '', url);
+    }
     materials.forEach((m) => m.color.set(hex));
     custom.value = hex;
     toggle.querySelector('i').style.background = hex;
@@ -68,6 +86,17 @@ export function createPaintControl(root, robotDef) {
   try {
     saved = localStorage.getItem(storageKey);
   } catch {}
-  if (saved) apply(saved);
+  const variant = VARIANTS.find((v) => v.id === new URLSearchParams(location.search).get('variant'));
+  if (variant) {
+    apply(variant.color);
+    finish = variant;
+    applyFinish([...materials], variant);
+    const animate = (ms) => {
+      if (finish !== variant) return;
+      animateFinish(materials, variant, ms / 1000);
+      requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
+  } else if (saved) apply(saved);
   else apply(original, false);
 }
