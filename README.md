@@ -48,7 +48,17 @@ A robot is two files. The file name `<name>` becomes its URL, `?robot=<name>`.
 
 Once both exist, the robot shows up in the page's menu.
 
-**1. Get an MJCF model.** Convert it from where the robot lives now:
+**1. Get an MJCF model.** The easiest way is the converter page: pick the
+description type (URDF, CoppeliaSim scene, Isaac Sim USD), drop in the files,
+convert, and check the result in its URDF and MuJoCo viewers:
+
+```sh
+venv/bin/python tools/converter/server.py          # open http://localhost:8010/
+```
+
+See [docs/converter.md](docs/converter.md).
+
+Or convert from the command line:
 
 ```sh
 # from a CoppeliaSim scene (how MORF and Red Mirror were made)
@@ -105,7 +115,8 @@ script and a troubleshooting table, is in
 | --- | --- |
 | [docs/adding-a-robot.md](docs/adding-a-robot.md) | Step-by-step tutorial for adding a robot |
 | [python/README.md](python/README.md) | Controller API: every `obs` field and module setting |
-| [docs/model-tools.md](docs/model-tools.md) | The converters: CoppeliaSim, URDF, USD, mesh compression |
+| [docs/converter.md](docs/converter.md) | The converter page: converting a robot to MJCF in the browser, its viewers, how it works |
+| [docs/model-tools.md](docs/model-tools.md) | The command-line converters: CoppeliaSim, URDF, USD, mesh compression |
 | [docs/usage.md](docs/usage.md) | Running in the browser and on the desktop, controls, deployment |
 | [docs/architecture.md](docs/architecture.md) | Repository layout, stack and how the page works |
 | [docs/python-js-bridge.md](docs/python-js-bridge.md) | How Python controllers drive the JavaScript/WASM MuJoCo |

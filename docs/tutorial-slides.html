@@ -1,0 +1,750 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adding a Robot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+  :root {
+    --bg: #f6f5f1;
+    --bg2: #ecebe5;
+    --ink: #16212e;
+    --soft: #4a5566;
+    --mute: #7a8494;
+    --line: #d6d4cc;
+    --card: #fdfcf9;
+    --accent: #d9622f;      /* orange: Python side, highlights */
+    --blue: #2e66c9;        /* blue: JavaScript side */
+    --green: #2f8a5b;
+    --dark: #142030;
+    --dark2: #1c2b3f;
+    --code-bg: #1b2533;
+    --code-ink: #e4e8ee;
+    --sans: 'IBM Plex Sans', 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+    --mono: 'JetBrains Mono', 'Fira Code', Consolas, 'Courier New', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: #0d131c; overflow: hidden; }
+  body { font-family: var(--sans); color: var(--ink); }
+
+  #stage { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
+  #deck { width: 1920px; height: 1080px; position: relative; transform-origin: center center; flex: none; }
+  .slide {
+    position: absolute; inset: 0; background: var(--bg); padding: 110px 128px 150px;
+    display: none; flex-direction: column; gap: 40px; overflow: hidden;
+  }
+  .slide.active { display: flex; }
+  .slide.dark { background: var(--dark); color: #eef1f5; }
+  .slide.alt { background: var(--bg2); }
+
+  /* type scale: 120 / 72 / 44 / 32 / 26 */
+  h1 { font-size: 112px; line-height: 1.05; font-weight: 700; letter-spacing: -2px; }
+  h2 { font-size: 64px; line-height: 1.1; font-weight: 600; letter-spacing: -1px; }
+  h3 { font-size: 34px; line-height: 1.2; font-weight: 600; }
+  p, li, td, th { font-size: 28px; line-height: 1.45; color: var(--soft); }
+  .dark p, .dark li { color: #bfcad8; }
+  .eyebrow { font-size: 24px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); }
+  .lead { font-size: 36px; line-height: 1.4; color: var(--soft); max-width: 1500px; }
+  .dark .lead { color: #c8d2df; }
+  b, strong { color: var(--ink); font-weight: 600; }
+  .dark b { color: #fff; }
+  code, .mono { font-family: var(--mono); font-size: 0.9em; }
+  p code, li code, td code { background: #e4e1d8; padding: 2px 8px; border-radius: 6px; color: var(--ink); }
+  .dark p code, .dark li code { background: #2a3a52; color: #fff; }
+
+  .row { display: flex; gap: 40px; }
+  .col { display: flex; flex-direction: column; gap: 24px; }
+  .grow { flex: 1; min-width: 0; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 36px 40px; display: flex; flex-direction: column; gap: 14px; }
+  .card h3 { font-size: 32px; }
+  .card p, .card li { font-size: 26px; }
+  .dark .card { background: var(--dark2); border-color: #2c3d55; }
+  .dark .card h3 { color: #fff; }
+  .tag { display: inline-block; font-size: 22px; font-weight: 600; padding: 4px 14px; border-radius: 999px; background: var(--ink); color: #fff; align-self: flex-start; letter-spacing: 1px; }
+  .tag.js { background: var(--blue); }
+  .tag.py { background: var(--accent); }
+  .tag.gr { background: var(--green); }
+
+  ul.clean { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+  ul.clean li { padding-left: 36px; position: relative; }
+  ul.clean li::before { content: ""; position: absolute; left: 0; top: 16px; width: 14px; height: 14px; border-radius: 3px; background: var(--accent); }
+  ul.check li::before { background: transparent; border: 3px solid var(--accent); width: 18px; height: 18px; top: 12px; border-radius: 4px; }
+
+  pre {
+    font-family: var(--mono); font-size: 25px; line-height: 1.5; background: var(--code-bg); color: var(--code-ink);
+    padding: 32px 38px; border-radius: 16px; white-space: pre; overflow: hidden;
+  }
+  pre.sm { font-size: 22px; }
+  pre.xs { font-size: 20px; line-height: 1.45; padding: 26px 32px; }
+  .card.compact { padding: 20px 28px; gap: 6px; }
+  pre .c { color: #7f8ea3; }      /* comment */
+  pre .k { color: #ff9e6b; }      /* keyword */
+  pre .s { color: #9fd89a; }      /* string */
+  pre .t { color: #7fb4ff; }      /* tag / name */
+  pre .a { color: #e7c37a; }      /* attribute */
+  pre .p { color: #ff9e6b; font-weight: 600; } /* prompt */
+
+  table { border-collapse: collapse; width: 100%; }
+  th { text-align: left; font-weight: 600; color: var(--ink); font-size: 26px; padding: 14px 20px; border-bottom: 2px solid var(--ink); }
+  td { padding: 14px 20px; border-bottom: 1px solid var(--line); font-size: 26px; vertical-align: top; }
+  td:first-child { color: var(--ink); font-weight: 500; }
+  table.tight td, table.tight th { padding: 10px 18px; font-size: 24px; }
+
+  .num { font-size: 120px; font-weight: 700; line-height: 1; color: var(--accent); letter-spacing: -3px; }
+  .step-badge { width: 88px; height: 88px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 44px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex: none; }
+  .head-row { display: flex; align-items: center; gap: 32px; }
+
+  .shot { border-radius: 16px; border: 1px solid var(--line); object-fit: cover; display: block; background: #222; }
+
+  /* diagrams */
+  .box { border-radius: 14px; padding: 22px 26px; border: 2px solid var(--ink); background: var(--card); font-size: 26px; line-height: 1.35; color: var(--ink); }
+  .box small { display: block; font-size: 22px; color: var(--soft); margin-top: 4px; }
+  .box.js { border-color: var(--blue); background: #eaf0fb; }
+  .box.py { border-color: var(--accent); background: #fbeee7; }
+  .box.gr { border-color: var(--green); background: #e6f3ec; }
+  .box.mono { font-family: var(--mono); font-size: 23px; }
+  .arrow { color: var(--mute); font-size: 40px; display: flex; align-items: center; justify-content: center; font-weight: 300; }
+  .lane-label { font-size: 22px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+
+  .footer { position: absolute; left: 128px; right: 128px; bottom: 56px; display: flex; justify-content: space-between; font-size: 22px; color: var(--mute); }
+  .dark .footer { color: #6f7f96; }
+
+  aside.notes { display: none; }
+
+  /* chrome */
+  #notes {
+    position: fixed; left: 0; right: 0; bottom: 0; max-height: 34vh; overflow: auto; background: rgba(10, 15, 22, 0.94);
+    color: #dfe5ec; font: 17px/1.5 var(--sans); padding: 18px 28px 22px; display: none; border-top: 2px solid var(--accent); z-index: 10;
+  }
+  #notes.show { display: block; }
+  #notes .lbl { color: var(--accent); font-weight: 600; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+  #progress { position: fixed; left: 0; top: 0; height: 4px; background: var(--accent); transition: width .2s; z-index: 11; }
+  #hint { position: fixed; right: 16px; bottom: 12px; color: #6f7f96; font: 13px var(--sans); z-index: 9; }
+
+  @media print {
+    @page { size: 1920px 1080px; margin: 0; }
+    html, body { overflow: visible; height: auto; background: none; }
+    #stage { position: static; display: block; }
+    #deck { transform: none !important; width: auto; height: auto; }
+    .slide { display: flex !important; position: relative; width: 1920px; height: 1080px; page-break-after: always; break-after: page; }
+    #notes, #progress, #hint { display: none !important; }
+  }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="stage"><div id="deck">
+
+<!-- ============================================================ COVER -->
+<section class="slide dark" style="justify-content:center; gap:48px;">
+  <img src="images/menu.jpg" alt="" style="position:absolute; right:0; top:0; width:820px; height:1080px; object-fit:cover; opacity:.35;">
+  <div style="position:absolute; right:0; top:0; width:820px; height:1080px; background:linear-gradient(90deg, #142030 0%, rgba(20,32,48,0) 60%);"></div>
+  <p class="eyebrow" style="position:relative;">MuJoCo Web Simulator · Tutorial</p>
+  <h1 style="position:relative; max-width:1150px;">Adding a robot to the simulator</h1>
+  <p class="lead" style="position:relative; max-width:1050px;">From a robot description to a walking robot in the browser: one MJCF model plus one Python file.</p>
+  <div class="footer" style="position:absolute;"><span>docs/adding-a-robot.md</span><span>[Presenter name] · [Date]</span></div>
+  <aside class="notes">Welcome. Today: how this repo simulates legged robots in the browser, and the practical workflow for adding a new robot. Keys: arrows to move, N toggles these notes, F for fullscreen.</aside>
+</section>
+
+<!-- ============================================================ AGENDA -->
+<section class="slide">
+  <p class="eyebrow">Agenda</p>
+  <h2>Four parts, one goal: your robot in the menu</h2>
+  <div class="row" style="flex:1; align-items:stretch;">
+    <div class="card grow"><span class="num">1</span><h3>Robot simulation</h3><p>What a physics engine does and how MuJoCo steps a robot.</p></div>
+    <div class="card grow"><span class="num">2</span><h3>Robot description</h3><p>URDF, MJCF, USD: how a robot is written down for a simulator.</p></div>
+    <div class="card grow"><span class="num">3</span><h3>Repo architecture</h3><p>MuJoCo in JavaScript, controllers in Python, and the bridge between them.</p></div>
+    <div class="card grow" style="border:2px solid var(--accent);"><span class="num">4</span><h3>Adding a robot</h3><p>The six-step workflow, hands-on. The main part of today.</p></div>
+  </div>
+  <aside class="notes">Parts 1 to 3 are background so that part 4 makes sense. If the audience already knows MuJoCo, go quickly through part 1.</aside>
+</section>
+
+<!-- ============================================================ ROBOTS TODAY -->
+<section class="slide">
+  <p class="eyebrow">Where we are</p>
+  <h2>Three robots walk in the browser today</h2>
+  <div class="row" style="flex:1;">
+    <div class="col grow"><img class="shot" src="images/gecko.jpg" alt="Gecko robot walking in the web page" style="width:100%; height:400px;"><h3>Gecko</h3><p>Quadruped with a bending spine. From an Isaac Sim USD.</p></div>
+    <div class="col grow"><img class="shot" src="images/morf.jpg" alt="MORF hexapod walking in the web page" style="width:100%; height:400px;"><h3>MORF</h3><p>Hexapod, tripod gait. From a CoppeliaSim scene.</p></div>
+    <div class="col grow"><img class="shot" src="images/red_mirror.jpg" alt="Red Mirror stick-insect hexapod walking in the web page" style="width:100%; height:400px;"><h3>Red Mirror</h3><p>Stick-insect hexapod. From a CoppeliaSim scene.</p></div>
+  </div>
+  <p>Plus the Unitree B1 (from URDF), hidden while its controller is in progress. Each opens at <code>?robot=&lt;name&gt;</code>.</p>
+  <aside class="notes">Show the live site if possible. Each robot came from a different source format, which is why part 2 matters. Drive one with the keyboard: W/S forward/back, A/D steer, M toggles Watch mode.</aside>
+</section>
+
+<!-- ============================================================ SECTION 1 -->
+<section class="slide dark" style="justify-content:center;">
+  <p class="eyebrow">Part 1</p>
+  <h1>Robot simulation</h1>
+  <p class="lead">A physics engine turns a model and some motor commands into motion, one small time step at a time.</p>
+  <aside class="notes">Part 1: the minimum physics-simulation vocabulary needed for the rest.</aside>
+</section>
+
+<section class="slide">
+  <p class="eyebrow">Robot simulation</p>
+  <h2>A simulator is a loop: state in, state out</h2>
+  <div class="row" style="align-items:center; gap:24px; margin-top:20px;">
+    <div class="box grow" style="text-align:center;"><b>State</b><small>joint angles, velocities, base pose</small></div>
+    <div class="arrow">→</div>
+    <div class="box py grow" style="text-align:center;"><b>Controller</b><small>decides motor targets</small></div>
+    <div class="arrow">→</div>
+    <div class="box gr grow" style="text-align:center;"><b>Physics step</b><small>gravity, contacts, actuator forces</small></div>
+    <div class="arrow">→</div>
+    <div class="box grow" style="text-align:center;"><b>New state</b><small>Δt = 2 ms later</small></div>
+  </div>
+  <div class="row" style="margin-top:20px;">
+    <div class="card grow"><h3>Dynamics</h3><p>Masses and inertias decide how the robot reacts to forces. Wrong masses = a robot that sags or explodes.</p></div>
+    <div class="card grow"><h3>Contacts</h3><p>Collision shapes touching the floor produce the friction that makes walking possible.</p></div>
+    <div class="card grow"><h3>Actuators</h3><p>Motors turn commands into joint torques. Here, mostly <b>position servos</b>.</p></div>
+  </div>
+  <aside class="notes">Everything a simulator does is in this loop. The controller is the only part we write per robot; the physics step is MuJoCo's job. The three cards are the three things that most often go wrong in a newly imported robot.</aside>
+</section>
+
+<section class="slide">
+  <p class="eyebrow">Robot simulation</p>
+  <h2>MuJoCo in four words</h2>
+  <div class="row" style="flex:1;">
+    <div class="col grow">
+      <div class="card"><h3><code>MjModel</code>: what the robot is</h3><p>Compiled from the XML. Bodies, joints, geoms, masses, actuators. Does not change while running.</p></div>
+      <div class="card"><h3><code>MjData</code>: what the robot is doing</h3><p><code>qpos</code>, <code>qvel</code>, <code>ctrl</code>, <code>sensordata</code>, time. Changes every step.</p></div>
+    </div>
+    <div class="col grow">
+      <div class="card"><h3><code>mj_step</code>: advance time</h3><p>Advances <code>MjData</code> by one <code>timestep</code>, reading <code>ctrl</code> for the actuator commands.</p></div>
+      <div class="card"><h3>Position actuator</h3><p>A servo: <code>torque = kp·(target − q) − kv·q̇</code>. We write the target into <code>ctrl</code>; MuJoCo computes the torque.</p></div>
+    </div>
+  </div>
+  <aside class="notes">This vocabulary is used everywhere in the repo. Note that ctrl holds targets, not torques, for position actuators. kp and kv are set per actuator in the XML; the converter defaults are kp=10, kv=0.5.</aside>
+</section>
+
+<section class="slide">
+  <p class="eyebrow">Robot simulation</p>
+  <h2>Physics fast, control slower</h2>
+  <div class="row" style="flex:1; align-items:center;">
+    <div class="col grow">
+      <p class="lead">The page steps physics at the model's fixed timestep to keep up with real time. The controller runs at its own <code>rate</code>, in <b>simulated</b> time.</p>
+      <ul class="clean">
+        <li>Physics: every <code>timestep</code> (e.g. 2 ms, 500 Hz)</li>
+        <li>Controller: every <code>1 / rate</code> (default 50 Hz)</li>
+        <li>Between ticks, <code>ctrl</code> keeps its last value</li>
+        <li>Same behaviour at any frame rate, browser or desktop</li>
+      </ul>
+    </div>
+    <pre class="grow" style="flex:0 0 760px;"><span class="c">// every animation frame</span>
+<span class="k">while</span> (simTime &lt; realTime) {
+  <span class="k">if</span> (controlTickDue)
+    data.ctrl = controller(obs)
+  mj_step(model, data)
+}
+render(data)</pre>
+  </div>
+  <aside class="notes">This decoupling is why a controller behaves identically whether the browser runs at 30 or 144 fps. When porting a CoppeliaSim script, rate matters: CoppeliaSim's default step is 50 ms, so Red Mirror uses rate = 20.</aside>
+</section>
+
+<!-- ============================================================ SECTION 2 -->
+<section class="slide dark" style="justify-content:center;">
+  <p class="eyebrow">Part 2</p>
+  <h1>Robot description</h1>
+  <p class="lead">Before you can simulate a robot, you write down its parts, how they connect and how they move.</p>
+  <aside class="notes">Part 2: robot description formats. The simulator only understands MJCF, so every robot is converted to it.</aside>
+</section>
+
+<section class="slide">
+  <p class="eyebrow">Robot description</p>
+  <h2>Many formats in, one format out: MJCF</h2>
+  <table>
+    <tr><th style="width:22%">Format</th><th style="width:30%">Comes from</th><th style="width:48%">In this repo</th></tr>
+    <tr><td>CoppeliaSim <code>.ttt</code></td><td>CoppeliaSim scenes</td><td><code>export_urdf.sh</code> → URDF → <code>urdf_to_mjcf.py</code> (MORF, Red Mirror)</td></tr>
+    <tr><td>URDF</td><td>ROS, CAD exporters, vendors</td><td><code>urdf_to_mjcf.py</code>, or <code>b1_to_mjcf.py</code> (Unitree B1)</td></tr>
+    <tr><td>USD</td><td>NVIDIA Isaac Sim</td><td><code>usd_to_mjcf.py</code> (Gecko)</td></tr>
+    <tr><td>MJCF</td><td>MuJoCo, MuJoCo Menagerie</td><td>Copy it in directly</td></tr>
+  </table>
+  <p>All describe the same things: a <b>tree of rigid links</b> joined by <b>joints</b>, each link with <b>mass</b>, <b>shapes to draw</b> and <b>shapes to collide</b>. MJCF also describes actuators, sensors and the world.</p>
+  <aside class="notes">URDF is the most common exchange format but has no actuators or floor. MJCF is MuJoCo's native format and includes physics options, actuators and sensors. The converters fill in what URDF lacks.</aside>
+</section>
+
+<section class="slide">
+  <p class="eyebrow">Robot description</p>
+  <h2>Anatomy of an MJCF file</h2>
+  <div class="row" style="flex:1;">
+    <pre class="sm xs" style="flex:0 0 1000px; align-self:flex-start;"><span class="t">&lt;mujoco</span> <span class="a">model</span>=<span class="s">"hexbot"</span><span class="t">&gt;</span>
+  <span class="t">&lt;option</span> <span class="a">integrator</span>=<span class="s">"implicitfast"</span><span class="t">/&gt;</span>
+  <span class="t">&lt;asset&gt;</span> <span class="c">meshes, materials</span> <span class="t">&lt;/asset&gt;</span>
+  <span class="t">&lt;worldbody&gt;</span>
+    <span class="t">&lt;geom</span> <span class="a">name</span>=<span class="s">"floor"</span> <span class="a">type</span>=<span class="s">"plane"</span> <span class="a">size</span>=<span class="s">"0 0 0.05"</span><span class="t">/&gt;</span>
+    <span class="t">&lt;body</span> <span class="a">name</span>=<span class="s">"robot_base"</span><span class="t">&gt;</span>
+      <span class="t">&lt;freejoint/&gt;</span>
+      <span class="t">&lt;inertial</span> <span class="a">mass</span>=<span class="s">"1.965"</span> <span class="a">diaginertia</span>=<span class="s">"…"</span><span class="t">/&gt;</span>
+      <span class="t">&lt;geom</span> <span class="a">type</span>=<span class="s">"box"</span> <span class="a">group</span>=<span class="s">"3"</span><span class="t">/&gt;</span>
+      <span class="t">&lt;body</span> <span class="a">name</span>=<span class="s">"coxa0"</span> <span class="a">pos</span>=<span class="s">"…"</span><span class="t">&gt;</span>
+        <span class="t">&lt;joint</span> <span class="a">name</span>=<span class="s">"TC0"</span> <span class="a">range</span>=<span class="s">"-1.57 1.57"</span><span class="t">/&gt;</span>
+        <span class="c">…child bodies: femur, tibia, foot</span>
+      <span class="t">&lt;/body&gt;</span>
+    <span class="t">&lt;/body&gt;</span>
+  <span class="t">&lt;/worldbody&gt;</span>
+  <span class="t">&lt;actuator&gt;</span>
+    <span class="t">&lt;position</span> <span class="a">name</span>=<span class="s">"TC0"</span> <span class="a">joint</span>=<span class="s">"TC0"</span> <span class="a">kp</span>=<span class="s">"10"</span> <span class="a">kv</span>=<span class="s">"0.5"</span><span class="t">/&gt;</span>
+  <span class="t">&lt;/actuator&gt;</span>
+<span class="t">&lt;/mujoco&gt;</span></pre>
+    <div class="col grow" style="gap:14px;">
+      <div class="card compact"><h3>body</h3><p>A rigid link. Nesting = the kinematic tree.</p></div>
+      <div class="card compact"><h3>joint</h3><p>How a body moves relative to its parent. <code>freejoint</code> lets the base fly free.</p></div>
+      <div class="card compact"><h3>geom</h3><p>A shape: drawn, collided, or both.</p></div>
+      <div class="card compact"><h3>actuator</h3><p>A motor on a joint. Its <b>name</b> is what your controller commands.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Simplified from public/assets/morf/morf.xml. The key link to the controller: the actuator names (TC0, CF0, FT0...) are the keys of the dictionary the Python controller returns. Joint names are the keys of obs.qpos.</aside>
+</section>
+
+<section class="slide">
+  <p class="eyebrow">Robot description</p>
+  <h2>Two kinds of geometry: what you see, what collides</h2>
+  <div class="row" style="flex:1;">
+    <div class="card grow">
+      <span class="tag gr">group="1"</span>
+      <h3>Visual geoms</h3>
+      <p>Detailed meshes from CAD. <code>contype="0" conaffinity="0"</code>: never collide. <code>density="0"</code>: add no mass.</p>
+    </div>
+    <div class="card grow">
+      <span class="tag">group="3"</span>
+      <h3>Collision geoms</h3>
+      <p>Simple boxes, capsules, spheres. Fast and stable contacts. The web page hides group 3 when a model has visual geoms.</p>
+    </div>
+    <div class="card grow">
+      <span class="tag py">material="printed"</span>
+      <h3>Body colour</h3>
+      <p>Shell parts sharing the <code>printed</code> material get the page's <b>Body</b> colour picker.</p>
+    </div>
+  </div>
+  <p>Rule of thumb: <b>pretty meshes to look at, primitives to touch the floor.</b> Heavy robots (like the B1) walk much better on primitive collision shapes.</p>
+  <aside class="notes">This split is the most common clean-up step. MuJoCo's desktop viewer still shows group 3; press 3 to toggle it. The feet must be collision geoms, or the legs sink through the floor (Red Mirror had exactly this problem).</aside>
+</section>
+
+<!-- ============================================================ SECTION 3 -->
+<section class="slide dark" style="justify-content:center;">
+  <p class="eyebrow">Part 3</p>
+  <h1>Repo architecture</h1>
+  <p class="lead">A static website. Physics in JavaScript, controllers in Python, no server.</p>
+  <aside class="notes">Part 3: how the page is built and how JavaScript and Python cooperate.</aside>
+</section>
+
+<section class="slide">
+  <p class="eyebrow">Repo architecture</p>
+  <h2>The stack: everything runs in the browser</h2>
+  <div class="row" style="flex:1;">
+    <div class="card grow"><span class="tag js">physics</span><h3>MuJoCo WASM</h3><p><code>@mujoco/mujoco</code>, DeepMind's official WebAssembly build, called from JavaScript.</p></div>
+    <div class="card grow"><span class="tag js">rendering</span><h3>Three.js</h3><p>Copies each geom's pose onto a mesh every frame.</p></div>
+    <div class="card grow"><span class="tag py">controllers</span><h3>Pyodide</h3><p>CPython compiled to WebAssembly. Loaded (~10 MB) only when a robot is opened.</p></div>
+    <div class="card grow"><span class="tag">tooling</span><h3>Vite</h3><p>Dev server and bundler. No UI framework. Push to <code>main</code> deploys to GitHub Pages.</p></div>
+  </div>
+  <p class="lead">No backend: the site is static files. And the same controller runs on the desktop with native <code>mujoco</code> for debugging.</p>
+  <aside class="notes">Because there is no server, the robot runs on the visitor's machine. Deployment is .github/workflows/deploy.yml.</aside>
+</section>
+
+<section class="slide">
+  <p class="eyebrow">Repo architecture</p>
+  <h2>Where things live</h2>
+  <div class="row" style="flex:1;">
+    <pre class="sm" style="flex:0 0 1080px;"><span class="t">index.html, src/</span>          <span class="c">the web page (JavaScript)</span>
+  main.js                 <span class="c">start-up + frame loop</span>
+  simulation.js           <span class="c">load MJCF, step MuJoCo + controller</span>
+  robots/python.js        <span class="c">Pyodide + the JS↔Python bridge</span>
+  render/                 <span class="c">Three.js drawing</span>
+  hud.js, input.js, …     <span class="c">UI, keyboard / gamepad / touch</span>
+<span class="t">python/</span>
+  robots/<span class="s">&lt;name&gt;</span>.py        <span class="c">one controller per robot</span>
+  robots/_template.py     <span class="c">start here</span>
+  simbot.py               <span class="c">controller API, shared web + desktop</span>
+  run_local.py            <span class="c">desktop runner (native MuJoCo)</span>
+  test_robots.py          <span class="c">smoke test for every robot</span>
+<span class="t">public/assets/</span><span class="s">&lt;name&gt;</span>/     <span class="c">MJCF + meshes, served as-is</span>
+<span class="t">tools/</span>                    <span class="c">converters: CoppeliaSim, URDF, USD, meshes</span>
+<span class="t">docs/</span>                     <span class="c">tutorials and references</span></pre>
+    <div class="col grow" style="justify-content:center;">
+      <div class="card" style="border:2px solid var(--accent);"><h3>You touch only two places</h3><p><code>public/assets/&lt;name&gt;/</code><br>and<br><code>python/robots/&lt;name&gt;.py</code></p></div>
+      <p>Everything in <code>src/</code> is generic. Adding a robot needs <b>no JavaScript</b>.</p>
+    </div>
+  </div>
+  <aside class="notes">Point out that src/ never mentions a specific robot (the old JS gecko gait is kept only as a reference). Files in python/robots starting with an underscore are helpers, not robots.</aside>
+</section>
+
+<section class="slide">
+  <p class="eyebrow">Repo architecture · JS ↔ Python</p>
+  <h2>Two runtimes in one page, JavaScript in the middle</h2>
+  <div class="row" style="flex:1; align-items:stretch; gap:28px;">
+    <div class="col grow" style="gap:16px;">
+      <p class="lane-label" style="color:var(--blue);">JavaScript · MuJoCo WASM</p>
+      <div class="box js mono">model = MjModel.from_xml_string(xml)<br>data&nbsp; = new MjData(model)</div>
+      <div class="box js mono">layout = modelLayout(model)<br><small>names → indices in flat arrays</small></div>
+      <div class="box js mono">every tick: read qpos, qvel,<br>sensordata, joystick</div>
+      <div class="box js mono">data.ctrl.set(ctrl)<br>mj_step(model, data)</div>
+    </div>
+    <div class="col" style="flex:0 0 220px; justify-content:center; gap:60px; text-align:center;">
+      <div><p style="font-size:24px;">layout, once</p><div class="arrow">⟶</div></div>
+      <div><p style="font-size:24px;">numbers, per tick</p><div class="arrow">⟶</div></div>
+      <div><div class="arrow">⟵</div><p style="font-size:24px;">ctrl list</p></div>
+    </div>
+    <div class="col grow" style="gap:16px;">
+      <p class="lane-label" style="color:var(--accent);">Python · Pyodide</p>
+      <div class="box py mono">simbot.Runner(module, layout)<br><small>builds RobotInfo, calls Controller(info)</small></div>
+      <div class="box py mono">Runner.step_js(time, sticks, …,<br>&nbsp;&nbsp;qpos, qvel, sensordata)</div>
+      <div class="box py mono">obs = Observation(…by name…)<br>Controller.step(obs)</div>
+      <div class="box py mono">{"TC0": 0.3, …} → full ctrl list</div>
+    </div>
+  </div>
+  <aside class="notes">Python never touches MuJoCo in the browser: the mujoco Python package is not loaded there. JS describes the model once (modelLayout in src/robots/python.js), then on every control tick passes typed arrays over and gets a list of controls back. One crossing per control tick, not per physics step, so it is cheap at 50 Hz.</aside>
+</section>
+
+<section class="slide">
+  <p class="eyebrow">Repo architecture · JS ↔ Python</p>
+  <h2>One control tick, step by step</h2>
+  <div class="row" style="flex:1;">
+    <div class="col grow" style="gap:20px;">
+      <div class="head-row"><div class="step-badge" style="background:var(--blue);">1</div><p><b>JS</b> sees a tick is due in simulated time and calls <code>Runner.step_js(...)</code> with typed arrays viewing MuJoCo's memory.</p></div>
+      <div class="head-row"><div class="step-badge">2</div><p><b>Python</b> builds an <code>Observation</code> by name: <code>qpos[qposadr]</code> → <code>obs.qpos["TC0"]</code>; free joint → <code>obs.base_pos</code>.</p></div>
+      <div class="head-row"><div class="step-badge">3</div><p><b>Your</b> <code>Controller.step(obs)</code> returns <code>{actuator name: target}</code>. Missing names keep their value; unknown names raise.</p></div>
+      <div class="head-row"><div class="step-badge" style="background:var(--blue);">4</div><p><b>JS</b> copies the list into <code>data.ctrl</code>; the next <code>mj_step</code> applies it.</p></div>
+    </div>
+    <div class="col" style="flex:0 0 560px; gap:20px;">
+      <div class="card"><h3>Reset (R)</h3><p>JS resets <code>MjData</code> (to the first keyframe if any) and calls <code>Runner.reset_js</code> → your <code>reset()</code>.</p></div>
+      <div class="card"><h3>Errors</h3><p>A Python exception shows a red traceback box. Physics keeps running with the last controls.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Code locations: src/simulation.js for stepping, src/robots/python.js for the bridge (step_js call and data.ctrl.set), python/simbot.py for Runner, Observation and Joy.</aside>
+</section>
+
+<section class="slide">
+  <p class="eyebrow">Repo architecture · JS ↔ Python</p>
+  <h2>The same controller file, browser and desktop</h2>
+  <table>
+    <tr><th style="width:26%"></th><th style="width:37%">Browser</th><th style="width:37%">Desktop · <code>run_local.py</code></th></tr>
+    <tr><td>Physics</td><td>MuJoCo WASM, from JavaScript</td><td>native <code>mujoco</code> package, from Python</td></tr>
+    <tr><td>Layout built by</td><td><code>modelLayout()</code> in python.js</td><td><code>native_layout()</code> in simbot.py</td></tr>
+    <tr><td>Calls the controller</td><td><code>Runner.step_js</code></td><td><code>Runner.step</code> directly</td></tr>
+    <tr><td>Applies the result</td><td><code>data.ctrl.set(...)</code> in JS</td><td><code>data.ctrl[:] = ...</code> in Python</td></tr>
+  </table>
+  <div class="row">
+    <div class="card grow"><h3>Why it works</h3><p>A controller sees only <b>names and floats</b>, never MuJoCo objects.</p></div>
+    <div class="card grow"><h3>What it costs</h3><p>No <code>mj_forward</code>, no contacts or <code>data.xpos</code>. Need more? Add a <code>&lt;sensor&gt;</code>.</p></div>
+    <div class="card grow"><h3>Browser limits</h3><p>Standard library + Pyodide packages (numpy, scipy). No files, network or threads.</p></div>
+  </div>
+  <aside class="notes">This is the design decision that makes the workflow pleasant: debug with print, breakpoints and matplotlib on the desktop, then the identical file runs in the browser.</aside>
+</section>
+
+<!-- ============================================================ SECTION 4 -->
+<section class="slide dark" style="justify-content:center;">
+  <p class="eyebrow">Part 4</p>
+  <h1>Adding a robot</h1>
+  <p class="lead">Six steps. Our example robot is <code>hexbot</code>: the file name becomes the URL, <code>?robot=hexbot</code>.</p>
+  <aside class="notes">The main part. Follow along in docs/adding-a-robot.md, which has every command.</aside>
+</section>
+
+<section class="slide">
+  <p class="eyebrow">Adding a robot</p>
+  <h2>A robot is two files</h2>
+  <div class="row" style="flex:1; align-items:center; gap:28px;">
+    <div class="card grow" style="padding:48px;"><span class="tag gr">model</span><h3 class="mono" style="font-size:24px;">public/assets/hexbot/hexbot.xml</h3><p>The MJCF model, plus its meshes. Served as a static file.</p></div>
+    <div class="arrow" style="font-size:72px;">+</div>
+    <div class="card grow" style="padding:48px;"><span class="tag py">controller</span><h3 class="mono" style="font-size:24px;">python/robots/hexbot.py</h3><p><code>step(obs)</code> returns <code>{actuator name: target}</code>.</p></div>
+    <div class="arrow" style="font-size:72px;">=</div>
+    <div class="card" style="flex:0 0 360px; padding:48px; border:2px solid var(--accent);"><h3>In the menu</h3><p>Vite finds the <code>.py</code> at build time and reads its card settings from the text.</p></div>
+  </div>
+  <aside class="notes">src/robots/python.js globs python/robots/*.py, so no registration step is needed. If MODEL points to a missing file, the robot is left out of the menu.</aside>
+</section>
+
+<section class="slide">
+  <p class="eyebrow">Adding a robot</p>
+  <h2>The pipeline</h2>
+  <div class="row" style="flex:1; align-items:center; gap:20px;">
+    <div class="col" style="flex:0 0 400px; gap:14px;">
+      <div class="box">CoppeliaSim <code>.ttt</code></div>
+      <div class="box">URDF</div>
+      <div class="box">Isaac USD</div>
+      <div class="box">Existing MJCF</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="col grow" style="gap:20px;">
+      <div class="box gr"><b>1 · Get an MJCF</b><small>converters in tools/</small></div>
+      <div class="box gr"><b>2 · Clean up the model</b><small>masses, joints, feet, groups, meshes</small></div>
+      <div class="box gr"><b>3 · Check that it stands</b><small>_template.py + run_local.py</small></div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="col grow" style="gap:20px;">
+      <div class="box py"><b>4 · Write the controller</b><small>step(obs) → targets</small></div>
+      <div class="box py"><b>5 · Menu card</b><small>TITLE, DESCRIPTION, THUMBNAIL</small></div>
+      <div class="box py"><b>6 · Test and ship</b><small>test_robots.py, npm run dev, push</small></div>
+    </div>
+  </div>
+  <aside class="notes">Steps 1 to 3 are about the model (green), 4 to 6 about the controller (orange). Most of the time goes into step 2 and step 4.</aside>
+</section>
+
+<section class="slide">
+  <div class="head-row"><div class="step-badge">1</div><div><p class="eyebrow">Step 1</p><h2>Get an MJCF model</h2></div></div>
+  <div class="row" style="flex:1;">
+    <div class="col grow">
+      <h3>Path A · CoppeliaSim scene <span style="color:var(--mute); font-weight:400;">(MORF, Red Mirror)</span></h3>
+      <pre class="sm"><span class="c"># A2 export the model root to URDF (headless)</span>
+tools/coppeliasim/export_urdf.sh HexBot.ttt /hexbot_body
+<span class="c"># A3 check joints and axes in the browser viewer</span>
+python tools/coppeliasim/urdf_viewer/server.py
+<span class="c"># A4 extract the scene's Lua controller</span>
+tools/coppeliasim/extract_scripts.sh HexBot.ttt
+<span class="c"># A5 URDF -> MJCF + STL meshes</span>
+python tools/coppeliasim/urdf_to_mjcf.py \
+    assets_src/HexBot/urdf/HexBot.urdf</pre>
+    </div>
+    <div class="col" style="flex:0 0 560px;">
+      <div class="card"><h3>Path B · URDF</h3><p>Same <code>urdf_to_mjcf.py</code>. Resolve <code>package://</code> and xacro first.</p></div>
+      <div class="card"><h3>Path C · MJCF</h3><p>E.g. MuJoCo Menagerie: copy it in, check floor and actuators.</p></div>
+      <div class="card"><h3>The converter adds</h3><p>Free joint, a position actuator per joint (<code>kp=10</code>), floor, lights, placeholder masses.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Set COPPELIASIM_ROOT first. The export script flattens nested shapes so CoppeliaSim's exporter picks up every part; the .ttt is not modified. The converter's summary line reports placeholder inertias: any non-zero count means links that need real masses.</aside>
+</section>
+
+<section class="slide">
+  <div class="head-row"><div class="step-badge">2</div><div><p class="eyebrow">Step 2</p><h2>Clean up the model</h2></div></div>
+  <p>A converted model loads but rarely behaves. Copy it to <code>public/assets/hexbot/</code>, then check:</p>
+  <div class="row" style="flex:1;">
+    <ul class="clean check grow">
+      <li><b>Masses</b> match the real robot. MORF's scene had 0.82 kg where 0.082 kg was meant.</li>
+      <li><b>Unused joints</b> deleted with their actuators (Red Mirror's leg-mount slides).</li>
+      <li><b>Feet collide</b>: remove <code>contype="0" conaffinity="0"</code> from foot geoms.</li>
+      <li><b>Collision shapes</b> in <code>group="3"</code> so the page shows meshes, not boxes.</li>
+    </ul>
+    <ul class="clean check grow">
+      <li><b>Actuator strength</b>: raise <code>kp</code> for heavy robots, cap with <code>forcerange</code>.</li>
+      <li><b>Body colour</b> (optional): shared <code>material="printed"</code>.</li>
+      <li><b>Model name</b>: <code>&lt;mujoco model="hexbot"&gt;</code>.</li>
+      <li><b>Smaller meshes</b>: <code>tools/stl_to_msh.py</code>. Aim under ~5 MB.</li>
+    </ul>
+  </div>
+  <pre class="sm">python -c "import mujoco; m = mujoco.MjModel.from_xml_path('public/assets/hexbot/hexbot.xml'); print(m.body_mass.sum())"</pre>
+  <aside class="notes">Every item here is something MORF or Red Mirror actually needed. Wrong masses are the number one cause of explosions. .msh files are about a third the size of STL with the same geometry; keep the STLs in assets_src to reconvert.</aside>
+</section>
+
+<section class="slide">
+  <div class="head-row"><div class="step-badge">3</div><div><p class="eyebrow">Step 3</p><h2>Check that it stands</h2></div></div>
+  <div class="row" style="flex:1;">
+    <div class="col grow">
+      <pre class="sm"><span class="p">$</span> cp python/robots/_template.py python/robots/hexbot.py</pre>
+      <pre class="sm"><span class="t">MODEL</span> = <span class="s">"assets/hexbot/hexbot.xml"</span>  <span class="c"># relative to public/</span>
+<span class="t">HIDDEN</span> = <span class="k">True</span>                       <span class="c"># out of the menu for now</span>
+
+<span class="k">class</span> <span class="t">Controller</span>:
+    rate = <span class="s">50</span>
+    <span class="k">def</span> <span class="t">step</span>(self, obs):
+        <span class="k">return</span> {}   <span class="c"># no commands: hold every joint at 0</span></pre>
+      <pre class="sm"><span class="p">$</span> python python/run_local.py hexbot</pre>
+    </div>
+    <div class="col" style="flex:0 0 600px;">
+      <div class="card"><h3>Expect</h3><p>Drops onto the floor and stands (or folds up) without jitter, drift or flying away.</p></div>
+      <div class="card"><h3>If it explodes</h3><p><code>Nan, Inf or huge value in QACC</code>: check masses and inertias, then <code>kp</code>/<code>kv</code> on light links, then <code>timestep="0.001"</code>.</p></div>
+      <div class="card"><h3>Then list the names</h3><p>Print <code>m.actuator(i).name</code> and <code>m.joint(i).name</code>: your controller's vocabulary.</p></div>
+    </div>
+  </div>
+  <aside class="notes">The do-nothing template is the fastest sanity check of a model. HIDDEN = True keeps it out of the menu, but ?robot=hexbot still opens it in the page.</aside>
+</section>
+
+<section class="slide">
+  <div class="head-row"><div class="step-badge">4</div><div><p class="eyebrow">Step 4</p><h2>Write the controller</h2></div></div>
+  <div class="row" style="flex:1;">
+    <pre class="sm" style="flex:0 0 1100px; align-self:flex-start;"><span class="k">import</span> math
+
+<span class="t">MODEL</span> = <span class="s">"assets/hexbot/hexbot.xml"</span>
+<span class="t">USER_CONTROL</span> = <span class="k">True</span>              <span class="c"># keyboard / gamepad / touch</span>
+<span class="t">WATCH_INPUT</span> = {<span class="s">"left_y"</span>: <span class="s">1.0</span>}    <span class="c"># Watch mode walks forward</span>
+<span class="t">STAND</span> = {<span class="s">"CF0"</span>: -<span class="s">0.5</span>, <span class="s">"FT0"</span>: <span class="s">1.7</span>}  <span class="c"># one entry per actuator</span>
+
+<span class="k">class</span> <span class="t">Controller</span>:
+    rate = <span class="s">50</span>  <span class="c"># control ticks per simulated second</span>
+
+    <span class="k">def</span> <span class="t">reset</span>(self):   <span class="c"># at start and on R</span>
+        self.phase = <span class="s">0.0</span>
+
+    <span class="k">def</span> <span class="t">step</span>(self, obs):
+        self.phase += <span class="s">2</span>*math.pi / self.rate * obs.joy.left_y * obs.speed
+        targets = dict(STAND)
+        targets[<span class="s">"TC0"</span>] = <span class="s">0.3</span> * math.sin(self.phase)
+        <span class="k">return</span> targets</pre>
+    <div class="col grow">
+      <div class="card"><h3>In</h3><p><code>obs</code>: joystick, joint positions and velocities, sensors, base pose.</p></div>
+      <div class="card"><h3>Out</h3><p><code>{actuator name: target}</code>. Left-out actuators keep their value.</p></div>
+      <div class="card"><h3>Fail early</h3><p>In <code>__init__(self, robot)</code>, check your names against <code>robot.actuators</code>.</p></div>
+    </div>
+  </div>
+  <aside class="notes">A minimal standing pose plus a single oscillating joint driven by the forward stick. Real examples: python/robots/morf.py (tripod gait), red_mirror.py (ported Lua), gecko.py (CPG with visuals, toggle key and touch button).</aside>
+</section>
+
+<section class="slide">
+  <p class="eyebrow">Step 4 · Controller API</p>
+  <h2>What <code style="background:none; padding:0;">obs</code> gives you</h2>
+  <table class="tight">
+    <tr><th style="width:34%">Field</th><th style="width:66%">Meaning</th></tr>
+    <tr><td><code>obs.joy.left_y</code></td><td>forward / back: W/S, Up/Down, gamepad left stick (−1..1)</td></tr>
+    <tr><td><code>obs.joy.right_x</code>, <code>right_y</code></td><td>steer: A/D, Left/Right · up/down: Q/E</td></tr>
+    <tr><td><code>obs.joy.keys</code>, <code>toggled</code></td><td>held keys (<code>"Space"</code>, <code>"KeyJ"</code>) · toggle keys switched on</td></tr>
+    <tr><td><code>obs.qpos</code>, <code>obs.qvel</code></td><td><code>{joint name: position / velocity}</code></td></tr>
+    <tr><td><code>obs.sensors</code></td><td><code>{sensor name: value}</code>, float or tuple</td></tr>
+    <tr><td><code>obs.base_pos</code>, <code>base_quat</code>, <code>base_vel</code></td><td>root body pose (w, x, y, z) and velocity, if it has a free joint</td></tr>
+    <tr><td><code>obs.time</code>, <code>obs.speed</code>, <code>obs.watching</code></td><td>sim seconds · speed multiplier · True in Watch mode</td></tr>
+  </table>
+  <p>Full reference: <code>python/README.md</code>. Shared helpers go in <code>python/robots/_&lt;name&gt;.py</code>, e.g. <code>_heading.HeadingHold</code>.</p>
+  <aside class="notes">In Watch mode the sticks are replaced by WATCH_INPUT, so the controller needs no extra code for it. HeadingHold uses base_quat to keep an open-loop gait walking straight.</aside>
+</section>
+
+<section class="slide">
+  <p class="eyebrow">Step 4 · Porting</p>
+  <h2>From a CoppeliaSim Lua script to Python</h2>
+  <div class="row">
+    <div class="col grow"><p class="lane-label" style="color:var(--mute);">Lua · sysCall_actuation</p>
+      <pre class="sm"><span class="k">function</span> <span class="t">sysCall_actuation</span>()
+  o2 = math.cos(count)*<span class="s">0.4</span>
+  count = count + <span class="s">0.05</span>
+  sim.setJointTargetPosition(
+      L1_joints[<span class="s">1</span>], o2-<span class="s">0.8</span>)  <span class="c">-- /TL0</span>
+<span class="k">end</span></pre></div>
+    <div class="arrow" style="font-size:56px;">→</div>
+    <div class="col grow"><p class="lane-label" style="color:var(--accent);">Python · step(obs)</p>
+      <pre class="sm"><span class="k">class</span> <span class="t">Controller</span>:
+    rate = <span class="s">20</span>   <span class="c"># 1 / 0.05 s</span>
+    <span class="k">def</span> <span class="t">step</span>(self, obs):
+        o2 = math.cos(self.count)*<span class="s">0.4</span>
+        self.count += <span class="s">0.05</span> * obs.joy.left_y
+        <span class="k">return</span> {<span class="s">"TL0"</span>: o2 - <span class="s">0.8</span>}</pre></div>
+  </div>
+  <div class="row">
+    <div class="card grow"><h3>Handles → names</h3><p><code>/TL0</code> is joint <code>TL0</code> and actuator <code>TL0</code>.</p></div>
+    <div class="card grow"><h3>Match the rate</h3><p>CoppeliaSim steps at 50 ms → <code>rate = 20</code>.</p></div>
+    <div class="card grow"><h3>Make it drivable</h3><p>Scale phase by <code>left_y</code>, steer with <code>right_x</code>, ramp in.</p></div>
+  </div>
+  <aside class="notes">Red Mirror's port, python/robots/red_mirror.py, is the reference. Check joint directions with the URDF viewer's sliders. Open-loop gaits drift; HeadingHold corrects that. Fade the amplitude in over about a second or the robot stumbles at start.</aside>
+</section>
+
+<section class="slide">
+  <div class="head-row"><div class="step-badge">5</div><div><p class="eyebrow">Step 5</p><h2>Give it a menu card</h2></div></div>
+  <div class="row" style="flex:1;">
+    <div class="col grow">
+      <pre class="sm"><span class="t">TITLE</span> = <span class="s">"HexBot"</span>
+<span class="t">DESCRIPTION</span> = <span class="s">"Six-legged tripod walker."</span>
+<span class="t">THUMBNAIL</span> = <span class="s">"assets/thumbs/hexbot.jpg"</span>
+<span class="t">USER_CONTROL</span> = <span class="k">True</span></pre>
+      <p>Plain <b>one-line literals</b>: the menu reads them from the file text, before Python starts.</p>
+      <p>Thumbnail: frame the robot in the page, screenshot, save an ~800×500 JPEG in <code>public/assets/thumbs/</code>.</p>
+      <p>Optional: <code>CAMERA</code>, <code>HELP</code>, <code>BUTTONS</code>, <code>SPEED_RANGE</code>, <code>DRIVE_SPEED</code>, <code>VISUALS</code>, <code>BODY_COLOR</code>.</p>
+    </div>
+    <img class="shot" src="images/menu.jpg" alt="The robot menu with a card per robot" style="flex:0 0 720px; height:560px; object-fit:contain; background:#1b2533;">
+  </div>
+  <aside class="notes">When the robot works, delete HIDDEN = True. CAMERA matters for robots much bigger or smaller than about 30 cm.</aside>
+</section>
+
+<section class="slide">
+  <div class="head-row"><div class="step-badge">6</div><div><p class="eyebrow">Step 6</p><h2>Test and ship</h2></div></div>
+  <div class="row" style="flex:1;">
+    <div class="col grow">
+      <pre class="sm"><span class="c"># desktop: viewer, headless, watch mode</span>
+python python/run_local.py hexbot
+python python/run_local.py hexbot --headless \
+    --seconds 10 --joy left_y=1
+python python/run_local.py hexbot --watch --speed 2
+
+<span class="c"># every robot loads and stays stable</span>
+python python/test_robots.py
+
+<span class="c"># browser, reloads when you save the .py</span>
+npm run dev   <span class="c"># localhost:5173/?robot=hexbot</span></pre>
+    </div>
+    <div class="col" style="flex:0 0 600px;">
+      <div class="card"><h3>Debug in the browser</h3><p>Errors: red traceback box. <code>print()</code>: browser console (F12). Phone: add <code>?touch</code>.</p></div>
+      <div class="card"><h3>Commit</h3><p><code>public/assets/hexbot/</code>, the thumbnail, <code>python/robots/hexbot.py</code>.</p></div>
+      <div class="card" style="border:2px solid var(--accent);"><h3>Ship</h3><p>Push to <code>main</code> → GitHub Pages deploys it.</p></div>
+    </div>
+  </div>
+  <aside class="notes">In the desktop viewer keys latch, because MuJoCo only reports presses: Up/Down change left_y by 0.5 per press. On macOS use mjpython. assets_src/ is optional to commit; the page does not need it.</aside>
+</section>
+
+<section class="slide alt">
+  <p class="eyebrow">Troubleshooting</p>
+  <h2>When it goes wrong</h2>
+  <table class="tight">
+    <tr><th style="width:36%">Symptom</th><th style="width:64%">Likely cause and fix</th></tr>
+    <tr><td>Explodes at t ≈ 0</td><td>Bad mass or inertia, or starts inside the floor</td></tr>
+    <tr><td>Sags, can't stand</td><td>Actuators too weak: raise <code>kp</code>, check <code>forcerange</code></td></tr>
+    <tr><td>Legs pass through floor</td><td>Foot geoms have <code>contype="0" conaffinity="0"</code></td></tr>
+    <tr><td>Legs jitter</td><td><code>kv</code> too high on light links; keep <code>implicitfast</code>, lower the timestep</td></tr>
+    <tr><td>Walks in circles</td><td>Open-loop drift: use <code>HeadingHold</code>, check gait symmetry</td></tr>
+    <tr><td>Wrong gait speed vs CoppeliaSim</td><td><code>rate</code> doesn't match the 50 ms step (use 20)</td></tr>
+    <tr><td>Boxes over the meshes</td><td>Collision geoms not in <code>group="3"</code></td></tr>
+    <tr><td>Missing from the menu</td><td><code>HIDDEN = True</code>, name starts with <code>_</code>, or <code>MODEL</code> path wrong</td></tr>
+  </table>
+  <aside class="notes">The full table, including CoppeliaSim export problems, is at the end of docs/adding-a-robot.md.</aside>
+</section>
+
+<section class="slide dark" style="justify-content:center;">
+  <p class="eyebrow">Recap</p>
+  <h2 style="font-size:80px; max-width:1500px;">MJCF in <code style="background:none; color:var(--accent);">public/assets/</code>, Python in <code style="background:none; color:var(--accent);">python/robots/</code>. No JavaScript.</h2>
+  <div class="row" style="margin-top:30px;">
+    <div class="card grow"><h3>Tutorial</h3><p><code>docs/adding-a-robot.md</code></p></div>
+    <div class="card grow"><h3>Controller API</h3><p><code>python/README.md</code></p></div>
+    <div class="card grow"><h3>Bridge</h3><p><code>docs/python-js-bridge.md</code></p></div>
+    <div class="card grow"><h3>Converters</h3><p><code>docs/model-tools.md</code></p></div>
+  </div>
+  <p class="lead" style="margin-top:20px;">Next up for the repo: sensor feedback (IMU, foot contact) and ONNX policy controllers.</p>
+  <aside class="notes">Questions. Good first exercises: copy the template for a Menagerie robot, or tweak MORF's gait amplitude and watch it in the browser with hot reload.</aside>
+</section>
+
+</div></div>
+<div id="notes"><div class="lbl">Speaker notes</div><div id="notes-text"></div></div>
+<div id="hint">← → navigate · N notes · F fullscreen</div>
+
+<script>
+(() => {
+  const deck = document.getElementById('deck');
+  const slides = [...deck.querySelectorAll('.slide')];
+  const notes = document.getElementById('notes');
+  const notesText = document.getElementById('notes-text');
+  const progress = document.getElementById('progress');
+  let i = 0;
+
+  // page numbers on content slides
+  slides.forEach((s, n) => {
+    if (n === 0 || s.querySelector('.footer')) return;
+    const f = document.createElement('div');
+    f.className = 'footer';
+    f.innerHTML = `<span>Adding a robot · MuJoCo Web Simulator</span><span>${n + 1} / ${slides.length}</span>`;
+    s.appendChild(f);
+  });
+
+  function fit() {
+    const k = Math.min(innerWidth / 1920, innerHeight / 1080);
+    deck.style.transform = `scale(${k})`;
+  }
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, j) => s.classList.toggle('active', j === i));
+    const a = slides[i].querySelector('aside.notes');
+    notesText.textContent = a ? a.textContent : '';
+    progress.style.width = ((i + 1) / slides.length * 100) + '%';
+    history.replaceState(null, '', '#' + (i + 1));
+  }
+  addEventListener('keydown', e => {
+    if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(e.key)) { show(i + 1); e.preventDefault(); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key)) { show(i - 1); e.preventDefault(); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key === 'n' || e.key === 'N') notes.classList.toggle('show');
+    else if (e.key === 'f' || e.key === 'F') {
+      document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+    }
+  });
+  document.getElementById('stage').addEventListener('click', e => {
+    show(e.clientX > innerWidth / 2 ? i + 1 : i - 1);
+  });
+  addEventListener('resize', fit);
+  fit();
+  show((parseInt(location.hash.slice(1), 10) || 1) - 1);
+})();
+</script>
+</body>
+</html>

@@ -14,4 +14,12 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['@mujoco/mujoco'],
   },
+  // Don't watch folders the page never loads from: the Python venv (with
+  // PyTorch it's tens of thousands of files, past Linux's inotify limit),
+  // model sources and tools.
+  server: {
+    watch: {
+      ignored: ['**/venv/**', '**/.venv/**', '**/my_robot/**', '**/assets_src/**', '**/tools/**', '**/__pycache__/**'],
+    },
+  },
 });

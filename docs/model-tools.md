@@ -6,10 +6,23 @@ for `public/assets/`. For the full process of adding a robot, see
 
 | Tool | Input | Used for |
 | --- | --- | --- |
+| [tools/converter/](../tools/converter/) | any of the below, in a web page | converting and checking a model without the command line |
 | [tools/coppeliasim/](../tools/coppeliasim/) | CoppeliaSim `.ttt` scene | MORF, Red Mirror |
 | [tools/usd_to_mjcf.py](../tools/usd_to_mjcf.py) | Isaac Sim USD | Gecko (see [gecko.md](gecko.md)) |
 | [tools/b1_to_mjcf.py](../tools/b1_to_mjcf.py) | Unitree URDF + COLLADA meshes | Unitree B1 |
 | [tools/stl_to_msh.py](../tools/stl_to_msh.py) | an MJCF using STL meshes | shrinking any model's meshes |
+
+## The converter page
+
+[tools/converter/](../tools/converter/) runs these converters from a local
+web page, with a URDF viewer for the source and a MuJoCo viewer for the
+result:
+
+```sh
+venv/bin/python tools/converter/server.py      # open http://localhost:8010/
+```
+
+See [converter.md](converter.md) for how to use it and how it works.
 
 ## CoppeliaSim scenes
 
@@ -23,7 +36,7 @@ CoppeliaSim `.ttt` scene. The shell scripts run CoppeliaSim headless; set
 | `export_urdf.sh <scene.ttt> <model_path>` | Exports one model to URDF + COLLADA meshes (`assets_src/<scene>/urdf/`). Flattens each link first, since CoppeliaSim's URDF exporter only handles a joint's first child shape. |
 | `extract_scripts.sh <scene.ttt>` | Dumps every Lua script embedded in the scene (`assets_src/<scene>/scripts/`), e.g. the gait to port to Python. |
 | `urdf_viewer/server.py` | Browser viewer with joint sliders for the exported URDFs, to check the export. |
-| `urdf_to_mjcf.py <model.urdf>` | URDF → MJCF: meshes to STL, placeholder inertia where missing, free joint, a position actuator per joint, floor (`assets_src/<scene>/mujoco/`). |
+| `urdf_to_mjcf.py <model.urdf>` | URDF → MJCF: meshes to STL, placeholder inertia where missing, free joint, a position actuator per joint, floor (`assets_src/<scene>/mujoco/`). Works on other URDFs too: meshes are found through `package://` and relative paths (`--mesh-search DIR` to look elsewhere). |
 
 The step-by-step walkthrough, including the hand clean-up the generated MJCF
 needs, is [path A in adding-a-robot.md](adding-a-robot.md#path-a-from-a-coppeliasim-scene).

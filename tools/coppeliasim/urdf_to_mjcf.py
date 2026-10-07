@@ -2,8 +2,10 @@
 """Convert a URDF exported by export_urdf.sh into a MuJoCo MJCF model.
 
 MuJoCo cannot read the exported COLLADA (.dae) meshes, so they are converted to STL first.
+Also works on other URDFs: meshes are found through package:// and relative paths too.
 
 Usage: tools/coppeliasim/urdf_to_mjcf.py <model.urdf> [out_dir] [--fixed-base] [--kp N] [--kv N] [--no-actuators]
+                                         [--mesh-search DIR]
   default out_dir: <model dir>/../mujoco  ->  <scene>/mujoco/<scene>.xml + meshes/*.stl
   Every hinge/slide joint gets a position actuator (ctrlrange = joint range when limited).
   By default the root body gets a free joint; --fixed-base welds it to the world.
@@ -20,33 +22,76 @@ import numpy as np
 import trimesh
 
 
-def convert_meshes(root, urdf_dir, mesh_dir):
+def resolve_mesh(filename, urdf_dir, search_root=None):
+    """Find the file a URDF <mesh filename> points at: relative to the URDF, inside a package://
+    package found above it, or by name next to it (CoppeliaSim writes absolute file:// paths from
+    the exporting machine). Failing those, the best name match anywhere under search_root."""
+    path = filename.removeprefix("file://")
+    candidates = []
+    if path.startswith("package://"):
+        pkg, _, inner = path.removeprefix("package://").partition("/")
+        path = inner
+        for d in [urdf_dir, *urdf_dir.parents]:
+            candidates += [d / inner] if d.name == pkg else [d / pkg / inner]
+            if search_root and d == search_root:
+                break
+    else:
+        candidates.append(urdf_dir / path)
+    candidates.append(urdf_dir / Path(path).name)
+    for c in candidates:
+        if c.is_file():
+            return c.resolve()
+    if search_root:
+        parts = Path(path).parts
+        def shared_tail(p):  # how many trailing path parts match
+            n = 0
+            while n < min(len(parts), len(p.parts)) and parts[-1 - n] == p.parts[-1 - n]:
+                n += 1
+            return n
+        matches = [p for p in Path(search_root).rglob(Path(path).name) if p.is_file()]
+        if matches:
+            return max(matches, key=shared_tail).resolve()
+    raise FileNotFoundError(f"mesh not found: {filename}")
+
+
+def convert_meshes(root, urdf_dir, mesh_dir, search_root=None):
     """Convert every referenced mesh to STL in mesh_dir and point the URDF at it."""
     mesh_dir.mkdir(parents=True, exist_ok=True)
     done = {}
     for mesh in root.iter("mesh"):
-        src = urdf_dir / Path(mesh.get("filename").removeprefix("file://")).name
+        src = resolve_mesh(mesh.get("filename"), urdf_dir, search_root)
         if src not in done:
+            # visual/link1.dae and collision/link1.stl must not overwrite each other
+            name, n = src.stem, 1
+            while name + ".stl" in done.values():
+                name = f"{src.parent.name}_{src.stem}" if n == 1 else f"{src.stem}_{n}"
+                n += 1
             geom = trimesh.load(src, force="mesh")
-            dst = mesh_dir / (src.stem + ".stl")
-            geom.export(dst)
-            done[src] = dst.name
+            geom.export(mesh_dir / (name + ".stl"))
+            done[src] = name + ".stl"
         mesh.set("filename", done[src])
     return len(done)
 
 
 def add_missing_inertials(root, mass):
-    """CoppeliaSim only writes <inertial> for dynamic links; MuJoCo needs one on every moving body."""
+    """CoppeliaSim only writes <inertial> for dynamic links (and other URDFs sometimes leave out
+    <mass> or <inertia>); MuJoCo needs a complete one on every moving body."""
     count = 0
     for link in root.iter("link"):
-        if link.find("inertial") is None:
+        inertial = link.find("inertial")
+        if inertial is None:
             inertial = ET.Element("inertial")
             ET.SubElement(inertial, "origin", xyz="0 0 0", rpy="0 0 0")
-            ET.SubElement(inertial, "mass", value=str(mass))
-            i = mass * 2e-3  # ~ a 6 cm cube; only a placeholder
-            ET.SubElement(inertial, "inertia", ixx=str(i), iyy=str(i), izz=str(i), ixy="0", ixz="0", iyz="0")
             link.insert(0, inertial)
-            count += 1
+        elif inertial.find("mass") is not None and inertial.find("inertia") is not None:
+            continue
+        if inertial.find("mass") is None:
+            ET.SubElement(inertial, "mass", value=str(mass))
+        if inertial.find("inertia") is None:
+            m = float(inertial.find("mass").get("value", mass)) or mass
+            i = m * 2e-3  # ~ a 6 cm cube; only a placeholder
+            ET.SubElement(inertial, "inertia", ixx=str(i), iyy=str(i), izz=str(i), ixy="0", ixz="0", iyz="0")
+        count += 1
     return count
 
 
@@ -120,6 +165,7 @@ def main():
     ap.add_argument("--no-actuators", action="store_true", help="do not add position actuators")
     ap.add_argument("--no-floor", action="store_true", help="do not add a ground plane")
     ap.add_argument("--fixed-base", action="store_true", help="do not add a free joint to the root body")
+    ap.add_argument("--mesh-search", type=Path, help="folder to search for meshes the URDF's paths don't lead to")
     args = ap.parse_args()
 
     urdf = args.urdf.resolve()
@@ -129,7 +175,7 @@ def main():
 
     tree = ET.parse(urdf)
     root = tree.getroot()
-    n = convert_meshes(root, urdf.parent, mesh_dir)
+    n = convert_meshes(root, urdf.parent, mesh_dir, args.mesh_search and args.mesh_search.resolve())
     filled = add_missing_inertials(root, args.default_mass)
 
     # MuJoCo reads its compiler options from a <mujoco> element inside the URDF
