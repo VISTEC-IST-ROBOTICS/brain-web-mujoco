@@ -1,4 +1,4 @@
-"""MILLIS 8-segment millipede robot (public/assets/millis8seg/millis8seg.xml).
+"""MILLIS 8-segment millipede robot controller (public/assets/millis8seg/millis8seg.xml).
 
 The gait is the MILLIS project's own: an SO(2) CPG (a pair of coupled tanh
 neurons) feeds a PCPG that turns it into a hip (BC) sawtooth and a knee (CF)
