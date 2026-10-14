@@ -1,5 +1,5 @@
 """Minimal robot template: copy to python/robots/<name>.py, point MODEL at
-your MJCF, then pick it in the web page's robot menu or run `python python/run_local.py <name>`.
+your MJCF, then pick it in the web page's robot menu or run `uv run python python/run_local.py <name>`.
 
 As written it sends no commands (every actuator stays at 0), so the robot
 just stands or falls under gravity: a quick check that a new model loads and

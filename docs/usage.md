@@ -22,11 +22,11 @@ The same controllers run with native MuJoCo and its viewer, which is the
 easiest place to debug them:
 
 ```sh
-pip install mujoco
-python python/run_local.py gecko                               # interactive viewer
-python python/run_local.py gecko --headless --seconds 5 --joy left_y=1
-python python/run_local.py morf --watch --speed 2              # Watch mode, like the page's slider
-python python/test_robots.py                                   # smoke test every robot
+uv sync                                                        # once: Python deps (needs uv)
+uv run python python/run_local.py gecko                               # interactive viewer
+uv run python python/run_local.py gecko --headless --seconds 5 --joy left_y=1
+uv run python python/run_local.py morf --watch --speed 2              # Watch mode, like the page's slider
+uv run python python/test_robots.py                                   # smoke test every robot
 ```
 
 More options, and the viewer's keys, are in

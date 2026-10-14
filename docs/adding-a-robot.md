@@ -39,8 +39,7 @@ lowercase with underscores: it becomes the file names and the URL.
 
 ```sh
 npm install                                        # web page (needs Node.js)
-python -m venv .venv && source .venv/bin/activate
-pip install -r tools/coppeliasim/requirements.txt  # mujoco, trimesh, pycollada, numpy
+uv sync                                            # Python: mujoco + the converters (needs uv)
 ```
 
 For path A you also need [CoppeliaSim](https://www.coppeliarobotics.com/)
@@ -91,7 +90,7 @@ The `.ttt` file itself is not modified. Set `URDF_OPTS` to pass
 **A3. Check the export in the URDF viewer.**
 
 ```sh
-python tools/coppeliasim/urdf_viewer/server.py     # open http://localhost:8000/viewer/
+uv run python tools/coppeliasim/urdf_viewer/server.py     # open http://localhost:8000/viewer/
 ```
 
 It lists every `assets_src/*/urdf/*.urdf`, draws it with its meshes and has
@@ -111,7 +110,7 @@ tools/coppeliasim/extract_scripts.sh path/to/HexBot.ttt
 **A5. Convert the URDF to MJCF.**
 
 ```sh
-python tools/coppeliasim/urdf_to_mjcf.py assets_src/HexBot/urdf/HexBot.urdf
+uv run python tools/coppeliasim/urdf_to_mjcf.py assets_src/HexBot/urdf/HexBot.urdf
 # -> assets_src/HexBot/mujoco/HexBot.xml + meshes/*.stl
 ```
 
@@ -141,7 +140,7 @@ Now go to [step 2](#2-clean-up-the-model).
 URDFs whose meshes sit next to the `.urdf` file:
 
 ```sh
-python tools/coppeliasim/urdf_to_mjcf.py path/to/robot.urdf assets_src/hexbot/mujoco
+uv run python tools/coppeliasim/urdf_to_mjcf.py path/to/robot.urdf assets_src/hexbot/mujoco
 ```
 
 If the URDF uses `package://` paths or xacro, resolve those first (run
@@ -212,7 +211,7 @@ the MORF or Red Mirror models needed.
   same geometry), keeping the STLs in `assets_src/` to convert from again:
 
   ```sh
-  python tools/stl_to_msh.py public/assets/hexbot/hexbot.xml assets_src/HexBot/mujoco/meshes
+  uv run python tools/stl_to_msh.py public/assets/hexbot/hexbot.xml assets_src/HexBot/mujoco/meshes
   ```
 
   Try to keep a robot's files under ~5 MB; the page downloads them on every
@@ -237,7 +236,7 @@ The template sends no commands, so every position actuator holds its joint
 at 0. Run it:
 
 ```sh
-python python/run_local.py hexbot
+uv run python python/run_local.py hexbot
 ```
 
 The robot should drop onto the floor and stand (or fold up, if 0 isn't a
@@ -249,7 +248,7 @@ inertias first, then at `kp`/`kv` on very light links, then try a smaller
 Print the names your controller will use:
 
 ```sh
-python -c "
+uv run python -c "
 import mujoco; m = mujoco.MjModel.from_xml_path('public/assets/hexbot/hexbot.xml')
 print('actuators:', [m.actuator(i).name for i in range(m.nu)])
 print('joints:', [m.joint(i).name for i in range(m.njnt)])"
@@ -335,9 +334,9 @@ Translating it:
 Debug on the desktop, where `print()`, breakpoints and plots all work:
 
 ```sh
-python python/run_local.py hexbot                               # viewer; Up/Down latch left_y
-python python/run_local.py hexbot --headless --seconds 10 --joy left_y=1
-python python/run_local.py hexbot --watch --speed 2
+uv run python python/run_local.py hexbot                               # viewer; Up/Down latch left_y
+uv run python python/run_local.py hexbot --headless --seconds 10 --joy left_y=1
+uv run python python/run_local.py hexbot --watch --speed 2
 ```
 
 In the browser, controllers can import the standard library plus packages
@@ -370,7 +369,7 @@ When the robot works, delete `HIDDEN = True` so it shows in the menu.
 ## 6. Test and ship
 
 ```sh
-python python/test_robots.py    # every robot loads and stays stable under a few inputs
+uv run python python/test_robots.py    # every robot loads and stays stable under a few inputs
 npm run dev                     # open http://localhost:5173/?robot=hexbot
 ```
 

@@ -1,11 +1,10 @@
 """Run a Python robot on the desktop with native MuJoCo, same controller code
 as the browser.
 
-    pip install mujoco                                  # once
-    python python/run_local.py gecko                    # interactive viewer
-    python python/run_local.py gecko --headless --seconds 5 --joy left_y=1
-    python python/run_local.py gecko --joy left_y=1 toggled=KeyF   # held/toggled keys: comma-separated codes
-    python python/run_local.py gecko --watch            # Watch mode: walks on its own
+    uv run python python/run_local.py gecko                    # interactive viewer
+    uv run python python/run_local.py gecko --headless --seconds 5 --joy left_y=1
+    uv run python python/run_local.py gecko --joy left_y=1 toggled=KeyF   # held/toggled keys: comma-separated codes
+    uv run python python/run_local.py gecko --watch            # Watch mode: walks on its own
 
 Viewer keys (MuJoCo's viewer only reports key presses, so these latch):
 Up/Down change left_y in steps of 0.5, Left/Right change right_x,

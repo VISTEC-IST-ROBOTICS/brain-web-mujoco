@@ -113,13 +113,13 @@ on a straight line; the gecko, MORF and Red Mirror use it. No file access, netwo
 ## Working locally
 
 ```sh
-pip install mujoco
-python python/run_local.py arm                     # viewer window
-python python/run_local.py arm --headless --seconds 5 --joy left_y=1
-python python/run_local.py gecko --joy left_y=1 toggled=KeyF   # keys=/toggled= take comma-separated codes
-python python/run_local.py red_mirror --watch --speed 2        # like the page's speed slider
-python python/run_local.py gecko --watch                       # Watch mode (WATCH_INPUT)
-python python/test_robots.py                       # smoke test for every robot
+uv sync                                    # once: Python deps (needs uv)
+uv run python python/run_local.py arm                     # viewer window
+uv run python python/run_local.py arm --headless --seconds 5 --joy left_y=1
+uv run python python/run_local.py gecko --joy left_y=1 toggled=KeyF   # keys=/toggled= take comma-separated codes
+uv run python python/run_local.py red_mirror --watch --speed 2        # like the page's speed slider
+uv run python python/run_local.py gecko --watch                       # Watch mode (WATCH_INPUT)
+uv run python python/test_robots.py                       # smoke test for every robot
 ```
 
 In the viewer, MuJoCo only reports key presses (not releases), so the keys

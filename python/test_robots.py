@@ -1,7 +1,7 @@
 """Smoke test for every robot in python/robots/: it loads, the controller
 runs, and the simulation stays finite under a few joystick inputs.
 
-    python python/test_robots.py        (or: pytest python/test_robots.py)
+    uv run python python/test_robots.py        (or: pytest python/test_robots.py)
 """
 
 import importlib

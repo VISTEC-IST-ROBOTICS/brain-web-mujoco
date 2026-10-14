@@ -1,0 +1,27 @@
+[project]
+name = "mujoco-web-sim"
+version = "0.1.0"
+description = "Desktop side of the MuJoCo web simulator: robot controllers and model converters"
+requires-python = ">=3.12"
+# Running controllers on the desktop: python/run_local.py, python/test_robots.py.
+# mujoco is pinned to the version of the browser's @mujoco/mujoco (package.json).
+dependencies = [
+    "mujoco==3.14.0",
+    "numpy>=2",
+]
+
+[dependency-groups]
+# Model converters: tools/converter/, tools/coppeliasim/, tools/usd_to_mjcf.py,
+# tools/b1_to_mjcf.py, tools/stl_to_msh.py.
+tools = [
+    "trimesh>=5.1",
+    "pycollada>=0.9.3",
+    "usd-core",
+    "scipy",
+    "fast-simplification",
+    "rtree",
+]
+
+[tool.uv]
+package = false
+default-groups = ["tools"]

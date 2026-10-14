@@ -19,7 +19,7 @@ web page, with a URDF viewer for the source and a MuJoCo viewer for the
 result:
 
 ```sh
-venv/bin/python tools/converter/server.py      # open http://localhost:8010/
+uv run python tools/converter/server.py      # open http://localhost:8010/
 ```
 
 See [converter.md](converter.md) for how to use it and how it works.
@@ -29,7 +29,7 @@ See [converter.md](converter.md) for how to use it and how it works.
 [tools/coppeliasim/](../tools/coppeliasim/) extracts a robot from a
 CoppeliaSim `.ttt` scene. The shell scripts run CoppeliaSim headless; set
 `COPPELIASIM_ROOT` to its install directory. Python dependencies:
-`pip install -r tools/coppeliasim/requirements.txt`.
+`uv sync` (the `tools` group in [pyproject.toml](../pyproject.toml)).
 
 | Script | Does |
 | --- | --- |
@@ -51,8 +51,7 @@ legs, sphere feet) and uses simplified CAD meshes for looks only. That's a
 good pattern for any heavy robot with detailed CAD.
 
 ```sh
-pip install trimesh pycollada fast-simplification rtree scipy numpy
-python tools/b1_to_mjcf.py path/to/b1.urdf path/to/meshes public/assets/b1
+uv run python tools/b1_to_mjcf.py path/to/b1.urdf path/to/meshes public/assets/b1
 ```
 
 ## Smaller mesh files
@@ -64,8 +63,7 @@ third of the size, exactly the same geometry. Red Mirror's meshes went from
 11.9 MB to 4.3 MB this way.
 
 ```sh
-pip install trimesh
-python tools/stl_to_msh.py public/assets/red_mirror/red_mirror.xml assets_src/red_mirror/meshes
+uv run python tools/stl_to_msh.py public/assets/red_mirror/red_mirror.xml assets_src/red_mirror/meshes
 ```
 
 The second argument is where the original STLs are kept, to convert from

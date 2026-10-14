@@ -28,8 +28,7 @@ at the USD's 4.1 Nm max force. Visuals and physics use separate meshes:
 Re-run it after changing the USD (`npm install` first, for `gltfpack`):
 
 ```sh
-pip install usd-core numpy scipy trimesh fast_simplification
-python tools/usd_to_mjcf.py my_robot/gecko-aug-2026.usd public/assets/gecko
+uv run python tools/usd_to_mjcf.py my_robot/gecko-aug-2026.usd public/assets/gecko
 ```
 
 ## The gait

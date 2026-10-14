@@ -2,13 +2,13 @@
 """MJCF converter: a local web page that turns a robot description into a MuJoCo MJCF model,
 with a URDF viewer for the source and a MuJoCo (WASM) viewer for the result.
 
-    venv/bin/python tools/converter/server.py [port]      then open http://localhost:8010/
+    uv run python tools/converter/server.py [port]      then open http://localhost:8010/
 
 Pick the description type (URDF, CoppeliaSim scene, Isaac Sim USD or MJCF), drop in its files
 (a folder, several files or a .zip) and convert. The page runs the command-line converters in
-tools/ on this machine, so their requirements apply: tools/coppeliasim/requirements.txt for URDF
-and CoppeliaSim (plus CoppeliaSim itself, at $COPPELIASIM_ROOT), usd-core and friends for USD
-(see tools/usd_to_mjcf.py). Types whose requirements are missing are shown disabled.
+tools/ on this machine, so their requirements apply: the Python packages from `uv sync`, plus
+CoppeliaSim itself (at $COPPELIASIM_ROOT) for CoppeliaSim scenes. Types whose requirements are
+missing are shown disabled.
 
 Uploads and results live in a temporary folder; "Save to assets_src" copies a result to
 assets_src/<name>/ (mujoco/, plus urdf/ and scripts/ from a CoppeliaSim scene), the layout the
@@ -57,7 +57,7 @@ def missing_modules(*names):
 def description_types():
     """The description types and, for those that can't run here, why not."""
     urdf_missing = missing_modules("mujoco", "trimesh", "collada")
-    need = lambda mods: f"needs pip install {' '.join(mods)}" if mods else None  # noqa: E731
+    need = lambda mods: f"needs {', '.join(mods)}: run uv sync" if mods else None  # noqa: E731
     coppelia = need(urdf_missing) or (None if (COPPELIASIM_ROOT / "coppeliaSim.sh").is_file()
                                       else f"CoppeliaSim not found at {COPPELIASIM_ROOT} (set COPPELIASIM_ROOT)")
     usd = missing_modules("pxr", "trimesh", "scipy", "fast_simplification")

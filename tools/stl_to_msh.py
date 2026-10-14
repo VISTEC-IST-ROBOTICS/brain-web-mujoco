@@ -5,8 +5,7 @@ STL stores every triangle's three corners separately (50 bytes a triangle);
 .msh stores each vertex once plus 3 indices per triangle, about a third of
 the size. MuJoCo reads both the same way, natively and in the browser.
 
-    pip install trimesh
-    python tools/stl_to_msh.py public/assets/red_mirror/red_mirror.xml assets_src/red_mirror/meshes
+    uv run python tools/stl_to_msh.py public/assets/red_mirror/red_mirror.xml assets_src/red_mirror/meshes
 
 Converts every <mesh file="*.stl"> the model uses, reading the STLs from
 SRC_DIR (keep the originals there) and writing the .msh files into the

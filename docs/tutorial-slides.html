@@ -487,11 +487,11 @@ render(data)</pre>
       <pre class="sm"><span class="c"># A2 export the model root to URDF (headless)</span>
 tools/coppeliasim/export_urdf.sh HexBot.ttt /hexbot_body
 <span class="c"># A3 check joints and axes in the browser viewer</span>
-python tools/coppeliasim/urdf_viewer/server.py
+uv run python tools/coppeliasim/urdf_viewer/server.py
 <span class="c"># A4 extract the scene's Lua controller</span>
 tools/coppeliasim/extract_scripts.sh HexBot.ttt
 <span class="c"># A5 URDF -> MJCF + STL meshes</span>
-python tools/coppeliasim/urdf_to_mjcf.py \
+uv run python tools/coppeliasim/urdf_to_mjcf.py \
     assets_src/HexBot/urdf/HexBot.urdf</pre>
     </div>
     <div class="col" style="flex:0 0 560px;">
@@ -520,7 +520,7 @@ python tools/coppeliasim/urdf_to_mjcf.py \
       <li><b>Smaller meshes</b>: <code>tools/stl_to_msh.py</code>. Aim under ~5 MB.</li>
     </ul>
   </div>
-  <pre class="sm">python -c "import mujoco; m = mujoco.MjModel.from_xml_path('public/assets/hexbot/hexbot.xml'); print(m.body_mass.sum())"</pre>
+  <pre class="sm">uv run python -c "import mujoco; m = mujoco.MjModel.from_xml_path('public/assets/hexbot/hexbot.xml'); print(m.body_mass.sum())"</pre>
   <aside class="notes">Every item here is something MORF or Red Mirror actually needed. Wrong masses are the number one cause of explosions. .msh files are about a third the size of STL with the same geometry; keep the STLs in assets_src to reconvert.</aside>
 </section>
 
@@ -536,7 +536,7 @@ python tools/coppeliasim/urdf_to_mjcf.py \
     rate = <span class="s">50</span>
     <span class="k">def</span> <span class="t">step</span>(self, obs):
         <span class="k">return</span> {}   <span class="c"># no commands: hold every joint at 0</span></pre>
-      <pre class="sm"><span class="p">$</span> python python/run_local.py hexbot</pre>
+      <pre class="sm"><span class="p">$</span> uv run python python/run_local.py hexbot</pre>
     </div>
     <div class="col" style="flex:0 0 600px;">
       <div class="card"><h3>Expect</h3><p>Drops onto the floor and stands (or folds up) without jitter, drift or flying away.</p></div>
@@ -644,13 +644,13 @@ python tools/coppeliasim/urdf_to_mjcf.py \
   <div class="row" style="flex:1;">
     <div class="col grow">
       <pre class="sm"><span class="c"># desktop: viewer, headless, watch mode</span>
-python python/run_local.py hexbot
-python python/run_local.py hexbot --headless \
+uv run python python/run_local.py hexbot
+uv run python python/run_local.py hexbot --headless \
     --seconds 10 --joy left_y=1
-python python/run_local.py hexbot --watch --speed 2
+uv run python python/run_local.py hexbot --watch --speed 2
 
 <span class="c"># every robot loads and stays stable</span>
-python python/test_robots.py
+uv run python python/test_robots.py
 
 <span class="c"># browser, reloads when you save the .py</span>
 npm run dev   <span class="c"># localhost:5173/?robot=hexbot</span></pre>

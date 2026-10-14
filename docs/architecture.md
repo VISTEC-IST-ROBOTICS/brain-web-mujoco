@@ -34,6 +34,8 @@ tools/
   test_gecko.mjs          headless check of the JS gecko gait
 my_robot/                 gecko sources: the USD and the original ROS joystick script
 docs/                     these documents
+pyproject.toml, uv.lock   desktop Python deps for uv: mujoco + numpy, and a `tools` group
+                          for the converters (installed by default)
 ```
 
 ## Stack
@@ -44,6 +46,8 @@ docs/                     these documents
 - [Pyodide](https://pyodide.org) (Python compiled to WebAssembly) for the
   robot controllers, loaded from a CDN only when a robot is opened
 - [Vite](https://vite.dev/) as dev server and bundler; no UI framework
+- [uv](https://docs.astral.sh/uv/) for the desktop Python environment
+  (`uv sync`, then `uv run python ...`)
 
 ## How the page works
 

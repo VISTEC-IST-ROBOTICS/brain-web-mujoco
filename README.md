@@ -33,8 +33,8 @@ left to walk on its own in Watch mode.
 npm install
 npm run dev                              # open http://localhost:5173 and pick a robot
 
-pip install mujoco
-python python/run_local.py gecko         # the same robot in MuJoCo's desktop viewer
+uv sync                                  # once: Python deps from pyproject.toml (needs uv)
+uv run python python/run_local.py gecko         # the same robot in MuJoCo's desktop viewer
 ```
 
 ## Adding a new robot
@@ -53,7 +53,7 @@ description type (URDF, CoppeliaSim scene, Isaac Sim USD), drop in the files,
 convert, and check the result in its URDF and MuJoCo viewers:
 
 ```sh
-venv/bin/python tools/converter/server.py          # open http://localhost:8010/
+uv run python tools/converter/server.py          # open http://localhost:8010/
 ```
 
 See [docs/converter.md](docs/converter.md).
@@ -64,7 +64,7 @@ Or convert from the command line:
 # from a CoppeliaSim scene (how MORF and Red Mirror were made)
 tools/coppeliasim/export_urdf.sh path/to/Robot.ttt /robot_root     # -> assets_src/Robot/urdf/
 tools/coppeliasim/extract_scripts.sh path/to/Robot.ttt             # the scene's Lua controller
-python tools/coppeliasim/urdf_to_mjcf.py assets_src/Robot/urdf/Robot.urdf   # -> assets_src/Robot/mujoco/
+uv run python tools/coppeliasim/urdf_to_mjcf.py assets_src/Robot/urdf/Robot.urdf   # -> assets_src/Robot/mujoco/
 
 # from a URDF: the same urdf_to_mjcf.py; from an MJCF you already have: just copy it
 ```
@@ -78,7 +78,7 @@ put collision shapes in `group="3"`, and shrink the meshes with
 
 ```sh
 cp python/robots/_template.py python/robots/<name>.py    # set MODEL = "assets/<name>/<name>.xml"
-python python/run_local.py <name>
+uv run python python/run_local.py <name>
 ```
 
 **4. Write the controller**, porting the CoppeliaSim script if there is one.
@@ -89,7 +89,7 @@ body's pose in `obs`, and returns actuator targets.
 `public/assets/thumbs/`), then test and push:
 
 ```sh
-python python/test_robots.py
+uv run python python/test_robots.py
 npm run dev                                                # http://localhost:5173/?robot=<name>
 ```
 

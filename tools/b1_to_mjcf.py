@@ -4,8 +4,7 @@ Source: unitree_ros (BSD-3-Clause), robots/b1_description:
 https://github.com/unitreerobotics/unitree_ros/tree/master/robots/b1_description
 Download xacro/b1.urdf and the meshes/*.dae it uses, then:
 
-    pip install trimesh pycollada fast-simplification rtree scipy numpy
-    python tools/b1_to_mjcf.py path/to/b1.urdf path/to/meshes public/assets/b1
+    uv run python tools/b1_to_mjcf.py path/to/b1.urdf path/to/meshes public/assets/b1
 
 Writes b1.xml plus meshes/*.msh:
 - Bodies, joints (with their limits), masses and inertias as in the URDF.

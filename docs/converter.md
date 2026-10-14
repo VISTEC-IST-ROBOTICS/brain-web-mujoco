@@ -15,8 +15,8 @@ conversion and needs the same Python packages.
 
 ```sh
 npm install                                    # once: the page uses the repo's three.js and MuJoCo WASM
-pip install -r tools/coppeliasim/requirements.txt
-venv/bin/python tools/converter/server.py      # open http://localhost:8010/
+uv sync                                        # once: Python deps (needs uv)
+uv run python tools/converter/server.py      # open http://localhost:8010/
 ```
 
 Pass a port to use a different one (`server.py 8020`). The server only

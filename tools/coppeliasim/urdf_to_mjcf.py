@@ -9,7 +9,7 @@ Usage: tools/coppeliasim/urdf_to_mjcf.py <model.urdf> [out_dir] [--fixed-base] [
   default out_dir: <model dir>/../mujoco  ->  <scene>/mujoco/<scene>.xml + meshes/*.stl
   Every hinge/slide joint gets a position actuator (ctrlrange = joint range when limited).
   By default the root body gets a free joint; --fixed-base welds it to the world.
-Requires: pip install mujoco trimesh pycollada
+Requires: mujoco, trimesh, pycollada (all installed by `uv sync`)
 """
 import argparse
 import shutil

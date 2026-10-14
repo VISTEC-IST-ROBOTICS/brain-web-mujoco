@@ -12,11 +12,10 @@ meshes from the USD stage and writes:
 The viewer draws the GLB at each body's simulated pose; the MJCF collision
 geoms are in group 3 (MuJoCo's usual "collision only" group).
 
-Requires: usd-core, numpy, scipy, trimesh, fast_simplification
-  pip install usd-core numpy scipy trimesh fast_simplification
+Requires: usd-core, numpy, scipy, trimesh, fast_simplification (all installed by `uv sync`)
 
 Usage:
-  python tools/usd_to_mjcf.py my_robot/gecko-aug-2026.usd public/assets/gecko
+  uv run python tools/usd_to_mjcf.py my_robot/gecko-aug-2026.usd public/assets/gecko
 """
 import argparse
 import os
