@@ -46,6 +46,8 @@ HELP = "Up/Down: shoulder, Left/Right: elbow"                     # extra line i
 BUTTONS = [{"label": "Grip", "key": "KeyG", "toggle": True}]       # on-screen buttons on phones/tablets
 VISUALS = "assets/arm_visual.glb"   # web-only nicer meshes, one node per body name (see tools/usd_to_mjcf.py)
 BODY_COLOR = "#2b2b2b"              # default for the page's Body colour picker, which recolours the material named 'printed' (MJCF or VISUALS)
+SUMMON_SIZE = 0.7                   # the summon page's size for it: its longest side on the pedestal, in m (default 1)
+SUMMON_POSE = {"RShoulderPitch": -1.4}  # and its pose there: joint values over its start pose (one line, JSON-style)
 
 
 class Controller:

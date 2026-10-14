@@ -36,6 +36,8 @@
   .type.off { opacity: .45; }
   .hint { color: var(--muted); font-size: 12px; margin: 8px 0 0; }
   .hint.warn { color: var(--warn); }
+  .hint.ok { color: var(--ok); }
+  label.field > span.inline { display: flex; gap: 6px; margin: 0; color: inherit; font-size: inherit; }
 
   #drop { border: 1.5px dashed var(--line); border-radius: 10px; padding: 16px 12px; text-align: center;
     color: var(--muted); transition: border-color .15s, background .15s; }
@@ -91,6 +93,34 @@
   .joint .v { color: var(--muted); font-variant-numeric: tabular-nums; }
   .joint input { width: 100%; accent-color: var(--accent); }
   .joint input:disabled { opacity: .35; }
+  .btn.on { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  /* summon demo: drawn over the MJCF viewer, with the summon page's backdrop */
+  #demoStage { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 35%, #1d2a38, #111 70%); cursor: grab; }
+  /* thumbnail: the 16:10 frame (the rest dimmed) and its bar */
+  #thumbFrame { position: absolute; border: 2px solid var(--accent); border-radius: 4px; pointer-events: none;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45); z-index: 1; }
+  #thumbBar { position: absolute; left: 10px; right: 10px; bottom: 10px; z-index: 2; display: flex; gap: 12px; align-items: center;
+    background: rgba(28,34,43,.94); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+  #thumbBar img { width: 160px; height: 100px; border-radius: 6px; border: 1px solid var(--line); object-fit: cover; }
+  #thumbBar .text { flex: 1; min-width: 0; }
+  #thumbBar .hint { margin: 3px 0 0; }
+  #thumbBar .buttons { display: flex; flex-direction: column; gap: 6px; align-items: stretch; }
+  #thumbBar a.btn { text-align: center; text-decoration: none; }
+  #demoStage canvas { display: block; position: absolute; inset: 0; }
+  .pane .toolbar, .pane .joints { z-index: 1; }
+  #demoPanel h4 { margin: 14px 0 4px; font-size: 12px; }
+  #demoPanel h4 .muted { color: var(--muted); font-weight: normal; }
+  #demoPoseBox summary { margin-bottom: 6px; }
+  #demoPoseReset { width: 100%; margin-bottom: 4px; }
+  #demoPanel .hint { margin: 4px 0 8px; }
+  #demoPanel .row { margin-top: 8px; }
+  #demoSize { width: 100%; accent-color: var(--accent); }
+  #demoColor { width: 100%; height: 30px; padding: 2px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); }
+  #demoCount { margin: 10px 0 0; font-size: 12px; }
+  #demoSave { margin-top: 14px; }
+  #demoList { list-style: none; margin: 10px 0 0; padding: 0; font-size: 12px; color: var(--muted); }
+  #demoList li { padding: 3px 6px; border-radius: 5px; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #demoList li:hover { background: var(--panel-2); color: var(--text); text-decoration: line-through; }
   .linkbtn { background: none; border: none; color: var(--accent); cursor: pointer; padding: 0; font-size: 12px; }
 
   @media (max-width: 760px) {
@@ -138,6 +168,10 @@
   <section id="optionsSection">
     <h2><span class="n">3</span>Options</h2>
     <div data-for="coppeliasim">
+      <label class="field"><span>CoppeliaSim folder (the one with coppeliaSim.sh)</span>
+        <span class="inline"><input type="text" id="coppeliaPath" spellcheck="false"
+          placeholder="~/CoppeliaSim_Edu_V4_10_0_rev0_Ubuntu24_04"><button class="btn" id="coppeliaSet">Set</button></span></label>
+      <p class="hint" id="coppeliaHint"></p>
       <label class="field"><span>Robot's root in the scene (model path)</span>
         <input type="text" id="model_path" placeholder="/morf"></label>
       <label class="check"><input type="checkbox" id="scripts" checked> Also extract the scene's Lua scripts</label>
@@ -192,11 +226,60 @@
   </div>
   <div class="pane" id="pane-mjcf">
     <div class="empty" id="mjcfEmpty">Convert a robot, or pick an MJCF, to see the MuJoCo model here.</div>
-    <div class="toolbar"><button class="btn" id="play">▶ Simulate</button>
+    <div class="toolbar" id="mjcfToolbar"><button class="btn" id="play">▶ Simulate</button>
       <button class="btn" id="mjcfReset">Reset</button>
       <label class="btn"><input type="checkbox" id="mjcfCollision"> Collision</label>
+      <button class="btn" id="demoToggle" title="See it as the summon page shows it: set its size there and which parts change colour">Summon demo</button>
+      <button class="btn" id="thumbToggle" title="Make the picture on its card in the robot menu">Thumbnail</button>
       <span class="info" id="mjcfInfo" hidden></span></div>
     <div class="joints" id="mjcfJoints" hidden></div>
+    <div id="thumbFrame" hidden></div>
+    <div id="thumbBar" hidden>
+      <img id="thumbPreview" alt="The captured thumbnail" hidden>
+      <div class="text">
+        <b>Card thumbnail</b>
+        <p class="hint">Turn and zoom the view so the robot fills the frame. Pose it with the joint sliders,
+          or let it walk with Simulate. It is saved as an 800 × 500 JPEG, like the other cards.</p>
+        <p class="hint" id="thumbNote"></p>
+        <p class="hint" id="thumbStatus"></p>
+      </div>
+      <div class="buttons">
+        <button class="btn primary" id="thumbCapture">Capture</button>
+        <button class="btn" id="thumbSave" disabled>Save as thumbnail</button>
+        <a class="btn" id="thumbDownload" hidden>Download .jpg</a>
+        <button class="linkbtn" id="thumbClose">Close</button>
+      </div>
+    </div>
+    <div id="demoStage" hidden></div>
+    <div class="joints" id="demoPanel" hidden>
+      <h3><span>Summon demo</span><button class="linkbtn" id="demoDone">Done</button></h3>
+      <p class="hint">The robot as the summon page shows it. Drag to turn the pedestal.</p>
+      <label class="field"><span>Size: longest side <output id="demoSizeOut"></output> m (the pedestal is 1.3 m across)</span>
+        <input type="range" id="demoSize" min="0.3" max="2" step="0.01"></label>
+      <p class="hint" id="demoSizeNote"></p>
+      <label class="field"><span>Compare with (drawn see-through)</span><select id="demoCompare"></select></label>
+      <label class="field"><span>Colour variant</span><select id="demoVariant"></select></label>
+      <label class="check"><input type="checkbox" id="demoTurn" checked> Turn by itself</label>
+      <h4>Pose on the pedestal <span class="muted" id="demoPoseCount"></span></h4>
+      <p class="hint">Changes the joints only here: the robot page keeps starting from its start pose.</p>
+      <details id="demoPoseBox"><summary>Joints</summary>
+        <button class="btn" id="demoPoseReset">Back to the start pose</button>
+        <div id="demoPoseList"></div>
+      </details>
+      <h4>Parts that change colour</h4>
+      <div id="demoParts">
+        <p class="hint">Click the parts the variants and the robot page's Body colour repaint.</p>
+        <label class="check"><input type="checkbox" id="demoSimilar" checked> A click picks every part of that colour</label>
+        <label class="check"><input type="checkbox" id="demoHighlight"> Darken the other parts</label>
+        <label class="field"><span>Its own colour (the Body picker's Original)</span><input type="color" id="demoColor"></label>
+        <div class="row"><button class="btn" id="demoNone">Choose none</button><button class="btn" id="demoRevert">As saved</button></div>
+        <div id="demoCount"></div>
+      </div>
+      <p class="hint" id="demoNoParts" hidden></p>
+      <button class="btn primary wide" id="demoSave">Save changes</button>
+      <p class="hint" id="demoStatus"></p>
+      <ul id="demoList"></ul>
+    </div>
   </div>
 </main>
 

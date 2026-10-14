@@ -20,6 +20,7 @@ SPEED_RANGE = (0.25, 2.0)
 DESCRIPTION = "Six-legged robot walking a tripod gait with an open-loop CPG gait."
 THUMBNAIL = "assets/thumbs/morf.jpg"
 MODEL = "assets/morf/morf.xml"  # relative to public/
+SUMMON_SIZE = 0.69  # the summon page's size for it: its longest side on the pedestal (default 1)
 CAMERA = {"position": [0.5, -0.62, 0.38], "target": [0.04, 0, 0.08]}
 HELP = "[ / ]: step height · Gamepad: left stick walk, right stick steer/pitch"
 

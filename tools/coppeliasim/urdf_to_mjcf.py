@@ -9,6 +9,7 @@ Usage: tools/coppeliasim/urdf_to_mjcf.py <model.urdf> [out_dir] [--fixed-base] [
   default out_dir: <model dir>/../mujoco  ->  <scene>/mujoco/<scene>.xml + meshes/*.stl
   Every hinge/slide joint gets a position actuator (ctrlrange = joint range when limited).
   By default the root body gets a free joint; --fixed-base welds it to the world.
+  Collision geoms go in group 3 when the robot also has visual meshes (see set_collision_group).
 Requires: mujoco, trimesh, pycollada (all installed by `uv sync`)
 """
 import argparse
@@ -155,6 +156,27 @@ def add_floor(tree, model, clearance):
     base.set("pos", f"{x - cx:.5f} {y - cy:.5f} {z - lo[2] + clearance:.5f}")
 
 
+def set_collision_group(xml_path):
+    """Puts the robot's colliding geoms in group 3, MuJoCo's usual collision-only group, when it
+    also has visual-only geoms (contype = conaffinity = 0), so viewers that hide group 3 (the web
+    page, and the converter page's Collision toggle) show the visual meshes, not both on top of each
+    other. Geoms on the world body (the floor) are left alone, and so is a robot with no visual-only
+    geoms, whose collision shapes are also its looks. Rewrites the file only when something changes;
+    returns how many geoms moved."""
+    spec = mujoco.MjSpec.from_file(str(xml_path))
+    robot = [g for g in spec.geoms if g.parent.name != "world"]
+    collide = [g for g in robot if g.contype or g.conaffinity]
+    if len(collide) == len(robot):
+        return 0
+    moved = [g for g in collide if g.group != 3]
+    for g in moved:
+        g.group = 3
+    if moved:
+        spec.compile()
+        Path(xml_path).write_text(spec.to_xml())
+    return len(moved)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("urdf", type=Path)
@@ -212,8 +234,11 @@ def main():
     ET.indent(out_tree)
     out_tree.write(out_xml)
 
+    grouped = set_collision_group(out_xml)
+
     check = mujoco.MjModel.from_xml_path(str(out_xml))
-    print(f"wrote {out_xml} ({n} meshes -> STL; {check.nbody} bodies, {check.njnt} joints; placeholder inertia on {filled} links; {check.nu} actuators)")
+    print(f"wrote {out_xml} ({n} meshes -> STL; {check.nbody} bodies, {check.njnt} joints; placeholder inertia on {filled} links; "
+          f"{check.nu} actuators; {grouped} collision geoms in group 3)")
 
 
 if __name__ == "__main__":

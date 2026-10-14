@@ -140,4 +140,17 @@ needs:
   targets, let the model settle for a few seconds in MuJoCo, and copy
   `data.qpos`. That's how Red Mirror's `stand` keyframe was made.
 
-The robot is scaled to fit the pedestal, so its size doesn't matter.
+The robot is scaled so its longest side is 1 m on the pedestal (which is
+1.3 m across), whatever its real size. A robot that looks too big or too
+small next to the others there, such as a tall, thin humanoid, can set its
+own with `SUMMON_SIZE` in its robot file:
+
+```python
+SUMMON_SIZE = 0.7  # its longest side on the pedestal, in m (default 1)
+SUMMON_POSE = {"RShoulderPitch": -1.4}  # joints posed differently from its start pose, here only
+```
+
+The converter page's **Summon demo** shows the robot on this page's
+pedestal, next to another robot for comparison, and saves the size and pose (see
+[converter.md](converter.md#summon-demo)). It also chooses the parts that
+the variants recolour.

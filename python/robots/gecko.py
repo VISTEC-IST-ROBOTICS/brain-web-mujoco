@@ -20,6 +20,7 @@ THUMBNAIL = "assets/thumbs/gecko_py.jpg"
 MODEL = "assets/gecko/gecko.xml"
 VISUALS = "assets/gecko/gecko_visual.glb"
 BODY_COLOR = "#2b2b2b"  # default for the page's Body colour picker
+SUMMON_SIZE = 1.24  # the summon page's size for it: its longest side on the pedestal (default 1)
 CAMERA = {"position": [0.55, -0.75, 0.45], "target": [-0.12, 0, 0.1]}
 HELP = "F: lock spine · [ / ]: step height · Gamepad: left stick walk, right stick steer/pitch"
 BUTTONS = [{"label": "Lock spine", "key": "KeyF", "toggle": True}]

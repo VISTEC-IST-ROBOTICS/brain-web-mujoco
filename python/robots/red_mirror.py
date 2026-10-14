@@ -33,6 +33,7 @@ WATCH_INPUT = {"left_y": 1.0}  # Watch mode: walks straight ahead at the script'
 DESCRIPTION = "Stick-insect-inspired hexapod walking with an open-loop CPG gait."
 THUMBNAIL = "assets/thumbs/red_mirror.jpg"
 MODEL = "assets/red_mirror/red_mirror.xml"  # relative to public/
+SUMMON_POSE = {"CL2": -0.7383}  # the summon page's pose: joint values over its start pose
 CAMERA = {"position": [1.0, -1.35, 0.8], "target": [0, 0, 0.08]}  # wider view: the robot is ~0.8 m long
 HELP = "Gamepad: left stick walk, right stick steer"
 SPEED_RANGE = (0.25, 4.0)  # Watch mode's speed slider: scales how fast the CPG phase advances

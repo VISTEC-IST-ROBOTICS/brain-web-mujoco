@@ -11,7 +11,9 @@ import { animateFinish, applyFinish } from './variants.js';
 // and repaints its 'printed' material (the same parts the robot page's
 // Body colour picker recolours).
 
-const SIZE = 1; // every robot is scaled so its longest side is this long
+// Every robot is scaled so its longest side is this long (the pedestal is
+// 1.3 across), unless its robot file sets SUMMON_SIZE.
+export const DEFAULT_SIZE = 1;
 const mjGEOM_PLANE = 0;
 
 export function createStage(canvasParent) {
@@ -80,16 +82,22 @@ export function createStage(canvasParent) {
 
   let shown = null; // { root, printed, variant }
   let spin = 0;
+  let turning = true;
 
   renderer.setAnimationLoop((ms) => {
     const t = ms / 1000;
-    turntable.rotation.z = (turntable.rotation.z + 0.006 + spin) % (2 * Math.PI);
+    if (turning) turntable.rotation.z = (turntable.rotation.z + 0.006 + spin) % (2 * Math.PI);
     spin *= 0.94; // the reveal starts with a fast spin that settles
-    if (shown) animateFinish(shown.printed, shown.variant, t);
+    if (shown?.variant) animateFinish(shown.printed, shown.variant, t);
     renderer.render(scene, camera);
   });
 
   return {
+    camera,
+    renderer,
+    turntable, // what turns: the shown robot (and anything else put on it)
+    // Whether the turntable turns by itself (the summon page always does)
+    setTurning(on) { turning = on; },
     // The current view drawn into a new 2D canvas of width x height pixels
     // (transparent background), whatever the window's size, for screenshots.
     // Renders and copies in one go, so the WebGL canvas needs no
@@ -114,16 +122,25 @@ export function createStage(canvasParent) {
       return renderer.compileAsync(robot.root, camera, scene);
     },
     // Shows `robot` (a prepared robot from prepareRobot) painted as `variant`.
-    show(robot, variant, tierColor) {
+    // reveal: turn it in with a fast spin, as a summon does.
+    show(robot, variant, tierColor, { reveal = true } = {}) {
       if (shown) turntable.remove(shown.root);
       shown = { ...robot, variant };
       turntable.add(robot.root);
-      applyFinish(robot.printed, variant);
+      this.setFinish(robot.printed, variant, tierColor);
+      if (reveal) {
+        turntable.rotation.z = -0.9;
+        spin = 0.25;
+      }
+    },
+    // Repaints the shown robot: `printed` materials as `variant` (null: as
+    // they are), with the ring and rim light in tierColor.
+    setFinish(printed, variant, tierColor) {
+      if (shown) Object.assign(shown, { printed, variant });
+      if (variant) applyFinish(printed, variant);
       ringMaterial.color.set(tierColor);
       rim.color.set(tierColor);
       rim.intensity = 3;
-      turntable.rotation.z = -0.9;
-      spin = 0.25;
     },
     clear() {
       if (shown) turntable.remove(shown.root);
@@ -135,41 +152,78 @@ export function createStage(canvasParent) {
 }
 
 // Downloads and compiles a robot's model (plus its VISUALS file), poses it
-// at its start pose and returns { root, printed }: a group scaled to SIZE,
-// centred on the origin and standing on z = 0, and its 'printed' materials.
+// at its start pose and returns { root, printed }: a group scaled to the
+// card's summonSize (else DEFAULT_SIZE), centred on the origin and standing
+// on z = 0, and its 'printed' materials.
 export async function prepareRobot(mujoco, card) {
   const [files, gltf] = await Promise.all([fetchModelFiles(card.model), card.visuals && loadVisuals(card.visuals)]);
   const model = compileModel(mujoco, files);
-  const data = new mujoco.MjData(model);
-  if (model.nkey > 0) mujoco.mj_resetDataKeyframe(model, data, 0);
-  mujoco.mj_forward(model, data);
+  try {
+    const { root, printed } = buildRobot(mujoco, model, gltf, card.summonSize, card.summonPose);
+    return { root, printed };
+  } finally {
+    model.delete();
+  }
+}
 
+// The robot as the stage shows it, from a compiled model (kept by the caller)
+// and its VISUALS scene (or null; its nodes move into the robot), posed and
+// scaled by poseRobot: { root, printed, meshes: the geoms' meshes by geom
+// id, bodies, longest }. The converter page's summon demo uses this too, so
+// its preview matches this page.
+export function buildRobot(mujoco, model, gltf, size = DEFAULT_SIZE, pose = {}) {
   const robot = new THREE.Group();
   const meshes = buildGeoms(mujoco, model, robot);
   const bodies = gltf ? attachVisuals(mujoco, model, gltf, robot) : [];
   if (gltf || hasVisualOnlyGeoms(model)) hideCollisionGeoms(model, meshes);
   meshes.forEach((m, i) => m && model.geom_type[i] === mjGEOM_PLANE && robot.remove(m)); // the pedestal is the floor
-  syncGeoms(model, data, meshes);
-  syncBodies(data, bodies);
-  data.delete();
-  model.delete();
-
-  // Frame it from the visible meshes only (hidden collision shapes would
-  // throw off the box).
-  robot.updateMatrixWorld(true);
-  const box = new THREE.Box3();
   const printed = new Set();
   robot.traverseVisible((o) => {
     if (!o.isMesh) return;
-    box.expandByObject(o);
     o.castShadow = true;
     if (o.material.name === 'printed') printed.add(o.material);
   });
-  const size = box.getSize(new THREE.Vector3());
-  const center = box.getCenter(new THREE.Vector3());
   const root = new THREE.Group();
-  root.scale.setScalar(SIZE / Math.max(size.x, size.y, size.z));
-  robot.position.set(-center.x, -center.y, -box.min.z);
   root.add(robot);
-  return { root, printed: [...printed] };
+  const built = { root, robot, printed: [...printed], meshes, bodies, longest: 1 };
+  poseRobot(mujoco, model, built, pose, size);
+  return built;
+}
+
+// Puts a built robot in its summon pose and size: the model's start pose
+// (its first keyframe, else its default pose) with the joints in `pose`
+// ({ joint name: angle in rad, or m for a slide }, SUMMON_POSE in its robot
+// file) set, scaled so its longest side is `size`, centred on the origin and
+// standing on z = 0.
+const mjOBJ_JOINT = 3;
+export function poseRobot(mujoco, model, built, pose = {}, size = DEFAULT_SIZE) {
+  const data = new mujoco.MjData(model);
+  if (model.nkey > 0) mujoco.mj_resetDataKeyframe(model, data, 0);
+  for (const [name, value] of Object.entries(pose ?? {})) {
+    const j = mujoco.mj_name2id(model, mjOBJ_JOINT, name);
+    if (j >= 0 && model.jnt_type[j] >= 2) data.qpos[model.jnt_qposadr[j]] = value; // hinge and slide joints only
+  }
+  mujoco.mj_forward(model, data);
+  syncGeoms(model, data, built.meshes);
+  syncBodies(data, built.bodies);
+  data.delete();
+
+  // Frame it from the visible meshes only (hidden collision shapes would
+  // throw off the box), in the robot's own frame (the turntable may be turned).
+  const { robot, root } = built;
+  robot.updateMatrixWorld(true);
+  const toRobot = robot.matrixWorld.clone().invert();
+  const box = new THREE.Box3();
+  const part = new THREE.Box3();
+  const m = new THREE.Matrix4();
+  robot.traverseVisible((o) => {
+    if (!o.isMesh) return;
+    if (!o.geometry.boundingBox) o.geometry.computeBoundingBox();
+    box.union(part.copy(o.geometry.boundingBox).applyMatrix4(m.multiplyMatrices(toRobot, o.matrixWorld)));
+  });
+  const extent = box.getSize(new THREE.Vector3());
+  const center = box.getCenter(new THREE.Vector3());
+  built.longest = Math.max(extent.x, extent.y, extent.z, 1e-6);
+  root.scale.setScalar((size ?? DEFAULT_SIZE) / built.longest);
+  robot.position.set(-center.x, -center.y, -box.min.z);
 }

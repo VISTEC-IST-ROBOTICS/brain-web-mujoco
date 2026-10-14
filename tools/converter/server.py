@@ -7,8 +7,9 @@ with a URDF viewer for the source and a MuJoCo (WASM) viewer for the result.
 Pick the description type (URDF, CoppeliaSim scene, Isaac Sim USD or MJCF), drop in its files
 (a folder, several files or a .zip) and convert. The page runs the command-line converters in
 tools/ on this machine, so their requirements apply: the Python packages from `uv sync`, plus
-CoppeliaSim itself (at $COPPELIASIM_ROOT) for CoppeliaSim scenes. Types whose requirements are
-missing are shown disabled.
+CoppeliaSim itself for CoppeliaSim scenes. Its install folder is set on the page and remembered in
+~/.config/mjcf-converter.json; until then $COPPELIASIM_ROOT or the scripts' default is used. Types
+whose Python packages are missing are shown disabled.
 
 Uploads and results live in a temporary folder; "Save to assets_src" copies a result to
 assets_src/<name>/ (mujoco/, plus urdf/ and scripts/ from a CoppeliaSim scene), the layout the
@@ -32,22 +33,164 @@ from urllib.parse import parse_qs, unquote, urlparse
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 TOOLS = ROOT / "tools"
-JOBS = Path(tempfile.mkdtemp(prefix="mjcf-converter-"))
-COPPELIASIM_ROOT = Path(os.environ.get(
+JOBS = None  # the work folder, a temporary folder made when the server starts
+SETTINGS = Path.home() / ".config/mjcf-converter.json"
+# Where CoppeliaSim is looked for when the page hasn't set it (the shell scripts' default)
+COPPELIASIM_DEFAULT = Path(os.environ.get(
     "COPPELIASIM_ROOT", Path.home() / "Research/coppelia/CoppeliaSim_Edu_V4_10_0_rev0_Ubuntu24_04"))
 
 sys.path.insert(0, str(TOOLS / "coppeliasim"))
-from urdf_to_mjcf import resolve_mesh  # noqa: E402  (the converter's own mesh lookup, for the viewer)
+from urdf_to_mjcf import resolve_mesh, set_collision_group  # noqa: E402  (shared with the URDF converter)
+from paint import set_printed  # noqa: E402
 
 # URL prefix -> folder served from it. /repo/ only exposes the model folders.
 STATIC = {
     "/app/": HERE,
     "/src/": ROOT / "src",
     "/node_modules/": ROOT / "node_modules",
-    "/jobs/": JOBS,
     "/repo/public/": ROOT / "public",
+    "/assets/": ROOT / "public/assets",  # for src/ code that loads site files by their page path (the logo)
     "/repo/assets_src/": ROOT / "assets_src",
 }
+
+
+def load_settings():
+    try:
+        return json.loads(SETTINGS.read_text())
+    except (OSError, ValueError):
+        return {}
+
+
+def coppeliasim_folder(path):
+    """The CoppeliaSim install folder for a path the user gave: the folder itself, or its
+    coppeliaSim.sh / coppeliaSim program. None when there is no coppeliaSim.sh there."""
+    p = Path(path).expanduser()
+    folder = p.parent if p.is_file() else p
+    return folder.resolve() if (folder / "coppeliaSim.sh").is_file() else None
+
+
+def coppeliasim():
+    """Where CoppeliaSim is: {path, found, source}; source is "page" when set on the page."""
+    saved = load_settings().get("coppeliasim")
+    path = Path(saved) if saved else COPPELIASIM_DEFAULT
+    return {"path": str(path), "found": coppeliasim_folder(path) is not None,
+            "source": "page" if saved else ("COPPELIASIM_ROOT" if "COPPELIASIM_ROOT" in os.environ else "default")}
+
+
+def set_coppeliasim(path):
+    folder = coppeliasim_folder(path) if path.strip() else None
+    if folder is None:
+        raise ValueError(f"No coppeliaSim.sh in {path!r}. Give CoppeliaSim's install folder, "
+                         "the one with coppeliaSim.sh in it.")
+    SETTINGS.parent.mkdir(parents=True, exist_ok=True)
+    SETTINGS.write_text(json.dumps({**load_settings(), "coppeliasim": str(folder)}, indent=2))
+    return coppeliasim()
+
+
+def robot_files():
+    """{robot name: its python/robots/<name>.py settings}: MODEL, VISUALS (as served URLs),
+    SUMMON_SIZE, SUMMON_POSE, THUMBNAIL, BODY_COLOR and HIDDEN, read from the source the way the web page reads them."""
+    robots = {}
+    for py in sorted((ROOT / "python/robots").glob("[!_]*.py")):
+        src = py.read_text()
+        const = lambda key: (m := re.search(rf"^{key}\s*=\s*([\"'])(.*?)\1", src, re.M)) and m.group(2)  # noqa: E731
+        size = re.search(r"^SUMMON_SIZE\s*=\s*([0-9.]+)", src, re.M)
+        pose = re.search(r"^SUMMON_POSE\s*=\s*(\{.*\})", src, re.M)
+        try:
+            pose = json.loads(pose.group(1)) if pose else None
+        except ValueError:
+            pose = None
+        robots[py.stem] = {
+            "name": py.stem, "file": f"python/robots/{py.name}",
+            "title": const("TITLE") or py.stem,
+            "model": const("MODEL") and "/repo/public/" + const("MODEL"),
+            "visuals": const("VISUALS") and "/repo/public/" + const("VISUALS"),
+            "summonSize": float(size.group(1)) if size else None,
+            "summonPose": pose,
+            "thumbnail": const("THUMBNAIL") and "/repo/public/" + const("THUMBNAIL"),
+            "bodyColor": const("BODY_COLOR"),
+            "hidden": bool(re.search(r"^HIDDEN\s*=\s*True\b", src, re.M)),
+        }
+    return robots
+
+
+def robot_for(url):
+    """What the page knows about the MJCF at url: the robot file using it (if any), and its
+    VISUALS, from that file or else a <name>_visual.glb next to the model (tools/usd_to_mjcf.py)."""
+    robot = next((r for r in robot_files().values() if r["model"] == url), None)
+    glb = url.rsplit(".", 1)[0] + "_visual.glb"
+    try:
+        glb_found = local_path(glb).is_file()
+    except PermissionError:
+        glb_found = False
+    return {"robot": robot, "visuals": (robot and robot["visuals"]) or (glb if glb_found else None)}
+
+
+def robot_file_for(url):
+    """The python/robots file whose MODEL is the MJCF at url, or a ValueError saying there is none."""
+    robot = robot_for(url)["robot"]
+    if not robot:
+        raise ValueError("No python/robots/*.py uses this model, so there is nowhere to keep this. "
+                         "Add the robot to the project first.")
+    return robot
+
+
+def set_setting(src, key, value, comment, after=("MODEL", "VISUALS", "BODY_COLOR", "SUMMON_SIZE")):
+    """A robot file's source with the line `KEY = value` set: replaced where it is, else added after
+    the last of the `after` settings. value None removes the line."""
+    line = f"{key} = {value}"
+    found = re.search(rf"^{key}\s*=.*$", src, re.M)
+    if value is None:
+        return src[:found.start()] + src[found.end() + 1:] if found else src
+    if found:
+        # keep a comment the line already has
+        old_comment = re.search(r"\s+#.*$", found.group(0))
+        return src[:found.start()] + line + (old_comment.group(0) if old_comment else "") + src[found.end():]
+    anchors = list(re.finditer(rf"^({'|'.join(after)})\s*=.*$", src, re.M))
+    at = anchors[-1].end() if anchors else 0
+    return src[:at] + ("\n" if at else "") + line + (f"  # {comment}" if comment else "") + ("" if at else "\n") + src[at:]
+
+
+def set_summon(url, size=None, pose=None):
+    """Writes the summon page's settings into the robot file using the MJCF at url:
+    SUMMON_SIZE (its longest side on the pedestal) and SUMMON_POSE ({joint name: value} over its
+    start pose; an empty one removes the line). None leaves a setting as it is."""
+    robot = robot_file_for(url)
+    py = ROOT / robot["file"]
+    src = py.read_text()
+    if size is not None:
+        size = float(size)
+        if not 0.05 <= size <= 5:
+            raise ValueError("the size must be between 0.05 and 5")
+        src = set_setting(src, "SUMMON_SIZE", f"{size:.3g}",
+                          "the summon page's size for it: its longest side on the pedestal (default 1)")
+    if pose is not None:
+        pose = {str(k): round(float(v), 4) for k, v in pose.items()}
+        src = set_setting(src, "SUMMON_POSE", json.dumps(pose) if pose else None,
+                          "the summon page's pose: joint values over its start pose")
+    py.write_text(src)
+    return {"file": robot["file"], **robot_files()[robot["name"]]}
+
+
+def save_thumbnail(url, jpeg):
+    """Writes a robot card's thumbnail: to the file its robot file's THUMBNAIL names, else to
+    public/assets/thumbs/<robot>.jpg, setting THUMBNAIL. Returns the files written."""
+    if not jpeg.startswith(b"\xff\xd8"):
+        raise ValueError("not a JPEG image")
+    robot = robot_file_for(url)
+    py = ROOT / robot["file"]
+    src = py.read_text()
+    current = re.search(r"^THUMBNAIL\s*=\s*([\"'])(.*?)\1", src, re.M)
+    rel = current.group(2) if current else f"assets/thumbs/{robot['name']}.jpg"
+    path = safe_join(ROOT / "public", rel)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(jpeg)
+    files = [f"public/{rel}"]
+    if not current:
+        py.write_text(set_setting(src, "THUMBNAIL", json.dumps(rel), "",
+                                  after=("TITLE", "DESCRIPTION", "MODEL")))
+        files.append(robot["file"])
+    return {"thumbnail": f"/repo/public/{rel}", "files": files}
 
 
 def missing_modules(*names):
@@ -58,14 +201,12 @@ def description_types():
     """The description types and, for those that can't run here, why not."""
     urdf_missing = missing_modules("mujoco", "trimesh", "collada")
     need = lambda mods: f"needs {', '.join(mods)}: run uv sync" if mods else None  # noqa: E731
-    coppelia = need(urdf_missing) or (None if (COPPELIASIM_ROOT / "coppeliaSim.sh").is_file()
-                                      else f"CoppeliaSim not found at {COPPELIASIM_ROOT} (set COPPELIASIM_ROOT)")
     usd = missing_modules("pxr", "trimesh", "scipy", "fast_simplification")
     usd_pip = {"pxr": "usd-core", "fast_simplification": "fast_simplification"}
     return [
         {"id": "urdf", "label": "URDF", "ext": [".urdf"], "unavailable": need(urdf_missing),
          "hint": "The .urdf plus its meshes (.dae, .stl, .obj). Drop the whole package folder so package:// paths resolve."},
-        {"id": "coppeliasim", "label": "CoppeliaSim scene", "ext": [".ttt"], "unavailable": coppelia,
+        {"id": "coppeliasim", "label": "CoppeliaSim scene", "ext": [".ttt"], "unavailable": need(urdf_missing),
          "hint": "A .ttt scene. CoppeliaSim exports the robot to URDF headless, then it converts like a URDF."},
         {"id": "usd", "label": "Isaac Sim USD", "ext": [".usd", ".usda", ".usdc"],
          "unavailable": need([usd_pip.get(m, m) for m in usd]),
@@ -81,6 +222,14 @@ def safe_join(base, rel):
     if not path.is_relative_to(base.resolve()):
         raise PermissionError(rel)
     return path
+
+
+def local_path(url_path):
+    """The file a served URL path is."""
+    for prefix, base in STATIC.items():
+        if url_path.startswith(prefix):
+            return safe_join(base, url_path[len(prefix):])
+    raise PermissionError(url_path)
 
 
 def job_dir(job_id):
@@ -130,8 +279,11 @@ def convert(job, kind, main, opts):
         model_path = opts.get("model_path", "").strip()
         if not model_path.startswith("/"):
             return None, ["The model path must be the scene path of the robot's root, e.g. /morf"]
+        folder = coppeliasim_folder(coppeliasim()["path"])
+        if folder is None:
+            return None, [f"CoppeliaSim not found at {coppeliasim()['path']}. Set its folder under Options."]
         urdf = job / "urdf" / f"{name}.urdf"
-        env = {**os.environ, "COPPELIASIM_ROOT": str(COPPELIASIM_ROOT)}
+        env = {**os.environ, "COPPELIASIM_ROOT": str(folder)}
         ok = run(["bash", TOOLS / "coppeliasim/export_urdf.sh", src, model_path, urdf], log, env=env)
         if ok and not urdf.is_file():
             log.append(f"CoppeliaSim wrote no URDF. Is {model_path} the robot's root in the scene?")
@@ -154,6 +306,8 @@ def convert(job, kind, main, opts):
     else:
         return None, [f"unknown description type {kind!r}"]
 
+    if ok:
+        ok = group_collisions(xml, log)
     if ok and opts.get("msh"):
         meshdir = mesh_dir_of(xml)
         stls = list(meshdir.glob("*.stl")) + list(meshdir.glob("*.STL"))
@@ -169,6 +323,19 @@ def convert(job, kind, main, opts):
     if ok:
         ok = check_model(xml, log)
     return (xml if ok else None), log
+
+
+def group_collisions(xml, log):
+    """Every type's result gets the same collision group rule as urdf_to_mjcf.py: colliding geoms
+    in group 3 when there are visual meshes. (A no-op for its own results and for USD's.)"""
+    try:
+        moved = set_collision_group(xml)
+    except Exception as e:  # noqa: BLE001  (a model MuJoCo can't parse fails in check_model too)
+        log.append(f"Could not set the collision group: {e}")
+        return False
+    if moved:
+        log.append(f"Put {moved} collision geoms in group 3, so viewers show the visual meshes.")
+    return True
 
 
 def mesh_dir_of(xml):
@@ -223,6 +390,12 @@ class Handler(SimpleHTTPRequestHandler):
             return self.send_json(description_types())
         if path == "/api/library":
             return self.send_json(self.library())
+        if path == "/api/coppeliasim":
+            return self.send_json(coppeliasim())
+        if path == "/api/robots":
+            return self.send_json(list(robot_files().values()))
+        if path == "/api/robot":
+            return self.send_json(robot_for(query["url"][0]))
         if path == "/api/mesh":
             # A URDF's mesh, found the way urdf_to_mjcf.py finds it (package://, relative, by name)
             urdf = self.local_path(query["urdf"][0])
@@ -256,9 +429,24 @@ class Handler(SimpleHTTPRequestHandler):
 
     @guarded
     def do_POST(self):
-        path = urlparse(self.path).path
+        url = urlparse(self.path)
+        path = url.path
         body = self.rfile.read(int(self.headers.get("Content-Length") or 0))
+        if path == "/api/thumbnail":
+            # The JPEG itself is the body; ?url= the model the robot file uses
+            return self.send_json(save_thumbnail(parse_qs(url.query)["url"][0], body))
         req = json.loads(body or b"{}")
+        if path == "/api/coppeliasim":
+            return self.send_json(set_coppeliasim(req.get("path", "")))
+        if path == "/api/summon":
+            return self.send_json(set_summon(req["url"], req.get("size"), req.get("pose")))
+        if path == "/api/paint":
+            # The parts the page recolours: {url of an MJCF shown in the viewer, geom ids, #rrggbb}
+            url = req["url"]
+            if not url.startswith(("/jobs/", "/repo/")) or not url.endswith(".xml"):
+                raise PermissionError(url)
+            count, changed = set_printed(self.local_path(url), req["geoms"], req["color"])
+            return self.send_json({"printed": count, "changed": changed})
         if path == "/api/jobs":
             job_id = uuid.uuid4().hex[:12]
             (JOBS / job_id / "input").mkdir(parents=True)
@@ -306,17 +494,15 @@ class Handler(SimpleHTTPRequestHandler):
         return found
 
     def local_path(self, url_path):
-        for prefix, base in STATIC.items():
-            if url_path.startswith(prefix):
-                return safe_join(base, url_path[len(prefix):])
-        raise PermissionError(url_path)
+        return local_path(url_path)
 
     def send_file(self, path):
         if not path.is_file():
             raise FileNotFoundError(path.name)
         types = {".js": "text/javascript", ".mjs": "text/javascript", ".wasm": "application/wasm",
                  ".html": "text/html", ".css": "text/css", ".json": "application/json", ".xml": "text/xml",
-                 ".urdf": "text/xml", ".svg": "image/svg+xml", ".png": "image/png"}
+                 ".urdf": "text/xml", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg",
+                 ".webp": "image/webp", ".glb": "model/gltf-binary"}
         self.send_bytes(path.read_bytes(), types.get(path.suffix.lower(), "application/octet-stream"))
 
     def send_zip(self, job):
@@ -343,6 +529,8 @@ if __name__ == "__main__":
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8010
     if not (ROOT / "node_modules/@mujoco/mujoco").is_dir():
         sys.exit("node_modules missing: run npm install in the repository first")
+    JOBS = Path(tempfile.mkdtemp(prefix="mjcf-converter-"))
+    STATIC["/jobs/"] = JOBS
     print(f"MJCF converter on http://localhost:{port}/   (work folder {JOBS})")
     try:
         ThreadingHTTPServer(("127.0.0.1", port), Handler).serve_forever()

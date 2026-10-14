@@ -1,3 +1,5 @@
+import { createSummonDemo } from './summon-demo.js';
+import { createThumbnail } from './thumbnail.js';
 import { createMjcfViewer, createUrdfViewer } from './viewers.js';
 
 const $ = (id) => document.getElementById(id);
@@ -12,10 +14,26 @@ const viewers = {
   urdf: createUrdfViewer($('pane-urdf'), viewerUi('urdf')),
   mjcf: createMjcfViewer($('pane-mjcf'), viewerUi('mjcf')),
 };
+createSummonDemo(viewers.mjcf, {
+  toggle: $('demoToggle'), stage: $('demoStage'), panel: $('demoPanel'), joints: $('mjcfJoints'), done: $('demoDone'),
+  viewerControls: [$('play'), $('mjcfReset'), $('mjcfCollision'), $('thumbToggle')],
+  size: $('demoSize'), sizeOut: $('demoSizeOut'), sizeNote: $('demoSizeNote'), compare: $('demoCompare'),
+  variant: $('demoVariant'), turn: $('demoTurn'), partsBox: $('demoParts'), noParts: $('demoNoParts'),
+  similar: $('demoSimilar'), highlight: $('demoHighlight'), color: $('demoColor'), none: $('demoNone'),
+  revert: $('demoRevert'), count: $('demoCount'), save: $('demoSave'), status: $('demoStatus'), list: $('demoList'),
+  poseList: $('demoPoseList'), poseCount: $('demoPoseCount'), poseReset: $('demoPoseReset'),
+});
+createThumbnail(viewers.mjcf, {
+  toggle: $('thumbToggle'), pane: $('pane-mjcf'), toolbar: $('mjcfToolbar'), joints: $('mjcfJoints'),
+  frame: $('thumbFrame'), bar: $('thumbBar'), preview: $('thumbPreview'), note: $('thumbNote'), status: $('thumbStatus'),
+  capture: $('thumbCapture'), save: $('thumbSave'), download: $('thumbDownload'), close: $('thumbClose'),
+  others: [$('demoToggle')],
+});
 
 let types = [];
 let type = null; // the selected description type
 let job = null; // { id, files: [relative paths] }
+let coppelia = { path: '', found: false }; // where the server looks for CoppeliaSim
 
 // ------------------------------------------------------------ tabs and viewers
 
@@ -69,7 +87,7 @@ function refreshMain() {
     $('typeHint').textContent = `No ${type.ext.join(' / ')} file among the uploaded files.`;
     $('typeHint').classList.add('warn');
   }
-  $('convert').disabled = !list.length || !!type.unavailable;
+  $('convert').disabled = !list.length || !!type.unavailable || (type.id === 'coppeliasim' && !coppelia.found);
   if (!$('name').value && list.length) $('name').placeholder = baseName(select.value);
 }
 
@@ -85,6 +103,32 @@ function preview() {
   if (type.id === 'mjcf') view('mjcf', url);
 }
 $('main').onchange = () => { refreshMain(); preview(); };
+
+// ------------------------------------------------------------ CoppeliaSim folder
+
+function showCoppelia(info) {
+  coppelia = info;
+  $('coppeliaPath').value = info.path;
+  const hint = $('coppeliaHint');
+  const from = { page: '', COPPELIASIM_ROOT: ' (from $COPPELIASIM_ROOT)', default: ' (the default)' }[info.source] ?? '';
+  hint.textContent = info.found ? `Found CoppeliaSim${from}.` : `No coppeliaSim.sh in this folder${from}. Enter where CoppeliaSim is installed.`;
+  hint.className = `hint ${info.found ? 'ok' : 'warn'}`;
+  if (type) refreshMain();
+}
+
+// The server checks the folder and remembers it for next time.
+async function setCoppelia() {
+  try {
+    showCoppelia(await api('/api/coppeliasim', { method: 'POST', body: JSON.stringify({ path: $('coppeliaPath').value }) }));
+  } catch (e) {
+    coppelia = { ...coppelia, found: false };
+    $('coppeliaHint').textContent = e.message;
+    $('coppeliaHint').className = 'hint warn';
+    refreshMain();
+  }
+}
+$('coppeliaSet').onclick = (e) => { e.preventDefault(); setCoppelia(); };
+$('coppeliaPath').onkeydown = (e) => { if (e.key === 'Enter') setCoppelia(); };
 
 // ------------------------------------------------------------ uploads
 
@@ -246,6 +290,7 @@ $('library').onchange = (e) => {
 // ------------------------------------------------------------ start
 
 types = await api('/api/types');
+showCoppelia(await api('/api/coppeliasim'));
 $('types').replaceChildren(...types.map((t) => {
   const b = document.createElement('button');
   b.className = t.unavailable ? 'type off' : 'type';

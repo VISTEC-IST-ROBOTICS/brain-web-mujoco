@@ -20,18 +20,45 @@ MODEL = "assets/my_robot.xml"  # relative to public/
 # BUTTONS = [{"label": "Grip", "key": "KeyG", "toggle": True}]
 # VISUALS = "assets/my_robot_visual.glb"
 # BODY_COLOR = "#2b2b2b"
+# SUMMON_SIZE = 1.0                        # summon page: its longest side on the pedestal (set it with the converter's Summon demo)
+# SUMMON_POSE = {"joint_name": 0.5}        # summon page: joints posed differently from the start pose (same tool)
 
 
 class Controller:
     rate = 50  # control ticks per simulated second
 
     def __init__(self, robot):
-        # robot.actuators / robot.joints / robot.sensors: names from the XML
-        pass
+        # robot (simbot.RobotInfo), names as written in the XML:
+        #   robot.actuators   [name, ...] in model order: the keys step() may return
+        #   robot.joints      [name, ...] hinge/slide joints: the keys of obs.qpos / obs.qvel
+        #   robot.sensors     [name, ...]: the keys of obs.sensors
+        #   robot.ctrl_range  {actuator name: (low, high)} for actuators with a ctrlrange
+        self.robot = robot
 
     def reset(self):
+        # Optional: called at start and whenever the simulation resets (R key).
         pass
 
     def step(self, obs):
-        # obs.joy.left_y / right_x / right_y, obs.qpos, obs.qvel, obs.sensors, ...
-        return {}  # {actuator name: control value}
+        # Called `rate` times per simulated second. obs (simbot.Observation):
+        #   obs.time          simulated seconds since reset
+        #   obs.joy.left_y    -1..1 forward/back: Up/Down, W/S, gamepad left stick
+        #   obs.joy.right_x   -1..1 right/left: Right/Left, D/A, gamepad right stick
+        #   obs.joy.right_y   -1..1 up/down: Q/E, gamepad right stick
+        #   obs.joy.keys      set of held key codes, e.g. {"Space", "KeyJ", "Digit1"}
+        #   obs.joy.toggled   set of BUTTONS toggle keys that are switched on
+        #   obs.qpos          {joint name: position} in rad (hinge) or m (slide)
+        #   obs.qvel          {joint name: velocity} in rad/s or m/s
+        #   obs.sensors       {sensor name: value}: a float, or a tuple for multi-value sensors
+        #   obs.base_pos      (x, y, z) of the root body, if it has a free joint (else None)
+        #   obs.base_quat     its orientation (w, x, y, z) (else None)
+        #   obs.base_vel      its (vx, vy, vz, wx, wy, wz): world linear, body angular (else None)
+        #   obs.watching      True in Watch mode (the joy sticks are then WATCH_INPUT)
+        #   obs.speed         speed multiplier, 1 = normal (SPEED_RANGE slider / DRIVE_SPEED)
+        #
+        # Return {actuator name: control value}. The value means whatever the
+        # actuator is in the XML (a <position> target in rad/m, a <motor>
+        # torque/force, ...). Actuators left out keep their last value; an
+        # unknown name raises KeyError. Values aren't clamped here; MuJoCo
+        # clamps them to the actuator's ctrlrange if it has one.
+        return {}

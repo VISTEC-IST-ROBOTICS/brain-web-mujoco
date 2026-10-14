@@ -8,3 +8,4 @@ dist/
 *.log
 
 my_robot/
+assets_src/

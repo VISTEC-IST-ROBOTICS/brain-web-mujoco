@@ -25,6 +25,14 @@ export const pythonRobotNames = Object.keys(sources).filter((n) => !n.startsWith
 export const pythonRobotCards = pythonRobotNames.map((name) => {
   const src = sources[name];
   const constant = (key) => src.match(new RegExp(`^${key}\\s*=\\s*(["'])(.*?)\\1`, 'm'))?.[2];
+  const number = (key) => Number(src.match(new RegExp(`^${key}\\s*=\\s*([0-9.]+)`, 'm'))?.[1]) || undefined;
+  const json = (key) => {
+    try {
+      return JSON.parse(src.match(new RegExp(`^${key}\\s*=\\s*(\\{.*\\})`, 'm'))?.[1] ?? 'null') ?? undefined;
+    } catch {
+      return undefined; // not a one-line {"name": number} dict
+    }
+  };
   const flag = (key) => new RegExp(`^${key}\\s*=\\s*True\\b`, 'm').test(src);
   const defined = (key) => new RegExp(`^${key}\\s*=\\s*[^N\\s]`, 'm').test(src); // set, and not to None
   const doc = src.match(/^\s*(?:"{3}|'{3})([\s\S]*?)(?:\n\s*\n|"{3}|'{3})/)?.[1].replace(/\s+/g, ' ').trim();
@@ -35,6 +43,8 @@ export const pythonRobotCards = pythonRobotNames.map((name) => {
     thumbnail: constant('THUMBNAIL'),
     model: constant('MODEL'),
     visuals: constant('VISUALS'),
+    summonSize: number('SUMMON_SIZE'), // the summon page's size for it (longest side; default 1)
+    summonPose: json('SUMMON_POSE'), // and its pose there: { joint name: value } over its start pose
     controllable: flag('USER_CONTROL'),
     watchable: flag('USER_CONTROL') && defined('WATCH_INPUT'),
     hidden: flag('HIDDEN'), // work in progress: left out of the menu, ?robot=<name> still opens it

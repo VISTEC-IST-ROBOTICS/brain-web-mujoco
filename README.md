@@ -71,8 +71,8 @@ uv run python tools/coppeliasim/urdf_to_mjcf.py assets_src/Robot/urdf/Robot.urdf
 
 **2. Clean up the model** and copy it to `public/assets/<name>/`. Check the
 masses, remove joints the robot doesn't use, make sure the feet collide,
-put collision shapes in `group="3"`, and shrink the meshes with
-`tools/stl_to_msh.py`.
+and shrink the meshes with `tools/stl_to_msh.py`. (The converters already put
+collision shapes in `group="3"`, which the page hides behind the visual meshes.)
 
 **3. Check that it stands** with the do-nothing template:
 
@@ -86,7 +86,8 @@ It gets joystick input, joint positions and velocities, sensors and the
 body's pose in `obs`, and returns actuator targets.
 
 **5. Give it a menu card** (`TITLE`, `DESCRIPTION`, a thumbnail in
-`public/assets/thumbs/`), then test and push:
+`public/assets/thumbs/`, which the converter page's **Thumbnail** makes),
+then test and push:
 
 ```sh
 uv run python python/test_robots.py

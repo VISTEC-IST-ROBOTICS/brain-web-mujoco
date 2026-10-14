@@ -7,30 +7,39 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import URDFLoader from 'urdf-loader';
 import loadMujoco from '@mujoco/mujoco';
 import { buildGeoms, hasFloor, syncGeoms } from '/src/render/geoms.js';
+import { addLogoSign } from '/src/render/logo.js';
+import { addSimulatorLights } from '/src/render/view.js';
+import { attachVisuals, loadVisuals, syncBodies } from '/src/render/visuals.js';
 
 // A Z-up three.js scene drawn into a pane, only while the pane is visible.
+// simulatorLook: the robot page's background, lights, shadows and camera
+// lens (src/render/view.js), so the MJCF view and its thumbnails match it.
 class Stage {
-  constructor(pane) {
+  constructor(pane, { simulatorLook = false } = {}) {
     this.pane = pane;
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x14181e);
-    this.camera = new THREE.PerspectiveCamera(45, 1, 0.005, 200);
+    this.camera = new THREE.PerspectiveCamera(simulatorLook ? 50 : 45, 1, 0.005, 200);
     this.camera.up.set(0, 0, 1); // URDF and MuJoCo are both Z-up
     this.camera.position.set(1, -1.2, 0.8);
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.renderer.setPixelRatio(window.devicePixelRatio);
-    this.renderer.toneMapping = THREE.NeutralToneMapping;
     pane.prepend(this.renderer.domElement);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
 
-    const pmrem = new THREE.PMREMGenerator(this.renderer);
-    this.scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-    this.scene.environmentIntensity = 0.45;
-    this.scene.add(new THREE.HemisphereLight(0xbfd8ff, 0x333333, 0.6));
-    const sun = new THREE.DirectionalLight(0xffffff, 2);
-    sun.position.set(1.5, -2, 3);
-    this.scene.add(sun);
+    if (simulatorLook) {
+      addSimulatorLights(this.scene, this.renderer);
+    } else {
+      this.scene.background = new THREE.Color(0x14181e);
+      this.renderer.toneMapping = THREE.NeutralToneMapping;
+      const pmrem = new THREE.PMREMGenerator(this.renderer);
+      this.scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+      this.scene.environmentIntensity = 0.45;
+      this.scene.add(new THREE.HemisphereLight(0xbfd8ff, 0x333333, 0.6));
+      const sun = new THREE.DirectionalLight(0xffffff, 2);
+      sun.position.set(1.5, -2, 3);
+      this.scene.add(sun);
+    }
     this.grid = new THREE.GridHelper(10, 100, 0x3a4656, 0x252d38);
     this.grid.rotation.x = Math.PI / 2;
     this.scene.add(this.grid);
@@ -41,7 +50,7 @@ class Stage {
     this.renderer.setAnimationLoop((now) => {
       const dt = Math.min((now - last) / 1000, 1 / 30);
       last = now;
-      if (pane.hidden) return;
+      if (pane.hidden || this.paused) return; // paused: something else is drawn over the pane
       this.onFrame(dt);
       this.controls.update();
       this.renderer.render(this.scene, this.camera);
@@ -54,6 +63,26 @@ class Stage {
     this.renderer.setSize(w, h, false);
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();
+  }
+
+  // The part `rect` ({ x, y, w, h } in pane pixels) of the current view,
+  // drawn at width x height pixels into a new 2D canvas (for thumbnails).
+  snapshot(rect, width, height) {
+    const { clientWidth: pw, clientHeight: ph } = this.pane;
+    const camera = this.camera.clone();
+    camera.aspect = pw / ph;
+    camera.setViewOffset(pw, ph, rect.x, rect.y, rect.w, rect.h);
+    const ratio = this.renderer.getPixelRatio();
+    this.renderer.setPixelRatio(1);
+    this.renderer.setSize(width, height, false);
+    this.renderer.render(this.scene, camera);
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    canvas.getContext('2d').drawImage(this.renderer.domElement, 0, 0);
+    this.renderer.setPixelRatio(ratio);
+    this.resize();
+    return canvas;
   }
 
   // Points the camera at a box, from the front-right and a little above.
@@ -212,7 +241,7 @@ let mujocoReady = null;
 
 // The model file plus every file it references (meshes, textures, height fields, skins and
 // <include>d files), as { path relative to the model's folder: bytes }.
-async function fetchModelTree(url) {
+export async function fetchModelTree(url) {
   const base = new URL(url, location.href);
   const files = {};
   const errors = [];
@@ -250,7 +279,7 @@ async function fetchModelTree(url) {
 }
 
 let compiled = 0;
-function compile(mujoco, { main, files }) {
+export function compile(mujoco, { main, files }) {
   const { FS } = mujoco;
   const dir = `/converter/${compiled++}`;
   const paths = Object.keys(files).map((rel) => `${dir}/${rel}`);
@@ -266,7 +295,8 @@ function compile(mujoco, { main, files }) {
 }
 
 export function createMjcfViewer(pane, ui) {
-  const stage = new Stage(pane);
+  const stage = new Stage(pane, { simulatorLook: true });
+  let logo = null; // the lab logo sign the robot page shows behind models with a floor
   let mujoco = null;
   let model = null;
   let data = null;
@@ -274,14 +304,22 @@ export function createMjcfViewer(pane, ui) {
   let joints = [];
   let rows = [];
   let playing = false;
+  let url = null;
+  let info = {}; // from /api/robot: { robot: its python/robots file's settings, or null, visuals }
+  let bodies = []; // the VISUALS meshes, one group per body (src/render/visuals.js)
+  const listeners = { load: [], clear: [] };
 
   const isCollision = (i) => model.geom_group[i] === 3 || model.geom_contype[i] || model.geom_conaffinity[i];
   const isVisualOnly = (i) => model.geom_type[i] !== mjGEOM_PLANE && !isCollision(i);
 
+  // Looks apart from the collision shapes: a VISUALS file, or visual-only geoms
+  const hasVisuals = () => bodies.length > 0 || meshes.some((m, i) => m && isVisualOnly(i));
+
   function showCollision() {
-    const hasVisuals = meshes.some((m, i) => m && isVisualOnly(i));
-    ui.collision.disabled = !hasVisuals;
-    if (!hasVisuals) ui.collision.checked = true;
+    const visuals = hasVisuals();
+    ui.collision.disabled = !visuals;
+    ui.collision.parentElement.title = visuals ? '' : 'No visual meshes: the collision shapes are its looks';
+    if (!visuals) ui.collision.checked = true;
     meshes.forEach((m, i) => {
       if (m && model.geom_type[i] !== mjGEOM_PLANE && isCollision(i)) m.visible = ui.collision.checked;
     });
@@ -327,14 +365,31 @@ export function createMjcfViewer(pane, ui) {
       for (let s = 0; s < steps; s++) mujoco.mj_step(model, data);
     }
     syncGeoms(model, data, meshes);
+    syncBodies(data, bodies);
     joints.forEach((j, k) => rows[k].show(data.qpos[j.qadr]));
   };
 
   return {
+    stage,
+    // What the part painter (painter.js) works on: null when no model is shown. The parts are the
+    // geoms it draws, without the floor, and only the visual meshes when it has some.
+    // robot: its python/robots file's settings (or null); visuals: its VISUALS file's URL (or null)
+    get target() {
+      if (!model) return null;
+      return { mujoco, model, url, robot: info.robot, visuals: info.visuals };
+    },
+    pause() { setPlaying(false); },
+    on(event, fn) { listeners[event].push(fn); }, // 'load': a model is shown; 'clear': it is going
+
     clear() {
+      listeners.clear.forEach((fn) => fn());
+      url = null;
       setPlaying(false);
       meshes.forEach((m) => { if (m) { stage.scene.remove(m); disposeTree(m); } });
+      bodies.forEach(({ group }) => { stage.scene.remove(group); disposeTree(group); });
       meshes = [];
+      bodies = [];
+      info = {};
       data?.delete?.();
       model?.delete?.();
       model = data = null;
@@ -345,11 +400,11 @@ export function createMjcfViewer(pane, ui) {
       ui.empty.hidden = false;
     },
 
-    async load(url) {
+    async load(modelUrl) {
       this.clear();
       ui.empty.textContent = 'Loading MuJoCo…';
       mujoco = await (mujocoReady ??= loadMujoco());
-      const tree = await fetchModelTree(url);
+      const tree = await fetchModelTree(modelUrl);
       try {
         model = compile(mujoco, tree);
       } catch (e) {
@@ -357,13 +412,35 @@ export function createMjcfViewer(pane, ui) {
       }
       data = new mujoco.MjData(model);
       meshes = buildGeoms(mujoco, model, stage.scene);
+      // Its VISUALS meshes, as the site draws them (e.g. the Gecko's): from its robot file, or a
+      // <name>_visual.glb next to it
+      info = await fetch(`/api/robot?url=${encodeURIComponent(modelUrl)}`).then((r) => r.json()).catch(() => ({}));
+      if (info.visuals) {
+        try {
+          bodies = attachVisuals(mujoco, model, await loadVisuals(info.visuals), stage.scene);
+        } catch (e) {
+          console.warn(`Could not load ${info.visuals}:`, e);
+        }
+      }
+      // The robot page's default colour: BODY_COLOR from its robot file on the 'printed' parts
+      // (src/paint.js; without it they keep the material's colour)
+      const bodyColor = info.robot?.bodyColor;
+      if (bodyColor) {
+        [...meshes, ...bodies.map((b) => b.group)].forEach((o) => o?.traverse((m) => {
+          if (m.isMesh && m.material.name === 'printed') m.material.color.set(bodyColor);
+        }));
+      }
       stage.grid.visible = !hasFloor(model);
+      logo ??= addLogoSign(stage.scene, stage.renderer);
+      logo.visible = hasFloor(model);
       showCollision();
       reset();
       syncGeoms(model, data, meshes);
 
       const box = new THREE.Box3();
-      meshes.forEach((m, i) => { if (m && model.geom_type[i] !== mjGEOM_PLANE) box.expandByObject(m, true); });
+      syncBodies(data, bodies);
+      meshes.forEach((m, i) => { if (m && m.visible && model.geom_type[i] !== mjGEOM_PLANE) box.expandByObject(m, true); });
+      bodies.forEach(({ group }) => box.expandByObject(group, true));
       stage.frame(box);
 
       joints = [];
@@ -400,6 +477,8 @@ export function createMjcfViewer(pane, ui) {
       ui.info.textContent = `${model.nbody - 1} bodies · ${joints.length} joints · ${model.nu} actuators · ${mass.toPrecision(3)} kg`;
       ui.info.hidden = false;
       ui.empty.hidden = true;
+      url = modelUrl;
+      listeners.load.forEach((fn) => fn());
     },
   };
 }

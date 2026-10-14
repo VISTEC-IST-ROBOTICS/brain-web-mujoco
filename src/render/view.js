@@ -40,7 +40,6 @@ export function createView(mujoco, { model, data }, gltfScene, cameraView) {
 
 function setupScene(view) {
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x1a1f26);
 
   const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.01, 100);
   camera.up.set(0, 0, 1); // MuJoCo worlds are Z-up; three's default camera up is Y
@@ -52,11 +51,6 @@ function setupScene(view) {
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
-  // Neutral keeps model colours close to their rgba (ACES filmic desaturates
-  // and shifts saturated colours).
-  renderer.toneMapping = THREE.NeutralToneMapping;
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   document.getElementById('app').appendChild(renderer.domElement);
   window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -64,14 +58,29 @@ function setupScene(view) {
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.target.set(...view.target);
+  controls.enableDamping = true;
+
+  const sun = addSimulatorLights(scene, renderer);
+  return { scene, camera, renderer, controls, sun };
+}
+
+// The robot page's look: background, tone mapping, reflections, and lights
+// with a shadow-casting sun (returned). Also used by the converter page
+// (tools/converter), so its thumbnails match the robot page.
+export function addSimulatorLights(scene, renderer) {
+  scene.background = new THREE.Color(0x1a1f26);
+  // Neutral keeps model colours close to their rgba (ACES filmic desaturates
+  // and shifts saturated colours).
+  renderer.toneMapping = THREE.NeutralToneMapping;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
   // Soft studio reflections so metal/plastic parts read as 3D shapes.
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
   scene.environmentIntensity = 0.45;
-
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.target.set(...view.target);
-  controls.enableDamping = true;
 
   scene.add(new THREE.HemisphereLight(0xbfd8ff, 0x333333, 0.5));
   const sun = new THREE.DirectionalLight(0xffffff, 2.2); // strong key light for MuJoCo-like shading
@@ -85,8 +94,7 @@ function setupScene(view) {
   sun.shadow.bias = -0.0005;
   sun.shadow.normalBias = 0.01;
   scene.add(sun, sun.target);
-
-  return { scene, camera, renderer, controls, sun };
+  return sun;
 }
 
 // Keeps the robot in view: translates the given points (camera, orbit target,

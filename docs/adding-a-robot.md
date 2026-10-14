@@ -123,7 +123,7 @@ placeholder inertia on 0 links; 18 actuators`. What the converter does:
   any, check those links: they need real masses.
 - Keeps visual meshes and collision shapes apart: meshes become visual-only
   geoms (`group="1"`, no contacts), CoppeliaSim's pure (primitive) shapes do
-  the colliding.
+  the colliding, in `group="3"` so the page hides them behind the meshes.
 - Gives the root body a free joint (`--fixed-base` for a robot bolted to the
   world, like an arm).
 - Adds a position actuator per hinge/slide joint, named after the joint,
@@ -190,17 +190,21 @@ the MORF or Red Mirror models needed.
   non-colliding, which the converter keeps as `contype="0" conaffinity="0"`.
   Red Mirror's `FOOT_*` spheres had this and its legs sank through the
   floor. Remove those two attributes from the foot geoms.
-- [ ] **Hide the collision shapes in the web page.** If the robot has visual
-  meshes, add `group="3"` to the collision geoms (the primitive boxes,
-  cylinders and spheres). The page hides group 3 when a model has visual
-  geoms, so you see the meshes and not the boxes. MuJoCo's desktop viewer
-  still shows group 3 (toggle it with the `3` key), which helps debugging.
+- [ ] **Collision shapes hidden in the web page.** The page hides group 3
+  when a model has visual geoms, so you see the meshes and not the boxes.
+  The converters put the colliding geoms in `group="3"` already; check it
+  stayed that way for any geom you add or edit by hand. MuJoCo's desktop
+  viewer still shows group 3 (toggle it with the `3` key), which helps
+  debugging.
 - [ ] **Body colour (optional).** To get the page's **Body** colour picker,
   give the shell parts one shared material named `printed`, in place of
-  their `rgba`. Add `<material name="printed" rgba="0.3 0 0 1"/>` to
-  `<asset>`, and use `material="printed"` on those geoms. MORF's leg
-  shells and Red Mirror's red links are done this way. The material's
-  colour is the default; `BODY_COLOR` in the `.py` overrides it.
+  their `rgba`. The easiest way is **Summon demo** on the converter page:
+  click the parts and save (see
+  [converter.md](converter.md#parts-that-change-colour)). By hand: add
+  `<material name="printed" rgba="0.3 0 0 1"/>` to `<asset>`, and use
+  `material="printed"` on those geoms. MORF's leg shells and Red Mirror's
+  red links are done this way. The material's colour is the default;
+  `BODY_COLOR` in the `.py` overrides it.
 - [ ] **Floor.** The converter's floor is fine; a simple coloured one also
   works: `<geom name="floor" type="plane" size="0 0 0.05" condim="3" rgba="0.2 0.3 0.4 1"/>`.
 - [ ] **Actuator strength.** The default `kp=10` suits robots of about 1 kg
@@ -355,8 +359,11 @@ THUMBNAIL = "assets/thumbs/hexbot.jpg"
 USER_CONTROL = True
 ```
 
-For the thumbnail, open the robot in the page, frame it nicely, take a
-screenshot, and save it as an ~800×500 JPEG in `public/assets/thumbs/`.
+For the thumbnail, use **Thumbnail** on the converter page: frame the
+robot, capture, and save, which also sets `THUMBNAIL` (see
+[converter.md](converter.md#card-thumbnail)). Or open the robot in the
+page, frame it nicely, take a screenshot, and save it as an ~800×500 JPEG
+in `public/assets/thumbs/`.
 
 Other optional settings, all described in [python/README.md](../python/README.md#controller-file):
 `CAMERA` (starting view; set it for robots much bigger or smaller than
@@ -399,6 +406,6 @@ want the conversion to be reproducible, but the page doesn't need them.
 | Legs jitter | `kv` too high for very light links, or `kp` too high for the timestep. Keep `integrator="implicitfast"`, lower `kv`/`kp`, or lower the timestep. |
 | Robot walks in circles | Open-loop drift or unequal friction: use `HeadingHold`, check the gait is symmetric. |
 | Gait much faster or slower than in CoppeliaSim | Controller `rate` doesn't match CoppeliaSim's step (default 20 Hz). |
-| Boxes drawn over the meshes in the page | Collision geoms not in `group="3"`. |
+| Boxes drawn over the meshes in the page | Collision geoms not in `group="3"`. Re-run the converter (or the MJCF type on the converter page), or set the group by hand. |
 | Robot missing from the menu | `HIDDEN = True`, file name starts with `_`, or `MODEL` points to a file that isn't in `public/` (the browser console says which). |
 | Page is slow to load the robot | Meshes too big: run `tools/stl_to_msh.py`, and simplify very dense meshes. |

@@ -6,8 +6,11 @@ const LOGO_URL = 'assets/brain_logo_v2.webp';
 // The lab logo on a white sign standing on the floor behind the start
 // position, facing the default camera, printed on both faces so it reads
 // correctly from either side. Visual only: physics never sees it, so robots
-// pass through it.
+// pass through it. Returns the group the sign appears in once the logo has
+// loaded.
 export function addLogoSign(scene, renderer) {
+  const holder = new THREE.Group();
+  scene.add(holder);
   const WIDTH = 2.0; // metres (height follows the logo's shape: ~0.37 m)
   const CENTER = [-0.2, 1.5]; // x, y of the sign's base
   const THICKNESS = 0.03;
@@ -47,7 +50,8 @@ export function addLogoSign(scene, renderer) {
     }
     sign.rotation.x = Math.PI / 2;
     sign.position.set(CENTER[0], CENTER[1], height / 2);
-    scene.add(sign);
+    holder.add(sign);
   };
   image.src = LOGO_URL;
+  return holder;
 }
