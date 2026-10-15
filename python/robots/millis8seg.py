@@ -22,11 +22,13 @@ import numpy as np
 
 TITLE = "MILLIS 8-Segment"
 USER_CONTROL = True  # driven with the keyboard / gamepad / touch joystick
-WATCH_INPUT = {"left_y": 1.0}  # Watch mode: walks straight ahead on its own
+WATCH_INPUT = {"left_y": 1.5}  # Watch mode: walks straight ahead on its own
 SPEED_RANGE = (0.25, 2.0)  # scales the CPG rate
 DESCRIPTION = "Eight-segment millipede robot walking a CPG-driven wave gait."
 THUMBNAIL = "assets/thumbs/millis8seg.png"
 MODEL = "assets/millis8seg/millis8seg.xml"  # relative to public/
+SUMMON_SIZE = 1.17  # the summon page's size for it: its longest side on the pedestal (default 1)
+SUMMON_POSE = {"Joint_BBH_s3": 0.7069, "Joint_BBH_s4": 0.8796, "Joint_BBH_s5": 0.6754, "Joint_BBH_s6": 0.7383, "Joint_BBH_s7": 0.7697, "Joint_BBH_s2": -0.5655}  # the summon page's pose: joint values over its start pose
 CAMERA = {"position": [1.0, -1.0, 0.7], "target": [0.3, 0, 0.05]}
 HELP = "Up/Down: walk · Left/Right: steer · [ / ]: CPG frequency · Gamepad: left stick walk, right stick steer"
 
