@@ -4,6 +4,7 @@
   <option integrator="implicitfast"/>
 
   <asset>
+    <material name="printed" rgba="0 0 0 1"/>
     <texture type="2d" colorspace="auto" name="grid" builtin="checker" rgb1="0.35 0.4 0.45" rgb2="0.25 0.3 0.35" width="512" height="512"/>
     <material name="grid" texture="grid" texrepeat="8 8" reflectance="0.1"/>
     <mesh name="MILLIS1SEG_base_link_visual_vis_1" file="MILLIS1SEG_base_link_visual_vis_1.msh"/>
@@ -24,7 +25,7 @@
       <joint type="free"/>
       <geom name="body_segment_1" size="0.02 0.065 0.0175" type="box" group="3"/>
       <geom size="0.02 0.0675 0.0175" pos="0 0.001 0" quat="0.707107 0 0 -0.707107" type="box" group="3"/>
-      <geom name="base_link_visual" pos="-0.003 0 0.004937" quat="0.65912 -0.265681 -0.655297 -0.256048" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 0 0 1" density="0" mesh="MILLIS1SEG_base_link_visual_vis_1"/>
+      <geom name="base_link_visual" pos="-0.003 0 0.004937" quat="0.65912 -0.265681 -0.655297 -0.256048" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_base_link_visual_vis_1" material="printed"/>
       <geom name="Accelerometer" pos="0 0.001 0" quat="0.703093 -0.0154266 -0.0152067 0.710768" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.323529 0.323529 0.676471 1" density="0" mesh="MILLIS1SEG_Accelerometer_vis_1"/>
       <body name="seg1_L1" pos="0.000768 0.052002 -0.025009" quat="3.26795e-07 1 0 0">
         <inertial pos="-0.001039 -0.026032 -0.024835" quat="0.512139 0.487824 -0.508534 0.491054" mass="0.514371" diaginertia="0.000745767 0.000607274 0.00056016"/>
@@ -32,12 +33,12 @@
         <geom name="Cuboid" size="0.016 0.0235 0.015" pos="-0.001987 -0.040141 -0.024224" quat="0.707107 0.707107 -2.44949e-07 0" type="box" group="3"/>
         <geom size="0.0325 0.015 0.0025" pos="-0.000769 -0.021998 -0.004009" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
         <geom size="0.0325 0.015 0.0025" pos="-0.000769 -0.021998 -0.046009" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
-        <geom name="Link_L1_visual" pos="0 -0.0006 0" quat="1 -1.73205e-07 -1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_L1_visual_vis_1"/>
+        <geom name="Link_L1_visual" pos="0 -0.0006 0" quat="1 -1.73205e-07 -1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_L1_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
         <body name="seg1_L2" pos="0 -0.04085 -0.011134" quat="0.5 0.5 0.5 0.5">
           <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001"/>
           <geom type="capsule" size="0.005" fromto="0 0.02 0 -0.023 0.061 0" friction="1.2 0.02 0.002" group="3"/>
           <joint name="Joint_L1_s1"/>
-          <geom name="Link_L2_visual" pos="0.000449 -0.000275 -0.0015" quat="-1.22475e-07 0.707107 1.22474e-07 0.707107" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_L2_visual_vis_1"/>
+          <geom name="Link_L2_visual" pos="0.000449 -0.000275 -0.0015" quat="-1.22475e-07 0.707107 1.22474e-07 0.707107" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_L2_visual_vis_1" material="printed"/>
         </body>
       </body>
       <body name="seg1_R1" pos="0.000768 -0.051992 -0.023854" quat="0 -3.26795e-07 -1 3.26795e-07">
@@ -46,12 +47,12 @@
         <geom size="0.0325 0.015 0.0025" pos="0.000769 -0.021008 -0.002854" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
         <geom size="0.016 0.0235 0.015" pos="-0.00045 -0.039152 -0.023069" quat="-0.707107 -0.707107 0 -2.44949e-07" type="box" group="3"/>
         <geom size="0.0325 0.015 0.0025" pos="0.000769 -0.021008 -0.044854" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
-        <geom name="Link_R1_visual" pos="0 0.0006 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_R1_visual_vis_1"/>
+        <geom name="Link_R1_visual" pos="0 0.0006 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_R1_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
         <body name="seg1_R2" pos="0.00237 -0.04009 -0.01156" quat="0.5 0.5 -0.5 -0.5">
           <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001"/>
           <geom type="capsule" size="0.005" fromto="0 0.02 0 0.012 0.061 0.005" friction="1.2 0.02 0.002" group="3"/>
           <joint name="Joint_R1_s1"/>
-          <geom name="Link_R2_visual" pos="0 0 0.00177" quat="-1.22475e-07 0.707107 -1.22474e-07 -0.707107" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_R2_visual_vis_1"/>
+          <geom name="Link_R2_visual" pos="0 0 0.00177" quat="-1.22475e-07 0.707107 -1.22474e-07 -0.707107" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_R2_visual_vis_1" material="printed"/>
         </body>
       </body>
       <body name="seg1_BBV" pos="-0.056761 0 0.001401" quat="0.434223 0.429215 0.557252 -0.562756">
@@ -60,19 +61,19 @@
         <geom size="0.0025 0.0265 0.015" pos="0.004611 -0.02385 -0.001004" quat="-0.562756 -0.557252 0.429215 0.434223" type="box" group="3"/>
         <geom size="0.0025 0.02 0.015" pos="0.000279 -0.006398 0.02301" quat="0.704971 0.0905358 -0.697538 0.0908864" type="box" group="3"/>
         <geom size="0.0025 0.02 0.015" pos="-0.000218 -0.006487 -0.024987" quat="0.704971 0.0905358 -0.697538 0.0908864" type="box" group="3"/>
-        <geom name="Link_BBV_visual" pos="-0.000244 -4.3e-05 -0.023525" quat="0.991723 -0.000248006 0.00525592 0.128285" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_BBV_visual_vis_1"/>
+        <geom name="Link_BBV_visual" pos="-0.000244 -4.3e-05 -0.023525" quat="0.991723 -0.000248006 0.00525592 0.128285" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_BBV_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
         <body name="seg2_BBH" pos="0.040165 -0.045102 -0.000333" quat="0.0905363 -0.704971 -0.0908868 -0.697538">
           <inertial pos="0 -0.013599 -0.022301" quat="0.0105759 0.707028 0.0105759 0.707028" mass="0.3" diaginertia="0.000439118 0.000419049 0.000358167"/>
           <geom size="0.0025 0.02 0.015" pos="0 -0.007599 -0.001967" quat="0.707107 0 -0.707107 0" type="box" group="3"/>
           <geom size="0.0025 0.0225 0.015" pos="0 -0.025599 -0.021967" quat="-0.5 -0.5 0.5 0.5" type="box" group="3"/>
           <geom size="0.0025 0.02 0.015" pos="0 -0.007599 -0.042967" quat="0.707107 0 -0.707107 0" type="box" group="3"/>
-          <geom pos="-0.0002 -0.0018 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_BBH_visual_vis_1"/>
+          <geom pos="-0.0002 -0.0018 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_BBH_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
           <body name="seg2_body">
             <inertial pos="-0.0005 0.054902 -0.025967" quat="0.5 0.5 0.5 0.5" mass="5" diaginertia="0.00833458 0.00833458 0.00833333"/>
             <joint name="Joint_BBH_s2" axis="0 0 -1"/>
             <geom size="0.02 0.065 0.0175" pos="0 0.054901 -0.025968" quat="2.31079e-07 0.707107 -0.707107 4.76028e-07" type="box" group="3"/>
             <geom size="0.02 0.0675 0.0175" pos="-0.001 0.054901 -0.025967" quat="3.26795e-07 1 0 0" type="box" group="3"/>
-            <geom pos="0 0.057901 -0.030904" quat="-0.2755 0.647121 -0.285015 -0.651229" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 0 0 1" density="0" mesh="MILLIS1SEG_base_link_visual_vis_1"/>
+            <geom pos="0 0.057901 -0.030904" quat="-0.2755 0.647121 -0.285015 -0.651229" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_base_link_visual_vis_1" material="printed"/>
             <geom pos="-0.001 0.054901 -0.025967" quat="-0.000155979 0.00542745 0.999751 0.0216603" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.323529 0.323529 0.676471 1" density="0" mesh="MILLIS1SEG_Accelerometer_vis_1"/>
             <body name="seg2_L1" pos="-0.052002 0.054133 -0.000958" quat="0.707107 -7.07107e-07 0 -0.707107">
               <inertial pos="-0.001039 -0.026032 -0.024835" quat="0.512139 0.487824 -0.508534 0.491054" mass="0.514371" diaginertia="0.000745767 0.000607274 0.00056016"/>
@@ -80,12 +81,12 @@
               <geom size="0.016 0.0235 0.015" pos="-0.001987 -0.040141 -0.024224" quat="0.707107 0.707107 -2.44949e-07 0" type="box" group="3"/>
               <geom size="0.0325 0.015 0.0025" pos="-0.000769 -0.021998 -0.004009" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
               <geom size="0.0325 0.015 0.0025" pos="-0.000769 -0.021998 -0.046009" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
-              <geom pos="0 -0.0006 0" quat="1 -1.73205e-07 -1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_L1_visual_vis_1"/>
+              <geom pos="0 -0.0006 0" quat="1 -1.73205e-07 -1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_L1_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
               <body name="seg2_L2" pos="0 -0.04085 -0.011134" quat="0.5 0.5 0.5 0.5">
                 <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001"/>
                 <geom type="capsule" size="0.005" fromto="0 0.02 0 -0.023 0.061 0" friction="1.2 0.02 0.002" group="3"/>
                 <joint name="Joint_L1_s2"/>
-                <geom pos="0.000449 -0.000275 -0.0015" quat="-1.22475e-07 0.707107 1.22474e-07 0.707107" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_L2_visual_vis_1"/>
+                <geom pos="0.000449 -0.000275 -0.0015" quat="-1.22475e-07 0.707107 1.22474e-07 0.707107" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_L2_visual_vis_1" material="printed"/>
               </body>
             </body>
             <body name="seg2_R1" pos="0.051992 0.054133 -0.002113" quat="0.707107 3.53553e-07 3.53553e-07 0.707107">
@@ -94,12 +95,12 @@
               <geom size="0.0325 0.015 0.0025" pos="0.000769 -0.021008 -0.002854" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
               <geom size="0.016 0.0235 0.015" pos="-0.00045 -0.039152 -0.023069" quat="-0.707107 -0.707107 0 -2.44949e-07" type="box" group="3"/>
               <geom size="0.0325 0.015 0.0025" pos="0.000769 -0.021008 -0.044854" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
-              <geom pos="0 0.0006 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_R1_visual_vis_1"/>
+              <geom pos="0 0.0006 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_R1_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
               <body name="seg2_R2" pos="0.00237 -0.04009 -0.01156" quat="0.5 0.5 -0.5 -0.5">
                 <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001"/>
                 <geom type="capsule" size="0.005" fromto="0 0.02 0 0.012 0.061 0.005" friction="1.2 0.02 0.002" group="3"/>
                 <joint name="Joint_R1_s2"/>
-                <geom pos="0 0 0.00177" quat="-1.22475e-07 0.707107 -1.22474e-07 -0.707107" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_R2_visual_vis_1"/>
+                <geom pos="0 0 0.00177" quat="-1.22475e-07 0.707107 -1.22474e-07 -0.707107" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_R2_visual_vis_1" material="printed"/>
               </body>
             </body>
             <body name="seg2_BBV" pos="0 0.111663 -0.027368" quat="0.0905366 0.704971 0.0908867 0.697538">
@@ -108,19 +109,19 @@
               <geom size="0.0025 0.0265 0.015" pos="0.004611 -0.02385 -0.001004" quat="-0.562756 -0.557252 0.429215 0.434223" type="box" group="3"/>
               <geom size="0.0025 0.02 0.015" pos="0.000279 -0.006398 0.02301" quat="0.704971 0.0905358 -0.697538 0.0908864" type="box" group="3"/>
               <geom size="0.0025 0.02 0.015" pos="-0.000218 -0.006487 -0.024987" quat="0.704971 0.0905358 -0.697538 0.0908864" type="box" group="3"/>
-              <geom pos="-0.000244 -4.3e-05 -0.023525" quat="0.991723 -0.000248006 0.00525592 0.128285" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_BBV_visual_vis_1"/>
+              <geom pos="-0.000244 -4.3e-05 -0.023525" quat="0.991723 -0.000248006 0.00525592 0.128285" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_BBV_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
               <body name="seg3_BBH" pos="0.040165 -0.045102 -0.000333" quat="0.0905363 -0.704971 -0.0908868 -0.697538">
                 <inertial pos="0 -0.013599 -0.022301" quat="0.0105759 0.707028 0.0105759 0.707028" mass="0.3" diaginertia="0.000439118 0.000419049 0.000358167"/>
                 <geom size="0.0025 0.02 0.015" pos="0 -0.007599 -0.001967" quat="0.707107 0 -0.707107 0" type="box" group="3"/>
                 <geom size="0.0025 0.0225 0.015" pos="0 -0.025599 -0.021967" quat="-0.5 -0.5 0.5 0.5" type="box" group="3"/>
                 <geom size="0.0025 0.02 0.015" pos="0 -0.007599 -0.042967" quat="0.707107 0 -0.707107 0" type="box" group="3"/>
-                <geom pos="-0.0002 -0.0018 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_BBH_visual_vis_1"/>
+                <geom pos="-0.0002 -0.0018 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_BBH_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                 <body name="seg3_body">
                   <inertial pos="-0.0005 0.054902 -0.025967" quat="0.5 0.5 0.5 0.5" mass="5" diaginertia="0.00833458 0.00833458 0.00833333"/>
                   <joint name="Joint_BBH_s3" axis="0 0 -1"/>
                   <geom size="0.02 0.065 0.0175" pos="0 0.054901 -0.025968" quat="2.31079e-07 0.707107 -0.707107 4.76028e-07" type="box" group="3"/>
                   <geom size="0.02 0.0675 0.0175" pos="-0.001 0.054901 -0.025967" quat="3.26795e-07 1 0 0" type="box" group="3"/>
-                  <geom pos="0 0.057901 -0.030904" quat="-0.2755 0.647121 -0.285015 -0.651229" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 0 0 1" density="0" mesh="MILLIS1SEG_base_link_visual_vis_1"/>
+                  <geom pos="0 0.057901 -0.030904" quat="-0.2755 0.647121 -0.285015 -0.651229" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_base_link_visual_vis_1" material="printed"/>
                   <geom pos="-0.001 0.054901 -0.025967" quat="-0.000155979 0.00542745 0.999751 0.0216603" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.323529 0.323529 0.676471 1" density="0" mesh="MILLIS1SEG_Accelerometer_vis_1"/>
                   <body name="seg3_L1" pos="-0.052002 0.054133 -0.000958" quat="0.707107 -7.07107e-07 0 -0.707107">
                     <inertial pos="-0.001039 -0.026032 -0.024835" quat="0.512139 0.487824 -0.508534 0.491054" mass="0.514371" diaginertia="0.000745767 0.000607274 0.00056016"/>
@@ -128,12 +129,12 @@
                     <geom size="0.016 0.0235 0.015" pos="-0.001987 -0.040141 -0.024224" quat="0.707107 0.707107 -2.44949e-07 0" type="box" group="3"/>
                     <geom size="0.0325 0.015 0.0025" pos="-0.000769 -0.021998 -0.004009" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
                     <geom size="0.0325 0.015 0.0025" pos="-0.000769 -0.021998 -0.046009" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
-                    <geom pos="0 -0.0006 0" quat="1 -1.73205e-07 -1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_L1_visual_vis_1"/>
+                    <geom pos="0 -0.0006 0" quat="1 -1.73205e-07 -1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_L1_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                     <body name="seg3_L2" pos="0 -0.04085 -0.011134" quat="0.5 0.5 0.5 0.5">
                       <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001"/>
                       <geom type="capsule" size="0.005" fromto="0 0.02 0 -0.023 0.061 0" friction="1.2 0.02 0.002" group="3"/>
                       <joint name="Joint_L1_s3"/>
-                      <geom pos="0.000449 -0.000275 -0.0015" quat="-1.22475e-07 0.707107 1.22474e-07 0.707107" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_L2_visual_vis_1"/>
+                      <geom pos="0.000449 -0.000275 -0.0015" quat="-1.22475e-07 0.707107 1.22474e-07 0.707107" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_L2_visual_vis_1" material="printed"/>
                     </body>
                   </body>
                   <body name="seg3_R1" pos="0.051992 0.054133 -0.002113" quat="0.707107 3.53553e-07 3.53553e-07 0.707107">
@@ -142,12 +143,12 @@
                     <geom size="0.0325 0.015 0.0025" pos="0.000769 -0.021008 -0.002854" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
                     <geom size="0.016 0.0235 0.015" pos="-0.00045 -0.039152 -0.023069" quat="-0.707107 -0.707107 0 -2.44949e-07" type="box" group="3"/>
                     <geom size="0.0325 0.015 0.0025" pos="0.000769 -0.021008 -0.044854" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
-                    <geom pos="0 0.0006 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_R1_visual_vis_1"/>
+                    <geom pos="0 0.0006 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_R1_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                     <body name="seg3_R2" pos="0.00237 -0.04009 -0.01156" quat="0.5 0.5 -0.5 -0.5">
                       <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001"/>
                       <geom type="capsule" size="0.005" fromto="0 0.02 0 0.012 0.061 0.005" friction="1.2 0.02 0.002" group="3"/>
                       <joint name="Joint_R1_s3"/>
-                      <geom pos="0 0 0.00177" quat="-1.22475e-07 0.707107 -1.22474e-07 -0.707107" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_R2_visual_vis_1"/>
+                      <geom pos="0 0 0.00177" quat="-1.22475e-07 0.707107 -1.22474e-07 -0.707107" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_R2_visual_vis_1" material="printed"/>
                     </body>
                   </body>
                   <body name="seg3_BBV" pos="0 0.111663 -0.027368" quat="0.0905366 0.704971 0.0908867 0.697538">
@@ -156,19 +157,19 @@
                     <geom size="0.0025 0.0265 0.015" pos="0.004611 -0.02385 -0.001004" quat="-0.562756 -0.557252 0.429215 0.434223" type="box" group="3"/>
                     <geom size="0.0025 0.02 0.015" pos="0.000279 -0.006398 0.02301" quat="0.704971 0.0905358 -0.697538 0.0908864" type="box" group="3"/>
                     <geom size="0.0025 0.02 0.015" pos="-0.000218 -0.006487 -0.024987" quat="0.704971 0.0905358 -0.697538 0.0908864" type="box" group="3"/>
-                    <geom pos="-0.000244 -4.3e-05 -0.023525" quat="0.991723 -0.000248006 0.00525592 0.128285" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_BBV_visual_vis_1"/>
+                    <geom pos="-0.000244 -4.3e-05 -0.023525" quat="0.991723 -0.000248006 0.00525592 0.128285" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_BBV_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                     <body name="seg4_BBH" pos="0.040165 -0.045102 -0.000333" quat="0.0905363 -0.704971 -0.0908868 -0.697538">
                       <inertial pos="0 -0.013599 -0.022301" quat="0.0105759 0.707028 0.0105759 0.707028" mass="0.3" diaginertia="0.000439118 0.000419049 0.000358167"/>
                       <geom size="0.0025 0.02 0.015" pos="0 -0.007599 -0.001967" quat="0.707107 0 -0.707107 0" type="box" group="3"/>
                       <geom size="0.0025 0.0225 0.015" pos="0 -0.025599 -0.021967" quat="-0.5 -0.5 0.5 0.5" type="box" group="3"/>
                       <geom size="0.0025 0.02 0.015" pos="0 -0.007599 -0.042967" quat="0.707107 0 -0.707107 0" type="box" group="3"/>
-                      <geom pos="-0.0002 -0.0018 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_BBH_visual_vis_1"/>
+                      <geom pos="-0.0002 -0.0018 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_BBH_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                       <body name="seg4_body">
                         <inertial pos="-0.0005 0.054902 -0.025967" quat="0.5 0.5 0.5 0.5" mass="5" diaginertia="0.00833458 0.00833458 0.00833333"/>
                         <joint name="Joint_BBH_s4" axis="0 0 -1"/>
                         <geom size="0.02 0.065 0.0175" pos="0 0.054901 -0.025968" quat="2.31079e-07 0.707107 -0.707107 4.76028e-07" type="box" group="3"/>
                         <geom size="0.02 0.0675 0.0175" pos="-0.001 0.054901 -0.025967" quat="3.26795e-07 1 0 0" type="box" group="3"/>
-                        <geom pos="0 0.057901 -0.030904" quat="-0.2755 0.647121 -0.285015 -0.651229" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 0 0 1" density="0" mesh="MILLIS1SEG_base_link_visual_vis_1"/>
+                        <geom pos="0 0.057901 -0.030904" quat="-0.2755 0.647121 -0.285015 -0.651229" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_base_link_visual_vis_1" material="printed"/>
                         <geom pos="-0.001 0.054901 -0.025967" quat="-0.000155979 0.00542745 0.999751 0.0216603" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.323529 0.323529 0.676471 1" density="0" mesh="MILLIS1SEG_Accelerometer_vis_1"/>
                         <body name="seg4_L1" pos="-0.052002 0.054133 -0.000958" quat="0.707107 -7.07107e-07 0 -0.707107">
                           <inertial pos="-0.001039 -0.026032 -0.024835" quat="0.512139 0.487824 -0.508534 0.491054" mass="0.514371" diaginertia="0.000745767 0.000607274 0.00056016"/>
@@ -176,12 +177,12 @@
                           <geom size="0.016 0.0235 0.015" pos="-0.001987 -0.040141 -0.024224" quat="0.707107 0.707107 -2.44949e-07 0" type="box" group="3"/>
                           <geom size="0.0325 0.015 0.0025" pos="-0.000769 -0.021998 -0.004009" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
                           <geom size="0.0325 0.015 0.0025" pos="-0.000769 -0.021998 -0.046009" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
-                          <geom pos="0 -0.0006 0" quat="1 -1.73205e-07 -1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_L1_visual_vis_1"/>
+                          <geom pos="0 -0.0006 0" quat="1 -1.73205e-07 -1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_L1_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                           <body name="seg4_L2" pos="0 -0.04085 -0.011134" quat="0.5 0.5 0.5 0.5">
                             <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001"/>
                             <geom type="capsule" size="0.005" fromto="0 0.02 0 -0.023 0.061 0" friction="1.2 0.02 0.002" group="3"/>
                             <joint name="Joint_L1_s4"/>
-                            <geom pos="0.000449 -0.000275 -0.0015" quat="-1.22475e-07 0.707107 1.22474e-07 0.707107" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_L2_visual_vis_1"/>
+                            <geom pos="0.000449 -0.000275 -0.0015" quat="-1.22475e-07 0.707107 1.22474e-07 0.707107" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_L2_visual_vis_1" material="printed"/>
                           </body>
                         </body>
                         <body name="seg4_R1" pos="0.051992 0.054133 -0.002113" quat="0.707107 3.53553e-07 3.53553e-07 0.707107">
@@ -190,12 +191,12 @@
                           <geom size="0.0325 0.015 0.0025" pos="0.000769 -0.021008 -0.002854" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
                           <geom size="0.016 0.0235 0.015" pos="-0.00045 -0.039152 -0.023069" quat="-0.707107 -0.707107 0 -2.44949e-07" type="box" group="3"/>
                           <geom size="0.0325 0.015 0.0025" pos="0.000769 -0.021008 -0.044854" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
-                          <geom pos="0 0.0006 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_R1_visual_vis_1"/>
+                          <geom pos="0 0.0006 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_R1_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                           <body name="seg4_R2" pos="0.00237 -0.04009 -0.01156" quat="0.5 0.5 -0.5 -0.5">
                             <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001"/>
                             <geom type="capsule" size="0.005" fromto="0 0.02 0 0.012 0.061 0.005" friction="1.2 0.02 0.002" group="3"/>
                             <joint name="Joint_R1_s4"/>
-                            <geom pos="0 0 0.00177" quat="-1.22475e-07 0.707107 -1.22474e-07 -0.707107" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_R2_visual_vis_1"/>
+                            <geom pos="0 0 0.00177" quat="-1.22475e-07 0.707107 -1.22474e-07 -0.707107" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_R2_visual_vis_1" material="printed"/>
                           </body>
                         </body>
                         <body name="seg4_BBV" pos="0 0.111663 -0.027368" quat="0.0905366 0.704971 0.0908867 0.697538">
@@ -204,19 +205,19 @@
                           <geom size="0.0025 0.0265 0.015" pos="0.004611 -0.02385 -0.001004" quat="-0.562756 -0.557252 0.429215 0.434223" type="box" group="3"/>
                           <geom size="0.0025 0.02 0.015" pos="0.000279 -0.006398 0.02301" quat="0.704971 0.0905358 -0.697538 0.0908864" type="box" group="3"/>
                           <geom size="0.0025 0.02 0.015" pos="-0.000218 -0.006487 -0.024987" quat="0.704971 0.0905358 -0.697538 0.0908864" type="box" group="3"/>
-                          <geom pos="-0.000244 -4.3e-05 -0.023525" quat="0.991723 -0.000248006 0.00525592 0.128285" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_BBV_visual_vis_1"/>
+                          <geom pos="-0.000244 -4.3e-05 -0.023525" quat="0.991723 -0.000248006 0.00525592 0.128285" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_BBV_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                           <body name="seg5_BBH" pos="0.040165 -0.045102 -0.000333" quat="0.0905363 -0.704971 -0.0908868 -0.697538">
                             <inertial pos="0 -0.013599 -0.022301" quat="0.0105759 0.707028 0.0105759 0.707028" mass="0.3" diaginertia="0.000439118 0.000419049 0.000358167"/>
                             <geom size="0.0025 0.02 0.015" pos="0 -0.007599 -0.001967" quat="0.707107 0 -0.707107 0" type="box" group="3"/>
                             <geom size="0.0025 0.0225 0.015" pos="0 -0.025599 -0.021967" quat="-0.5 -0.5 0.5 0.5" type="box" group="3"/>
                             <geom size="0.0025 0.02 0.015" pos="0 -0.007599 -0.042967" quat="0.707107 0 -0.707107 0" type="box" group="3"/>
-                            <geom pos="-0.0002 -0.0018 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_BBH_visual_vis_1"/>
+                            <geom pos="-0.0002 -0.0018 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_BBH_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                             <body name="seg5_body">
                               <inertial pos="-0.0005 0.054902 -0.025967" quat="0.5 0.5 0.5 0.5" mass="5" diaginertia="0.00833458 0.00833458 0.00833333"/>
                               <joint name="Joint_BBH_s5" axis="0 0 -1"/>
                               <geom size="0.02 0.065 0.0175" pos="0 0.054901 -0.025968" quat="2.31079e-07 0.707107 -0.707107 4.76028e-07" type="box" group="3"/>
                               <geom size="0.02 0.0675 0.0175" pos="-0.001 0.054901 -0.025967" quat="3.26795e-07 1 0 0" type="box" group="3"/>
-                              <geom pos="0 0.057901 -0.030904" quat="-0.2755 0.647121 -0.285015 -0.651229" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 0 0 1" density="0" mesh="MILLIS1SEG_base_link_visual_vis_1"/>
+                              <geom pos="0 0.057901 -0.030904" quat="-0.2755 0.647121 -0.285015 -0.651229" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_base_link_visual_vis_1" material="printed"/>
                               <geom pos="-0.001 0.054901 -0.025967" quat="-0.000155979 0.00542745 0.999751 0.0216603" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.323529 0.323529 0.676471 1" density="0" mesh="MILLIS1SEG_Accelerometer_vis_1"/>
                               <body name="seg5_L1" pos="-0.052002 0.054133 -0.000958" quat="0.707107 -7.07107e-07 0 -0.707107">
                                 <inertial pos="-0.001039 -0.026032 -0.024835" quat="0.512139 0.487824 -0.508534 0.491054" mass="0.514371" diaginertia="0.000745767 0.000607274 0.00056016"/>
@@ -224,12 +225,12 @@
                                 <geom size="0.016 0.0235 0.015" pos="-0.001987 -0.040141 -0.024224" quat="0.707107 0.707107 -2.44949e-07 0" type="box" group="3"/>
                                 <geom size="0.0325 0.015 0.0025" pos="-0.000769 -0.021998 -0.004009" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
                                 <geom size="0.0325 0.015 0.0025" pos="-0.000769 -0.021998 -0.046009" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
-                                <geom pos="0 -0.0006 0" quat="1 -1.73205e-07 -1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_L1_visual_vis_1"/>
+                                <geom pos="0 -0.0006 0" quat="1 -1.73205e-07 -1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_L1_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                                 <body name="seg5_L2" pos="0 -0.04085 -0.011134" quat="0.5 0.5 0.5 0.5">
                                   <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001"/>
                                   <geom type="capsule" size="0.005" fromto="0 0.02 0 -0.023 0.061 0" friction="1.2 0.02 0.002" group="3"/>
                                   <joint name="Joint_L1_s5"/>
-                                  <geom pos="0.000449 -0.000275 -0.0015" quat="-1.22475e-07 0.707107 1.22474e-07 0.707107" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_L2_visual_vis_1"/>
+                                  <geom pos="0.000449 -0.000275 -0.0015" quat="-1.22475e-07 0.707107 1.22474e-07 0.707107" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_L2_visual_vis_1" material="printed"/>
                                 </body>
                               </body>
                               <body name="seg5_R1" pos="0.051992 0.054133 -0.002113" quat="0.707107 3.53553e-07 3.53553e-07 0.707107">
@@ -238,12 +239,12 @@
                                 <geom size="0.0325 0.015 0.0025" pos="0.000769 -0.021008 -0.002854" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
                                 <geom size="0.016 0.0235 0.015" pos="-0.00045 -0.039152 -0.023069" quat="-0.707107 -0.707107 0 -2.44949e-07" type="box" group="3"/>
                                 <geom size="0.0325 0.015 0.0025" pos="0.000769 -0.021008 -0.044854" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
-                                <geom pos="0 0.0006 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_R1_visual_vis_1"/>
+                                <geom pos="0 0.0006 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_R1_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                                 <body name="seg5_R2" pos="0.00237 -0.04009 -0.01156" quat="0.5 0.5 -0.5 -0.5">
                                   <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001"/>
                                   <geom type="capsule" size="0.005" fromto="0 0.02 0 0.012 0.061 0.005" friction="1.2 0.02 0.002" group="3"/>
                                   <joint name="Joint_R1_s5"/>
-                                  <geom pos="0 0 0.00177" quat="-1.22475e-07 0.707107 -1.22474e-07 -0.707107" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_R2_visual_vis_1"/>
+                                  <geom pos="0 0 0.00177" quat="-1.22475e-07 0.707107 -1.22474e-07 -0.707107" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_R2_visual_vis_1" material="printed"/>
                                 </body>
                               </body>
                               <body name="seg5_BBV" pos="0 0.111663 -0.027368" quat="0.0905366 0.704971 0.0908867 0.697538">
@@ -252,19 +253,19 @@
                                 <geom size="0.0025 0.0265 0.015" pos="0.004611 -0.02385 -0.001004" quat="-0.562756 -0.557252 0.429215 0.434223" type="box" group="3"/>
                                 <geom size="0.0025 0.02 0.015" pos="0.000279 -0.006398 0.02301" quat="0.704971 0.0905358 -0.697538 0.0908864" type="box" group="3"/>
                                 <geom size="0.0025 0.02 0.015" pos="-0.000218 -0.006487 -0.024987" quat="0.704971 0.0905358 -0.697538 0.0908864" type="box" group="3"/>
-                                <geom pos="-0.000244 -4.3e-05 -0.023525" quat="0.991723 -0.000248006 0.00525592 0.128285" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_BBV_visual_vis_1"/>
+                                <geom pos="-0.000244 -4.3e-05 -0.023525" quat="0.991723 -0.000248006 0.00525592 0.128285" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_BBV_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                                 <body name="seg6_BBH" pos="0.040165 -0.045102 -0.000333" quat="0.0905363 -0.704971 -0.0908868 -0.697538">
                                   <inertial pos="0 -0.013599 -0.022301" quat="0.0105759 0.707028 0.0105759 0.707028" mass="0.3" diaginertia="0.000439118 0.000419049 0.000358167"/>
                                   <geom size="0.0025 0.02 0.015" pos="0 -0.007599 -0.001967" quat="0.707107 0 -0.707107 0" type="box" group="3"/>
                                   <geom size="0.0025 0.0225 0.015" pos="0 -0.025599 -0.021967" quat="-0.5 -0.5 0.5 0.5" type="box" group="3"/>
                                   <geom size="0.0025 0.02 0.015" pos="0 -0.007599 -0.042967" quat="0.707107 0 -0.707107 0" type="box" group="3"/>
-                                  <geom pos="-0.0002 -0.0018 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_BBH_visual_vis_1"/>
+                                  <geom pos="-0.0002 -0.0018 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_BBH_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                                   <body name="seg6_body">
                                     <inertial pos="-0.0005 0.054902 -0.025967" quat="0.5 0.5 0.5 0.5" mass="5" diaginertia="0.00833458 0.00833458 0.00833333"/>
                                     <joint name="Joint_BBH_s6" axis="0 0 -1"/>
                                     <geom size="0.02 0.065 0.0175" pos="0 0.054901 -0.025968" quat="2.31079e-07 0.707107 -0.707107 4.76028e-07" type="box" group="3"/>
                                     <geom size="0.02 0.0675 0.0175" pos="-0.001 0.054901 -0.025967" quat="3.26795e-07 1 0 0" type="box" group="3"/>
-                                    <geom pos="0 0.057901 -0.030904" quat="-0.2755 0.647121 -0.285015 -0.651229" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 0 0 1" density="0" mesh="MILLIS1SEG_base_link_visual_vis_1"/>
+                                    <geom pos="0 0.057901 -0.030904" quat="-0.2755 0.647121 -0.285015 -0.651229" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_base_link_visual_vis_1" material="printed"/>
                                     <geom pos="-0.001 0.054901 -0.025967" quat="-0.000155979 0.00542745 0.999751 0.0216603" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.323529 0.323529 0.676471 1" density="0" mesh="MILLIS1SEG_Accelerometer_vis_1"/>
                                     <body name="seg6_L1" pos="-0.052002 0.054133 -0.000958" quat="0.707107 -7.07107e-07 0 -0.707107">
                                       <inertial pos="-0.001039 -0.026032 -0.024835" quat="0.512139 0.487824 -0.508534 0.491054" mass="0.514371" diaginertia="0.000745767 0.000607274 0.00056016"/>
@@ -272,12 +273,12 @@
                                       <geom size="0.016 0.0235 0.015" pos="-0.001987 -0.040141 -0.024224" quat="0.707107 0.707107 -2.44949e-07 0" type="box" group="3"/>
                                       <geom size="0.0325 0.015 0.0025" pos="-0.000769 -0.021998 -0.004009" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
                                       <geom size="0.0325 0.015 0.0025" pos="-0.000769 -0.021998 -0.046009" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
-                                      <geom pos="0 -0.0006 0" quat="1 -1.73205e-07 -1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_L1_visual_vis_1"/>
+                                      <geom pos="0 -0.0006 0" quat="1 -1.73205e-07 -1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_L1_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                                       <body name="seg6_L2" pos="0 -0.04085 -0.011134" quat="0.5 0.5 0.5 0.5">
                                         <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001"/>
                                         <geom type="capsule" size="0.005" fromto="0 0.02 0 -0.023 0.061 0" friction="1.2 0.02 0.002" group="3"/>
                                         <joint name="Joint_L1_s6"/>
-                                        <geom pos="0.000449 -0.000275 -0.0015" quat="-1.22475e-07 0.707107 1.22474e-07 0.707107" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_L2_visual_vis_1"/>
+                                        <geom pos="0.000449 -0.000275 -0.0015" quat="-1.22475e-07 0.707107 1.22474e-07 0.707107" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_L2_visual_vis_1" material="printed"/>
                                       </body>
                                     </body>
                                     <body name="seg6_R1" pos="0.051992 0.054133 -0.002113" quat="0.707107 3.53553e-07 3.53553e-07 0.707107">
@@ -286,12 +287,12 @@
                                       <geom size="0.0325 0.015 0.0025" pos="0.000769 -0.021008 -0.002854" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
                                       <geom size="0.016 0.0235 0.015" pos="-0.00045 -0.039152 -0.023069" quat="-0.707107 -0.707107 0 -2.44949e-07" type="box" group="3"/>
                                       <geom size="0.0325 0.015 0.0025" pos="0.000769 -0.021008 -0.044854" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
-                                      <geom pos="0 0.0006 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_R1_visual_vis_1"/>
+                                      <geom pos="0 0.0006 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_R1_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                                       <body name="seg6_R2" pos="0.00237 -0.04009 -0.01156" quat="0.5 0.5 -0.5 -0.5">
                                         <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001"/>
                                         <geom type="capsule" size="0.005" fromto="0 0.02 0 0.012 0.061 0.005" friction="1.2 0.02 0.002" group="3"/>
                                         <joint name="Joint_R1_s6"/>
-                                        <geom pos="0 0 0.00177" quat="-1.22475e-07 0.707107 -1.22474e-07 -0.707107" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_R2_visual_vis_1"/>
+                                        <geom pos="0 0 0.00177" quat="-1.22475e-07 0.707107 -1.22474e-07 -0.707107" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_R2_visual_vis_1" material="printed"/>
                                       </body>
                                     </body>
                                     <body name="seg6_BBV" pos="0 0.111663 -0.027368" quat="0.0905366 0.704971 0.0908867 0.697538">
@@ -300,19 +301,19 @@
                                       <geom size="0.0025 0.0265 0.015" pos="0.004611 -0.02385 -0.001004" quat="-0.562756 -0.557252 0.429215 0.434223" type="box" group="3"/>
                                       <geom size="0.0025 0.02 0.015" pos="0.000279 -0.006398 0.02301" quat="0.704971 0.0905358 -0.697538 0.0908864" type="box" group="3"/>
                                       <geom size="0.0025 0.02 0.015" pos="-0.000218 -0.006487 -0.024987" quat="0.704971 0.0905358 -0.697538 0.0908864" type="box" group="3"/>
-                                      <geom pos="-0.000244 -4.3e-05 -0.023525" quat="0.991723 -0.000248006 0.00525592 0.128285" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_BBV_visual_vis_1"/>
+                                      <geom pos="-0.000244 -4.3e-05 -0.023525" quat="0.991723 -0.000248006 0.00525592 0.128285" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_BBV_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                                       <body name="seg7_BBH" pos="0.040165 -0.045102 -0.000333" quat="0.0905363 -0.704971 -0.0908868 -0.697538">
                                         <inertial pos="0 -0.013599 -0.022301" quat="0.0105759 0.707028 0.0105759 0.707028" mass="0.3" diaginertia="0.000439118 0.000419049 0.000358167"/>
                                         <geom size="0.0025 0.02 0.015" pos="0 -0.007599 -0.001967" quat="0.707107 0 -0.707107 0" type="box" group="3"/>
                                         <geom size="0.0025 0.0225 0.015" pos="0 -0.025599 -0.021967" quat="-0.5 -0.5 0.5 0.5" type="box" group="3"/>
                                         <geom size="0.0025 0.02 0.015" pos="0 -0.007599 -0.042967" quat="0.707107 0 -0.707107 0" type="box" group="3"/>
-                                        <geom pos="-0.0002 -0.0018 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_BBH_visual_vis_1"/>
+                                        <geom pos="-0.0002 -0.0018 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_BBH_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                                         <body name="seg7_body">
                                           <inertial pos="-0.0005 0.054902 -0.025967" quat="0.5 0.5 0.5 0.5" mass="5" diaginertia="0.00833458 0.00833458 0.00833333"/>
                                           <joint name="Joint_BBH_s7" axis="0 0 -1"/>
                                           <geom size="0.02 0.065 0.0175" pos="0 0.054901 -0.025968" quat="2.31079e-07 0.707107 -0.707107 4.76028e-07" type="box" group="3"/>
                                           <geom size="0.02 0.0675 0.0175" pos="-0.001 0.054901 -0.025967" quat="3.26795e-07 1 0 0" type="box" group="3"/>
-                                          <geom pos="0 0.057901 -0.030904" quat="-0.2755 0.647121 -0.285015 -0.651229" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 0 0 1" density="0" mesh="MILLIS1SEG_base_link_visual_vis_1"/>
+                                          <geom pos="0 0.057901 -0.030904" quat="-0.2755 0.647121 -0.285015 -0.651229" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_base_link_visual_vis_1" material="printed"/>
                                           <geom pos="-0.001 0.054901 -0.025967" quat="-0.000155979 0.00542745 0.999751 0.0216603" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.323529 0.323529 0.676471 1" density="0" mesh="MILLIS1SEG_Accelerometer_vis_1"/>
                                           <body name="seg7_L1" pos="-0.052002 0.054133 -0.000958" quat="0.707107 -7.07107e-07 0 -0.707107">
                                             <inertial pos="-0.001039 -0.026032 -0.024835" quat="0.512139 0.487824 -0.508534 0.491054" mass="0.514371" diaginertia="0.000745767 0.000607274 0.00056016"/>
@@ -320,12 +321,12 @@
                                             <geom size="0.016 0.0235 0.015" pos="-0.001987 -0.040141 -0.024224" quat="0.707107 0.707107 -2.44949e-07 0" type="box" group="3"/>
                                             <geom size="0.0325 0.015 0.0025" pos="-0.000769 -0.021998 -0.004009" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
                                             <geom size="0.0325 0.015 0.0025" pos="-0.000769 -0.021998 -0.046009" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
-                                            <geom pos="0 -0.0006 0" quat="1 -1.73205e-07 -1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_L1_visual_vis_1"/>
+                                            <geom pos="0 -0.0006 0" quat="1 -1.73205e-07 -1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_L1_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                                             <body name="seg7_L2" pos="0 -0.04085 -0.011134" quat="0.5 0.5 0.5 0.5">
                                               <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001"/>
                                               <geom type="capsule" size="0.005" fromto="0 0.02 0 -0.023 0.061 0" friction="1.2 0.02 0.002" group="3"/>
                                               <joint name="Joint_L1_s7"/>
-                                              <geom pos="0.000449 -0.000275 -0.0015" quat="-1.22475e-07 0.707107 1.22474e-07 0.707107" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_L2_visual_vis_1"/>
+                                              <geom pos="0.000449 -0.000275 -0.0015" quat="-1.22475e-07 0.707107 1.22474e-07 0.707107" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_L2_visual_vis_1" material="printed"/>
                                             </body>
                                           </body>
                                           <body name="seg7_R1" pos="0.051992 0.054133 -0.002113" quat="0.707107 3.53553e-07 3.53553e-07 0.707107">
@@ -334,12 +335,12 @@
                                             <geom size="0.0325 0.015 0.0025" pos="0.000769 -0.021008 -0.002854" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
                                             <geom size="0.016 0.0235 0.015" pos="-0.00045 -0.039152 -0.023069" quat="-0.707107 -0.707107 0 -2.44949e-07" type="box" group="3"/>
                                             <geom size="0.0325 0.015 0.0025" pos="0.000769 -0.021008 -0.044854" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
-                                            <geom pos="0 0.0006 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_R1_visual_vis_1"/>
+                                            <geom pos="0 0.0006 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_R1_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                                             <body name="seg7_R2" pos="0.00237 -0.04009 -0.01156" quat="0.5 0.5 -0.5 -0.5">
                                               <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001"/>
                                               <geom type="capsule" size="0.005" fromto="0 0.02 0 0.012 0.061 0.005" friction="1.2 0.02 0.002" group="3"/>
                                               <joint name="Joint_R1_s7"/>
-                                              <geom pos="0 0 0.00177" quat="-1.22475e-07 0.707107 -1.22474e-07 -0.707107" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_R2_visual_vis_1"/>
+                                              <geom pos="0 0 0.00177" quat="-1.22475e-07 0.707107 -1.22474e-07 -0.707107" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_R2_visual_vis_1" material="printed"/>
                                             </body>
                                           </body>
                                           <body name="seg7_BBV" pos="0 0.111663 -0.027368" quat="0.0905366 0.704971 0.0908867 0.697538">
@@ -348,19 +349,19 @@
                                             <geom size="0.0025 0.0265 0.015" pos="0.004611 -0.02385 -0.001004" quat="-0.562756 -0.557252 0.429215 0.434223" type="box" group="3"/>
                                             <geom size="0.0025 0.02 0.015" pos="0.000279 -0.006398 0.02301" quat="0.704971 0.0905358 -0.697538 0.0908864" type="box" group="3"/>
                                             <geom size="0.0025 0.02 0.015" pos="-0.000218 -0.006487 -0.024987" quat="0.704971 0.0905358 -0.697538 0.0908864" type="box" group="3"/>
-                                            <geom pos="-0.000244 -4.3e-05 -0.023525" quat="0.991723 -0.000248006 0.00525592 0.128285" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_BBV_visual_vis_1"/>
+                                            <geom pos="-0.000244 -4.3e-05 -0.023525" quat="0.991723 -0.000248006 0.00525592 0.128285" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_BBV_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                                             <body name="seg8_BBH" pos="0.040165 -0.045102 -0.000333" quat="0.0905363 -0.704971 -0.0908868 -0.697538">
                                               <inertial pos="0 -0.013599 -0.022301" quat="0.0105759 0.707028 0.0105759 0.707028" mass="0.3" diaginertia="0.000439118 0.000419049 0.000358167"/>
                                               <geom size="0.0025 0.02 0.015" pos="0 -0.007599 -0.001967" quat="0.707107 0 -0.707107 0" type="box" group="3"/>
                                               <geom size="0.0025 0.0225 0.015" pos="0 -0.025599 -0.021967" quat="-0.5 -0.5 0.5 0.5" type="box" group="3"/>
                                               <geom size="0.0025 0.02 0.015" pos="0 -0.007599 -0.042967" quat="0.707107 0 -0.707107 0" type="box" group="3"/>
-                                              <geom pos="-0.0002 -0.0018 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_BBH_visual_vis_1"/>
+                                              <geom pos="-0.0002 -0.0018 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_BBH_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                                               <body name="seg8_body">
                                                 <inertial pos="-0.0005 0.054902 -0.025967" quat="0.5 0.5 0.5 0.5" mass="5" diaginertia="0.00833458 0.00833458 0.00833333"/>
                                                 <joint name="Joint_BBH_s8" axis="0 0 -1"/>
                                                 <geom size="0.02 0.065 0.0175" pos="0 0.054901 -0.025968" quat="2.31079e-07 0.707107 -0.707107 4.76028e-07" type="box" group="3"/>
                                                 <geom size="0.02 0.0675 0.0175" pos="-0.001 0.054901 -0.025967" quat="3.26795e-07 1 0 0" type="box" group="3"/>
-                                                <geom pos="0 0.057901 -0.030904" quat="-0.2755 0.647121 -0.285015 -0.651229" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 0 0 1" density="0" mesh="MILLIS1SEG_base_link_visual_vis_1"/>
+                                                <geom pos="0 0.057901 -0.030904" quat="-0.2755 0.647121 -0.285015 -0.651229" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_base_link_visual_vis_1" material="printed"/>
                                                 <geom pos="-0.001 0.054901 -0.025967" quat="-0.000155979 0.00542745 0.999751 0.0216603" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.323529 0.323529 0.676471 1" density="0" mesh="MILLIS1SEG_Accelerometer_vis_1"/>
                                                 <body name="seg8_L1" pos="-0.052002 0.054133 -0.000958" quat="0.707107 -7.07107e-07 0 -0.707107">
                                                   <inertial pos="-0.001039 -0.026032 -0.024835" quat="0.512139 0.487824 -0.508534 0.491054" mass="0.514371" diaginertia="0.000745767 0.000607274 0.00056016"/>
@@ -368,12 +369,12 @@
                                                   <geom size="0.016 0.0235 0.015" pos="-0.001987 -0.040141 -0.024224" quat="0.707107 0.707107 -2.44949e-07 0" type="box" group="3"/>
                                                   <geom size="0.0325 0.015 0.0025" pos="-0.000769 -0.021998 -0.004009" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
                                                   <geom size="0.0325 0.015 0.0025" pos="-0.000769 -0.021998 -0.046009" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
-                                                  <geom pos="0 -0.0006 0" quat="1 -1.73205e-07 -1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_L1_visual_vis_1"/>
+                                                  <geom pos="0 -0.0006 0" quat="1 -1.73205e-07 -1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_L1_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                                                   <body name="seg8_L2" pos="0 -0.04085 -0.011134" quat="0.5 0.5 0.5 0.5">
                                                     <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001"/>
                                                     <geom type="capsule" size="0.005" fromto="0 0.02 0 -0.023 0.061 0" friction="1.2 0.02 0.002" group="3"/>
                                                     <joint name="Joint_L1_s8"/>
-                                                    <geom pos="0.000449 -0.000275 -0.0015" quat="-1.22475e-07 0.707107 1.22474e-07 0.707107" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_L2_visual_vis_1"/>
+                                                    <geom pos="0.000449 -0.000275 -0.0015" quat="-1.22475e-07 0.707107 1.22474e-07 0.707107" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_L2_visual_vis_1" material="printed"/>
                                                   </body>
                                                 </body>
                                                 <body name="seg8_R1" pos="0.051992 0.054133 -0.002113" quat="0.707107 3.53553e-07 3.53553e-07 0.707107">
@@ -382,12 +383,12 @@
                                                   <geom size="0.0325 0.015 0.0025" pos="0.000769 -0.021008 -0.002854" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
                                                   <geom size="0.016 0.0235 0.015" pos="-0.00045 -0.039152 -0.023069" quat="-0.707107 -0.707107 0 -2.44949e-07" type="box" group="3"/>
                                                   <geom size="0.0325 0.015 0.0025" pos="0.000769 -0.021008 -0.044854" quat="-1.22475e-07 -0.707107 0.707107 -1.22474e-07" type="box" group="3"/>
-                                                  <geom pos="0 0.0006 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_R1_visual_vis_1"/>
+                                                  <geom pos="0 0.0006 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_R1_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                                                   <body name="seg8_R2" pos="0.00237 -0.04009 -0.01156" quat="0.5 0.5 -0.5 -0.5">
                                                     <inertial pos="0 0 0" mass="0.05" diaginertia="0.0001 0.0001 0.0001"/>
                                                     <geom type="capsule" size="0.005" fromto="0 0.02 0 0.012 0.061 0.005" friction="1.2 0.02 0.002" group="3"/>
                                                     <joint name="Joint_R1_s8"/>
-                                                    <geom pos="0 0 0.00177" quat="-1.22475e-07 0.707107 -1.22474e-07 -0.707107" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_R2_visual_vis_1"/>
+                                                    <geom pos="0 0 0.00177" quat="-1.22475e-07 0.707107 -1.22474e-07 -0.707107" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_R2_visual_vis_1" material="printed"/>
                                                   </body>
                                                 </body>
                                                 <body name="seg8_BBV" pos="0 0.111663 -0.027368" quat="0.0905366 0.704971 0.0908867 0.697538">
@@ -396,7 +397,7 @@
                                                   <geom size="0.0025 0.0265 0.015" pos="0.004611 -0.02385 -0.001004" quat="-0.562756 -0.557252 0.429215 0.434223" type="box" group="3"/>
                                                   <geom size="0.0025 0.02 0.015" pos="0.000279 -0.006398 0.02301" quat="0.704971 0.0905358 -0.697538 0.0908864" type="box" group="3"/>
                                                   <geom size="0.0025 0.02 0.015" pos="-0.000218 -0.006487 -0.024987" quat="0.704971 0.0905358 -0.697538 0.0908864" type="box" group="3"/>
-                                                  <geom pos="-0.000244 -4.3e-05 -0.023525" quat="0.991723 -0.000248006 0.00525592 0.128285" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_BBV_visual_vis_1"/>
+                                                  <geom pos="-0.000244 -4.3e-05 -0.023525" quat="0.991723 -0.000248006 0.00525592 0.128285" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_BBV_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
                                                 </body>
                                               </body>
                                             </body>
@@ -425,7 +426,7 @@
         <geom size="0.0025 0.02 0.015" pos="0 -0.007599 -0.001967" quat="0.707107 0 -0.707107 0" type="box" group="3"/>
         <geom size="0.0025 0.0225 0.015" pos="0 -0.025599 -0.021967" quat="-0.5 -0.5 0.5 0.5" type="box" group="3"/>
         <geom size="0.0025 0.02 0.015" pos="0 -0.007599 -0.042967" quat="0.707107 0 -0.707107 0" type="box" group="3"/>
-        <geom name="Link_BBH_visual" pos="-0.0002 -0.0018 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="MILLIS1SEG_Link_BBH_visual_vis_1"/>
+        <geom name="Link_BBH_visual" pos="-0.0002 -0.0018 0" quat="-1 1.73205e-07 1.73205e-07 -1.73205e-07" type="mesh" contype="0" conaffinity="0" group="1" density="0" mesh="MILLIS1SEG_Link_BBH_visual_vis_1" rgba="0.9373 0.1608 0.1608 1"/>
       </body>
     </body>
   </worldbody>
